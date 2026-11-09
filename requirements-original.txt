@@ -1,0 +1,7 @@
+# Python 3.11 recommended. Ranges are not a reproducibility lockfile.
+torch>=2.2,<3
+numpy>=1.26,<3
+pandas>=2.2,<3
+wfdb>=4.1,<5
+scikit-learn>=1.4,<2
+matplotlib>=3.8,<4
