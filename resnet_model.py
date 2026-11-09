@@ -17,6 +17,8 @@ from sklearn.metrics import (accuracy_score, average_precision_score, confusion_
 from torch import nn
 from torch.utils.data import Dataset, DataLoader
 
+from ptbxl_data import load_v6_exports
+
 
 def set_seed(seed=42):
     random.seed(seed)
@@ -39,14 +41,14 @@ def get_device():
 
 
 class ECGDataset(Dataset):
-    """Accept finite V6 arrays shaped (N, 1000) or (N, 1, 1000)."""
+    """Accept finite V6 arrays shaped (N, 5000) or (N, 1, 5000)."""
     def __init__(self, signals, labels):
         x = np.asarray(signals, dtype=np.float32)
         y = np.asarray(labels)
         if x.ndim == 2:
             x = x[:, None, :]
-        if x.ndim != 3 or x.shape[1:] != (1, 1000) or not len(x):
-            raise ValueError("Signals must have nonempty shape (N, 1000) or (N, 1, 1000)")
+        if x.ndim != 3 or x.shape[1:] != (1, 5000) or not len(x):
+            raise ValueError("Signals must have nonempty shape (N, 5000) or (N, 1, 5000)")
         if y.shape != (len(x),) or not np.isin(y, [0, 1]).all():
             raise ValueError("Labels must have shape (N,) and contain only 0 (Normal) or 1 (LBBB)")
         if not np.isfinite(x).all():
@@ -93,6 +95,8 @@ class ResNet1D(nn.Module):
         self.classifier = nn.Linear(base_channels * 4, 2)
 
     def forward(self, x):
+        if x.ndim != 3 or x.shape[1:] != (1, 5000):
+            raise ValueError("ResNet expects (N, 1, 5000) V6 recordings at 500 Hz")
         return self.classifier(self.features(x).squeeze(-1))
 
 
@@ -125,11 +129,11 @@ def synthetic_data(seed=42, sizes=(128, 32, 32)):
     """Artificial waveforms, not simulated diagnoses or clinical evidence."""
     rng = np.random.default_rng(seed)
     result = {}
-    t = np.arange(1000, dtype=np.float32) / 100
+    t = np.arange(5000, dtype=np.float32) / 500
     for split, n in zip(("train", "val", "test"), sizes):
         labels = np.arange(n) % 2
         rng.shuffle(labels)
-        signals = rng.normal(0, .2, (n, 1000))
+        signals = rng.normal(0, .2, (n, 5000))
         signals += np.sin(2 * np.pi * (2 + labels[:, None]) * t)
         result[split] = ECGDataset(signals, labels)
     return result
@@ -183,7 +187,8 @@ def train(model, loaders, device, output_dir, epochs=10, learning_rate=1e-3,
             best_loss = val_stats["loss"]
             torch.save({"model_state_dict": model.state_dict(),
                         "optimizer_state_dict": optimizer.state_dict(),
-                        "base_channels": model.base_channels, "epoch": epoch,
+                        "base_channels": model.base_channels, "input_samples": 5000,
+                        "sampling_rate_hz": 500, "epoch": epoch,
                         "val_loss": best_loss, "metadata": metadata or {}},
                        output_dir / "best_model.pt")
         print(f"Epoch {epoch}/{epochs}: train loss={train_stats['loss']:.4f}, "
@@ -204,6 +209,8 @@ def train(model, loaders, device, output_dir, epochs=10, learning_rate=1e-3,
 def load_checkpoint(path, device=None):
     device = get_device() if device is None else torch.device(device)
     checkpoint = torch.load(path, map_location="cpu", weights_only=True)
+    if checkpoint.get("input_samples") != 5000 or checkpoint.get("sampling_rate_hz") != 500:
+        raise ValueError("Checkpoint must be trained on 500 Hz, 5000-sample V6 recordings")
     model = ResNet1D(checkpoint["base_channels"])
     model.load_state_dict(checkpoint["model_state_dict"])
     model.to(device).eval()
@@ -263,8 +270,11 @@ def evaluate(model, loader, device, output_dir, metadata=None):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--data", type=Path, help="Processed PTB-XL NPZ; omit for synthetic testing")
-    parser.add_argument("--output", type=Path, default=Path("outputs/synthetic"))
+    source = parser.add_mutually_exclusive_group()
+    source.add_argument("--data", type=Path, help="Prisha's V6 export directory or legacy NPZ")
+    source.add_argument("--synthetic", action="store_true", help="Explicit software-test mode")
+    parser.add_argument("--raw-root", type=Path, help="Verify every exported row against local records500 V6")
+    parser.add_argument("--output", type=Path, help="Defaults to outputs/real_500hz or outputs/synthetic_500hz")
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--learning-rate", type=float, default=1e-3)
@@ -272,19 +282,40 @@ def main():
     parser.add_argument("--device", choices=("auto", "cpu", "cuda", "mps"), default="auto")
     parser.add_argument("--checkpoint", type=Path, help="Evaluate a saved model without training")
     args = parser.parse_args()
+    if not args.data and not args.synthetic:
+        args.data = Path("data/processed/v6_500hz")
+    if args.raw_root and (args.synthetic or not args.data.is_dir()):
+        parser.error("--raw-root requires a V6 export directory")
+    if args.output is None:
+        args.output = Path("outputs/synthetic_500hz" if args.synthetic else "outputs/real_500hz")
     set_seed(args.seed)
     device = get_device() if args.device == "auto" else torch.device(args.device)
-    datasets = load_processed_data(args.data) if args.data else synthetic_data(args.seed)
+    provenance = {}
+    if args.synthetic:
+        datasets = synthetic_data(args.seed)
+    elif args.data.is_dir():
+        arrays, provenance = load_v6_exports(args.data, args.raw_root)
+        datasets = {split: ECGDataset(x, y) for split, (x, y) in arrays.items()}
+    elif args.data.is_file():
+        datasets = load_processed_data(args.data)
+    else:
+        parser.error(f"Real data unavailable at {args.data}. Supply Prisha's export directory "
+                     "with --data, or use --synthetic for a software test. No download attempted.")
     loaders = make_loaders(datasets, args.batch_size, args.seed)
-    metadata = {"synthetic": args.data is None, "seed": args.seed,
+    metadata = {"synthetic": args.synthetic, "seed": args.seed,
                 "data_path": str(args.data) if args.data else None,
-                "lead": "V6", "sampling_rate_hz": 100, "torch_version": str(torch.__version__),
-                "device": str(device)}
+                "lead": "V6", "sampling_rate_hz": 500, "torch_version": str(torch.__version__),
+                "device": str(device), "data_provenance": provenance}
+    (args.output).mkdir(parents=True, exist_ok=True)
+    (args.output / "run_metadata.json").write_text(json.dumps(metadata, indent=2))
     print(f"Device: {device}; synthetic: {metadata['synthetic']}")
     if args.checkpoint:
         model, checkpoint = load_checkpoint(args.checkpoint, device)
         if checkpoint["metadata"].get("synthetic") != metadata["synthetic"]:
             raise ValueError("Checkpoint and evaluation data must have the same synthetic/real status")
+        saved_hashes = checkpoint["metadata"].get("data_provenance", {}).get("file_sha256")
+        if saved_hashes is not None and saved_hashes != provenance.get("file_sha256"):
+            raise ValueError("Evaluation exports differ from the checkpoint's training data exports")
     else:
         model = ResNet1D()
         train(model, loaders, device, args.output, args.epochs, args.learning_rate, metadata)

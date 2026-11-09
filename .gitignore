@@ -3,3 +3,10 @@ __pycache__/
 .pytest_cache/
 outputs/
 *.npz
+data/
+results/
+*.npy
+*.pt
+*.pth
+*.hea
+*.dat
