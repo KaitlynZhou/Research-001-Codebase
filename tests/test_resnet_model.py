@@ -121,3 +121,40 @@ def test_reject_100hz_inputs_and_checkpoint(tmp_path):
     torch.save({'input_samples': 1000, 'sampling_rate_hz': 100}, old_checkpoint)
     with pytest.raises(ValueError, match='500 Hz'):
         load_checkpoint(old_checkpoint, 'cpu')
+
+
+def test_training_only_class_weights():
+    from resnet_model import training_class_weights
+    dataset = ECGDataset(np.zeros((8, 5000)), [0] * 6 + [1] * 2)
+    torch.testing.assert_close(training_class_weights(dataset), torch.tensor([2 / 3, 2.]))
+
+
+def test_weighted_validation_loss_independent_of_batching():
+    from resnet_model import run_epoch
+    class FixedModel(torch.nn.Module):
+        def forward(self, x):
+            return torch.tensor([2., -1.]).expand(len(x), 2)
+    dataset = ECGDataset(np.zeros((4, 5000)), [0, 0, 0, 1])
+    weights = torch.tensor([2 / 3, 2.])
+    expected = torch.nn.CrossEntropyLoss(weight=weights)(
+        FixedModel()(dataset.x), dataset.y).item()
+    for batch_size in (1, 3, 4):
+        loader = make_loaders({'val': dataset}, batch_size)['val']
+        assert run_epoch(FixedModel(), loader, 'cpu', class_weights=weights)['loss'] == pytest.approx(expected)
+
+
+def test_early_stopping_restores_lowest_validation_checkpoint(tmp_path, monkeypatch):
+    import json
+    import resnet_model
+    validation_losses = iter([.4, .3, .31, .32, .5])
+    def controlled_epoch(model, loader, device, optimizer=None, class_weights=None):
+        return {'loss': .5 if optimizer is not None else next(validation_losses),
+                'accuracy': .5, 'recall': .5, 'f1': .5}
+    monkeypatch.setattr(resnet_model, 'run_epoch', controlled_epoch)
+    loaders = make_loaders(synthetic_data(7, (4, 4, 4)), 4)
+    history = train(ResNet1D(4), loaders, 'cpu', tmp_path, epochs=10, patience=2, min_delta=0)
+    assert len(history['val_loss']) == 4
+    _, checkpoint = load_checkpoint(tmp_path / 'best_model.pt', 'cpu')
+    assert checkpoint['epoch'] == 2 and checkpoint['val_loss'] == .3
+    summary = json.loads((tmp_path / 'training_summary.json').read_text())
+    assert summary['early_stopped'] and summary['best_epoch'] == 2

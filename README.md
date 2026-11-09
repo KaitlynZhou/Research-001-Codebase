@@ -89,7 +89,9 @@ internal feature lengths, while the input ECG remains at its original 500 Hz.
 CrossEntropyLoss and Adam are unchanged. Labels remain int64; do not cast them
 to float. Softmax class 1 is the CLBBB score; predictions use threshold 0.5.
 The wider input does not require changing the global pooling classifier.
-No model hyperparameters were tuned against the test set.
+The full experiment uses training-derived weights and validation-based selection.
+The test split was viewed during earlier smoke runs; historical test independence
+cannot be certified. See the qualified audit below before interpreting results.
 
 ### Data contract and leakage checks
 
@@ -159,8 +161,8 @@ The 500 Hz extraction retains Prisha's cohort and split counts:
 
 Review this conservative cohort policy and imbalance with the research team
 before interpreting results. Short integration runs establish software execution,
-not clinical validity or feature stability. CUDA/MPS execution and full research
-experiments remain untested. WFDB currently emits pandas deprecation warnings
+not clinical validity or feature stability. Full CPU training is complete;
+CUDA/MPS execution, external validation and feature-stability experiments remain untested. WFDB currently emits pandas deprecation warnings
 which do not prevent the tests from passing.
 
 ### 500 Hz integration validation
@@ -172,9 +174,75 @@ one-epoch CPU run completed training, validation-based checkpoint selection,
 checkpoint reload and held-out evaluation. Local ignored artifacts are in
 `outputs/real_500hz_integration_smoke/`.
 
-The 40 automated tests pass, including forward/backward passes on 5000 samples,
+The 51 automated tests pass, including forward/backward passes on 5000 samples,
 training, predictions, checkpoint restoration, original-rate V6 verification,
 label/fold validation, and rejection of 100 Hz inputs, paths and checkpoints.
 Prisha's five original metadata tests also pass unchanged; the new extractor
 test verifies her adapted extraction at 500 Hz and rejects 100 Hz. Dependency
-consistency checks passed. ECG data, checkpoints and generated outputs are excluded from Git.
+consistency checks passed. ECG data, checkpoints and temporary generated outputs
+are excluded from Git. Only the small aggregate review bundle under `reports/`
+is prepared for version control.
+
+### Balanced training and early stopping
+
+Training now defaults to class-weighted cross entropy. Weights are computed only
+from training labels as `N_train / (2 * class_count)`; validation uses the same
+fixed weights. Epoch loss is the sum of weighted losses divided by the sum of
+sample weights, so its aggregation does not depend on validation batch sizes.
+`--unweighted` disables balancing for explicit comparison experiments.
+
+Early stopping monitors validation weighted loss with `--patience 5` and
+`--min-delta 0.0001` by default. The checkpoint always preserves the absolute
+lowest validation loss; patience resets after an improvement larger than
+`min_delta`. A full run can use `--epochs 30` as the maximum. Training history
+and curves include class-1 recall and F1 alongside loss and accuracy.
+`training_config.json` records class weights, optimizer settings and stopping
+configuration; `training_summary.json` records the best epoch and stopping epoch.
+The decision threshold stays at 0.5, and test data never influences stopping,
+class weighting or checkpoint selection. Weighted losses should not be compared
+directly with earlier unweighted-loss runs.
+
+
+### Qualified leakage audit and epoch-8 review results
+
+See [the experiment and leakage report](reports/ptbxl_resnet_500hz/README.md)
+for exact reproduction commands, selection settings, limitations and the result
+bundle. This bundle is ready for review, **not an unconditional leakage-free or
+independent-test certification**: earlier integration runs evaluated fold 10
+before the full balanced run. The code guards against test-driven optimization
+and selection, but cannot retrospectively establish absence of human adaptation.
+No further tuning should use this exposed test split; external, untouched data
+are needed for a stronger independent-validation claim.
+
+The audit found zero cross-split patient, ECG ID, path, exact V6 waveform or raw
+multilead DAT overlap. All samples match raw V6, and the input contains no target
+metadata. No pair met the all-pair centered-correlation screen at 0.99. The
+strongest train/test pair (0.9801) has different beat timing and similar slow
+baseline artifacts; transformed copies and acquisition shortcuts are not ruled
+out categorically. Class/device/age imbalance and the strict selected cohort
+are additional generalization risks. The audit changes neither the cohort nor
+the checkpoint and does not retrain.
+
+```bash
+OMP_NUM_THREADS=1 python leakage_audit.py \
+  --data "$HOME/Desktop/PTB-XL-ResNet-500Hz-processed/v6" \
+  --raw-root "$HOME/Desktop/PTB-XL" --run outputs/real_500hz_full_20261109 \
+  --output outputs/leakage_audit/audit.json
+```
+
+Add `--bundle reports/ptbxl_resnet_500hz` to regenerate only the aggregate review
+artifacts after technical checks pass with the documented historical caveat.
+The audit is deliberately specific to the recorded epoch-8 checkpoint; it
+rejects a different selected epoch. A fresh clone includes no trained weights:
+reproduce training with the pinned runtime versions in
+`requirements-reproducible.txt`, or supply the original checkpoint locally.
+Expected full-run settings are CPU, seed 42, batch 32, lr 0.001, maximum 30
+epochs, patience 5 and minimum improvement 0.0001; original training stopped at
+13 and selected 8. Exact results across hardware/library versions can differ.
+
+The review bundle includes aggregate metrics, 13-epoch history, audit evidence,
+configuration and small plots. It excludes patient IDs, ECG IDs, per-record
+predictions, waveforms, checkpoints, absolute local data paths and temporary
+inspection plots. Model input/training logic is unchanged by this audit; tests
+add guards for duplicate detection, metadata-independent predictions,
+validation BatchNorm freezing and training-only class weighting.

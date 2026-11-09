@@ -146,58 +146,101 @@ def make_loaders(datasets, batch_size=32, seed=42):
                              num_workers=0) for name, data in datasets.items()}
 
 
-def run_epoch(model, loader, device, optimizer=None):
+def training_class_weights(dataset):
+    """Balanced inverse-frequency weights computed exclusively from training labels."""
+    counts = torch.bincount(dataset.y, minlength=2).float()
+    if (counts == 0).any():
+        raise ValueError("Training requires both classes for balanced loss")
+    return len(dataset) / (2 * counts)
+
+
+def run_epoch(model, loader, device, optimizer=None, class_weights=None):
     training = optimizer is not None
     model.train(training)
-    loss_sum = correct = count = 0
-    criterion = nn.CrossEntropyLoss()
+    loss_sum = denominator = correct = count = 0
+    true_positive = false_positive = false_negative = 0
+    weights = class_weights.to(device) if class_weights is not None else None
+    criterion = nn.CrossEntropyLoss(weight=weights, reduction="sum")
     with torch.set_grad_enabled(training):
         for x, y in loader:
             x, y = x.to(device), y.to(device)
             if training:
                 optimizer.zero_grad(set_to_none=True)
             logits = model(x)
-            loss = criterion(logits, y)
+            batch_denominator = weights[y].sum() if weights is not None else len(y)
+            total_loss = criterion(logits, y)
+            loss = total_loss / batch_denominator
             if training:
                 loss.backward()
                 optimizer.step()
-            loss_sum += loss.item() * len(y)
-            correct += (logits.argmax(1) == y).sum().item()
+            loss_sum += total_loss.item()
+            denominator += float(batch_denominator)
+            predicted = logits.argmax(1)
+            correct += (predicted == y).sum().item()
+            true_positive += ((predicted == 1) & (y == 1)).sum().item()
+            false_positive += ((predicted == 1) & (y == 0)).sum().item()
+            false_negative += ((predicted == 0) & (y == 1)).sum().item()
             count += len(y)
-    return {"loss": loss_sum / count, "accuracy": correct / count}
+    return {"loss": loss_sum / denominator, "accuracy": correct / count,
+            "recall": true_positive / max(true_positive + false_negative, 1),
+            "f1": 2 * true_positive / max(2 * true_positive + false_positive + false_negative, 1)}
 
 
 def train(model, loaders, device, output_dir, epochs=10, learning_rate=1e-3,
-          metadata=None):
+          metadata=None, patience=5, min_delta=1e-4, balance_classes=True):
+    if patience < 1 or min_delta < 0:
+        raise ValueError("patience must be positive and min_delta nonnegative")
     if epochs < 1:
         raise ValueError("epochs must be positive")
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-    history = {key: [] for key in ("train_loss", "val_loss", "train_accuracy", "val_accuracy")}
+    weights = training_class_weights(loaders["train"].dataset) if balance_classes else None
+    config = {"max_epochs": epochs, "patience": patience, "min_delta": min_delta,
+              "learning_rate": learning_rate, "batch_size": loaders["train"].batch_size,
+              "class_weights": weights.tolist() if weights is not None else None,
+              "selection_metric": "validation weighted cross entropy" if weights is not None
+                                  else "validation cross entropy"}
+    (output_dir / "training_config.json").write_text(json.dumps(config, indent=2))
+    history = {f"{split}_{metric}": [] for split in ("train", "val")
+               for metric in ("loss", "accuracy", "recall", "f1")}
+    stopping_reference, stale_epochs, best_epoch = float("inf"), 0, 0
     best_loss = float("inf")
     for epoch in range(1, epochs + 1):
-        train_stats = run_epoch(model, loaders["train"], device, optimizer)
-        val_stats = run_epoch(model, loaders["val"], device)
+        train_stats = run_epoch(model, loaders["train"], device, optimizer, weights)
+        val_stats = run_epoch(model, loaders["val"], device, class_weights=weights)
         for prefix, stats in (("train", train_stats), ("val", val_stats)):
             for metric, value in stats.items():
                 history[f"{prefix}_{metric}"].append(value)
         if val_stats["loss"] < best_loss:
             best_loss = val_stats["loss"]
+            best_epoch = epoch
             torch.save({"model_state_dict": model.state_dict(),
                         "optimizer_state_dict": optimizer.state_dict(),
                         "base_channels": model.base_channels, "input_samples": 5000,
                         "sampling_rate_hz": 500, "epoch": epoch,
-                        "val_loss": best_loss, "metadata": metadata or {}},
+                        "val_loss": best_loss, "training_config": config, "metadata": metadata or {}},
                        output_dir / "best_model.pt")
         print(f"Epoch {epoch}/{epochs}: train loss={train_stats['loss']:.4f}, "
-              f"val loss={val_stats['loss']:.4f}, val accuracy={val_stats['accuracy']:.3f}")
+              f"val loss={val_stats['loss']:.4f}, val accuracy={val_stats['accuracy']:.3f}, "
+              f"val LBBB recall={val_stats['recall']:.3f}, F1={val_stats['f1']:.3f}", flush=True)
+        (output_dir / "history.json").write_text(json.dumps(history, indent=2))
+        if val_stats["loss"] < stopping_reference - min_delta:
+            stopping_reference, stale_epochs = val_stats["loss"], 0
+        else:
+            stale_epochs += 1
+        if stale_epochs >= patience:
+            print(f"Early stopping at epoch {epoch}; best checkpoint: epoch {best_epoch}", flush=True)
+            break
+    (output_dir / "training_summary.json").write_text(json.dumps({
+        "epochs_completed": epoch, "best_epoch": best_epoch, "best_val_loss": best_loss,
+        "early_stopped": epoch < epochs, "training_config": config}, indent=2))
     (output_dir / "history.json").write_text(json.dumps(history, indent=2))
-    fig, axes = plt.subplots(1, 2, figsize=(10, 4))
-    for ax, metric in zip(axes, ("loss", "accuracy")):
+    fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+    for ax, metric in zip(axes.flat, ("loss", "accuracy", "recall", "f1")):
         for split in ("train", "val"):
-            ax.plot(range(1, epochs + 1), history[f"{split}_{metric}"], label=split)
+            ax.plot(range(1, len(history[f"{split}_{metric}"]) + 1), history[f"{split}_{metric}"], label=split)
         ax.set(xlabel="Epoch", ylabel=metric.title())
         ax.legend()
     fig.tight_layout()
@@ -276,6 +319,9 @@ def main():
     parser.add_argument("--raw-root", type=Path, help="Verify every exported row against local records500 V6")
     parser.add_argument("--output", type=Path, help="Defaults to outputs/real_500hz or outputs/synthetic_500hz")
     parser.add_argument("--epochs", type=int, default=10)
+    parser.add_argument("--patience", type=int, default=5)
+    parser.add_argument("--min-delta", type=float, default=1e-4)
+    parser.add_argument("--unweighted", action="store_true", help="Disable training-derived class weights")
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--learning-rate", type=float, default=1e-3)
     parser.add_argument("--seed", type=int, default=42)
@@ -318,7 +364,8 @@ def main():
             raise ValueError("Evaluation exports differ from the checkpoint's training data exports")
     else:
         model = ResNet1D()
-        train(model, loaders, device, args.output, args.epochs, args.learning_rate, metadata)
+        train(model, loaders, device, args.output, args.epochs, args.learning_rate, metadata,
+              patience=args.patience, min_delta=args.min_delta, balance_classes=not args.unweighted)
         model, _ = load_checkpoint(args.output / "best_model.pt", device)
     # Test data is accessed only after validation-based model selection is complete.
     print(json.dumps(evaluate(model, loaders["test"], device, args.output, metadata), indent=2))

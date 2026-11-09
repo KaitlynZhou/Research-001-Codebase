@@ -1,0 +1,30 @@
+{
+  "checkpoint_epoch": 8,
+  "epochs_completed": 13,
+  "training_config": {
+    "max_epochs": 30,
+    "patience": 5,
+    "min_delta": 0.0001,
+    "learning_rate": 0.001,
+    "batch_size": 32,
+    "class_weights": [
+      0.5179587602615356,
+      14.420764923095703
+    ],
+    "selection_metric": "validation weighted cross entropy"
+  },
+  "seed": 42,
+  "device": "cpu",
+  "sampling_rate_hz": 500,
+  "samples": 5000,
+  "lead": "V6",
+  "best_epoch_training_loss": 0.006671113449158721,
+  "best_epoch_validation_loss": 0.0019281084860610562,
+  "checkpoint_sha256": "9aca38801d6e4ab729ae5c87e8c8eb9bcdb6c6320a743636f63ebd75f229b178",
+  "audited_resnet_source_sha256": "77c7917bc95323f138fd70e68fe2762296a6a2d6eebb204cc151fb234e7c7421",
+  "python": "3.11.9",
+  "platform": "macOS-26.3.1-arm64-arm-64bit",
+  "preprocessing_commit": "77873b1309ec049f204fbbec3d4af7bdb7976911",
+  "checkpoint_excluded": true,
+  "patient_level_data_excluded": true
+}

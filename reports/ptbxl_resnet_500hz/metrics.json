@@ -1,0 +1,27 @@
+{
+  "accuracy": 0.996875,
+  "precision": 0.9259259259259259,
+  "recall": 1.0,
+  "f1": 0.9615384615384616,
+  "auroc": 1.0,
+  "pr_auc": 1.0,
+  "average_precision": 1.0,
+  "threshold": 0.5,
+  "confusion_matrix": [
+    [
+      613,
+      2
+    ],
+    [
+      0,
+      25
+    ]
+  ],
+  "checkpoint_epoch": 8,
+  "checkpoint_sha256": "9aca38801d6e4ab729ae5c87e8c8eb9bcdb6c6320a743636f63ebd75f229b178",
+  "positive_class": "Complete LBBB",
+  "test_recordings": 640,
+  "test_positive_recordings": 25,
+  "false_negatives": 0,
+  "interpretation": "Development-exposed test split; historical independence caveat in README and audit.json"
+}

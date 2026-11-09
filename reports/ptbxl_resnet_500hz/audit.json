@@ -1,0 +1,257 @@
+{
+  "status": "technical_checks_pass_with_historical_test_exposure_caveat",
+  "checkpoint_epoch": 8,
+  "epochs_completed": 13,
+  "checkpoint_sha256": "9aca38801d6e4ab729ae5c87e8c8eb9bcdb6c6320a743636f63ebd75f229b178",
+  "split_counts": {
+    "train": {
+      "recordings": 5278,
+      "normal": 5095,
+      "CLBBB": 183,
+      "patients": 4994
+    },
+    "val": {
+      "recordings": 614,
+      "normal": 595,
+      "CLBBB": 19,
+      "patients": 593
+    },
+    "test": {
+      "recordings": 640,
+      "normal": 615,
+      "CLBBB": 25,
+      "patients": 593
+    }
+  },
+  "cross_split_overlap": {
+    "patient_id": {
+      "train/val": 0,
+      "train/test": 0,
+      "val/test": 0
+    },
+    "ecg_id": {
+      "train/val": 0,
+      "train/test": 0,
+      "val/test": 0
+    },
+    "filename_hr": {
+      "train/val": 0,
+      "train/test": 0,
+      "val/test": 0
+    },
+    "exact_V6_samples": {
+      "train/val": 0,
+      "train/test": 0,
+      "val/test": 0
+    },
+    "raw_multilead_dat_content": {
+      "train/val": 0,
+      "train/test": 0,
+      "val/test": 0
+    }
+  },
+  "within_split_exact_V6_duplicate_excess": {
+    "train": 0,
+    "val": 0,
+    "test": 0
+  },
+  "near_duplicate_screen": {
+    "threshold": 0.99,
+    "method": "all cross-split pairs; full 5000 samples; centered absolute correlation",
+    "pairs": {
+      "train/val": {
+        "max_absolute_correlation": 0.9306780695915222,
+        "pairs_at_or_above_threshold": 0,
+        "highest_pair_low_frequency_power_fractions_below_0_5hz": [
+          0.9255141019821167,
+          0.9558742046356201
+        ],
+        "highest_pair_residual_correlation_audit_only": -0.06846768488901823,
+        "highest_pair_labels": [
+          0,
+          0
+        ],
+        "highest_pair_raw_lead_correlations": {
+          "I": -0.05050451670269303,
+          "II": 0.23044816481027355,
+          "III": 0.17328011383613368,
+          "AVR": 0.10821332994477799,
+          "AVL": -0.022109851273697842,
+          "AVF": 0.29416338445625234,
+          "V1": -0.18691685662378166,
+          "V2": -0.07103882254194657,
+          "V3": -0.01569220681136197,
+          "V4": 0.03574004100301633,
+          "V5": -0.12605586386630685,
+          "V6": -0.9306795762508369
+        }
+      },
+      "train/test": {
+        "max_absolute_correlation": 0.9801151752471924,
+        "pairs_at_or_above_threshold": 0,
+        "highest_pair_low_frequency_power_fractions_below_0_5hz": [
+          0.8445139527320862,
+          0.8850290775299072
+        ],
+        "highest_pair_residual_correlation_audit_only": 0.9042931029943435,
+        "highest_pair_labels": [
+          0,
+          0
+        ],
+        "highest_pair_raw_lead_correlations": {
+          "I": -0.0010301032610137986,
+          "II": -0.033875662730003496,
+          "III": 0.02198469972000415,
+          "AVR": -0.019300483395415197,
+          "AVL": 0.022532394605088588,
+          "AVF": -0.03200822293605745,
+          "V1": 0.010857410594836867,
+          "V2": -0.04871389233002576,
+          "V3": -0.06376515764385045,
+          "V4": -0.011758842155006024,
+          "V5": 0.35952013808904953,
+          "V6": 0.9801133838892199
+        }
+      },
+      "val/test": {
+        "max_absolute_correlation": 0.9305824041366577,
+        "pairs_at_or_above_threshold": 0,
+        "highest_pair_low_frequency_power_fractions_below_0_5hz": [
+          0.9558742046356201,
+          0.9495245814323425
+        ],
+        "highest_pair_residual_correlation_audit_only": -0.3115091401579726,
+        "highest_pair_labels": [
+          0,
+          0
+        ],
+        "highest_pair_raw_lead_correlations": {
+          "I": -0.1873393153996122,
+          "II": -0.15478827165320147,
+          "III": -0.2818095060066253,
+          "AVR": -0.1621291397515823,
+          "AVL": -0.22512256001180175,
+          "AVF": -0.24074812822478403,
+          "V1": -0.06460506484711763,
+          "V2": -0.0020484015925550584,
+          "V3": 0.027565210015432755,
+          "V4": -0.016939240196723115,
+          "V5": 0.07143160970283526,
+          "V6": -0.9305827868125459
+        }
+      }
+    },
+    "limitation": "No exhaustive search over arbitrary time shifts or transformations"
+  },
+  "all_inputs_match_original_raw_V6": true,
+  "source_metadata_alignment_verified": true,
+  "input_contract": "Only float32 V6 amplitudes, (N,1,5000); y separate; no metadata channels",
+  "preprocessing": {
+    "lead": "V6",
+    "fs": 500,
+    "samples": 5000,
+    "units": "mV",
+    "X_dtype": "float32",
+    "y_dtype": "int64",
+    "normalization": "none; fit any later normalization on training only",
+    "manifest_sha256": "2ce38074739541a0d8c6e8cf47d54f1f8dbdcfa23db07b81c73a90bf30059359"
+  },
+  "normalization": "No fitted preprocessing normalization. BatchNorm learns training batches only; eval freezes running statistics.",
+  "class_weights_training_only": [
+    0.5179587602615356,
+    14.420764923095703
+  ],
+  "class_weights_match_checkpoint": true,
+  "checkpoint_is_minimum_validation_loss": true,
+  "inference_leaves_model_state_unchanged": true,
+  "metrics_match_checkpoint_and_saved_predictions": true,
+  "test_metrics": {
+    "accuracy": 0.996875,
+    "precision": 0.9259259259259259,
+    "recall": 1.0,
+    "f1": 0.9615384615384616,
+    "auroc": 1.0,
+    "pr_auc": 1.0,
+    "confusion_matrix": [
+      [
+        613,
+        2
+      ],
+      [
+        0,
+        25
+      ]
+    ]
+  },
+  "score_separation": {
+    "max_normal_score": 0.8073270916938782,
+    "min_CLBBB_score": 0.8939498066902161
+  },
+  "majority_normal_accuracy": 0.9609375,
+  "cohort_confound_descriptives": {
+    "0": {
+      "median_age": 52.0,
+      "sex_counts": {
+        "1": 3505,
+        "0": 2800
+      },
+      "device_counts": {
+        "CS-12   E": 1692,
+        "AT-6 C": 86,
+        "CS-12": 935,
+        "AT-6 C 5.5": 1261,
+        "AT-6 C 5.8": 228,
+        "AT-6 C 5.6": 19,
+        "AT-6     6": 666,
+        "AT-6 C 5.3": 25,
+        "AT-6 C 5.0": 15,
+        "CS100    3": 1124,
+        "AT-60    3": 254
+      }
+    },
+    "1": {
+      "median_age": 68.0,
+      "sex_counts": {
+        "1": 114,
+        "0": 113
+      },
+      "device_counts": {
+        "AT-6 C 5.5": 36,
+        "AT-6 C": 10,
+        "AT-6     6": 21,
+        "CS-12   E": 4,
+        "CS-12": 36,
+        "CS100    3": 105,
+        "AT-6 C 5.8": 3,
+        "AT-6 C 5.0": 1,
+        "AT-6 C 5.3": 1,
+        "AT-60    3": 10
+      }
+    }
+  },
+  "historical_test_exposure": {
+    "pristine_never_viewed_test_set": false,
+    "known_exposure": "Earlier 500 Hz integration smoke run evaluated this test split before the balanced full run; later evaluation repeated it.",
+    "full_run_selection": "Code and history use training-only weights and validation-only early stopping/checkpoint selection; fixed threshold 0.5.",
+    "limit": "No evidence of score-driven tuning in this session, but artifacts cannot prove absence of human adaptation. Repeated inspection weakens a claim of pristine independent final testing."
+  },
+  "limitations": [
+    "Near-duplicate screen is not exhaustive for shifted/filtered copies or incorrect source patient IDs.",
+    "Strict NORM-only versus isolated high-confidence CLBBB is a restricted, easier cohort; not all pathological negatives.",
+    "Test set has only 25 CLBBB recordings from 21 CLBBB patients; recording metrics are not independent patient-level validation.",
+    "Age, sex and acquisition differences can correlate with morphology; metadata are not input features, but waveform confounding is not ruled out.",
+    "No external validation or unseen final dataset; no further tuning against this test set."
+  ],
+  "data_file_sha256": {
+    "train_manifest.csv": "25dcacb7b6c10844d897e7625c8ced1e2bf4a319c6fedf22d8ca6146c76137b1",
+    "X_train.npy": "5e4d5e392a899b7b38795c0d2f31259ca3a0fa545af83a004f4d019260ecb48d",
+    "y_train.npy": "9b361fbee54db1f2cfca450f87f2920178196f5d332847b8e222bfe66f3782e7",
+    "val_manifest.csv": "cbed03d000b527db483687c398f40ab53e45cae81955124dedb9fea58a8a7b9c",
+    "X_val.npy": "d209b612654d4c7f72f26915b07bda3da4f293644eee3d6d4f2767f1467c9716",
+    "y_val.npy": "8efa2c4cd0f16de7434843bf6d277bdc7994f27ef776064049b7bf42226e2e29",
+    "test_manifest.csv": "16fc87bae818d814cafd47fc608c9ae6e32307f30118fd04e40cbe0aa43d9df2",
+    "X_test.npy": "0357222c72b8459918bd7ce93f2b645394895f1c37ae9f072e3c0b374cb7c25d",
+    "y_test.npy": "1e597e27440ded995b1574ab62c40d80bad4b35e6be1b0e412aaf7bfc4270a79",
+    "preprocessing.json": "ed9fcd537cffc8a8d60425fcd80580ad429ab553bbaa4308d5402e154bae190e"
+  }
+}
