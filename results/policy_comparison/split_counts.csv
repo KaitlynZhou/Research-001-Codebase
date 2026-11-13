@@ -1,0 +1,7 @@
+Policy,Split,Positive recordings,Positive patients,Normal recordings,Normal patients,All unique patients
+Conservative,train,183,160,5095,4834,4994
+Conservative,validation,19,17,595,576,593
+Conservative,test,25,21,615,572,593
+Broader,train,427,340,5095,4834,5174
+Broader,validation,54,47,595,576,623
+Broader,test,54,42,615,572,614

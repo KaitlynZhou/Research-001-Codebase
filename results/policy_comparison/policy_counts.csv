@@ -1,0 +1,3 @@
+Policy,Positive recordings,Positive patients,Normal recordings,Normal patients,All unique patients,Patients with both classes
+Conservative,227,198,6305,5982,6180,0
+Broader,535,429,6305,5982,6411,0
