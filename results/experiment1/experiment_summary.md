@@ -89,11 +89,12 @@ Classification threshold: **0.50 for both conditions**
 
 ## Observations:
 
-CLBBB maintained strong performance on unseen recordings, correctly identifying 52 of 54 positive cases.
+-CLBBB maintained strong performance on unseen recordings, correctly identifying 52 of 54 positive cases.
 
-ILBBB continued to demonstrate high recall but low precision. The model detected 7 of 8 positive cases but generated 85 false positives.
+-ILBBB continued to demonstrate high recall but low precision. The model detected 7 of 8 positive cases but generated 85 false positives.
 
-ILBBB ROC-AUC decreased from 0.977 on validation to 0.875 on the test set, indicating less consistent ranking performance across splits. However, the small number of positive ILBBB cases limits confidence in this comparison.
+-ILBBB ROC-AUC decreased from 0.977 on validation to 0.875 on the test set, indicating less consistent ranking performance across splits. However, the small number of positive ILBBB cases limits confidence in this comparison.
+
 ----------------------------------------------------
 Limitations: 
 -Since we are testing CLBBB and ILBBB seperating, this created a major limitation as ILBBB has only 77 total recordings, and only 62 of those are being used for positive training recordings. Only 7 ILBBB positve recordings are used for validation, and 8 for testing. This limited the amount of positive data available for learning. 
