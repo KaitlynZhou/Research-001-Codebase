@@ -49,6 +49,7 @@ ___________________________________________________
 |----------|----|----|----|---|
 |CLBBB     | 916 | 5 | 4| | 50|
 |ILBBB     | 875 | 93| 1  | 6 | 
+
 -CLBBB demonstrated strong validation performance. ILBBB achieved high recall and ROC-AUC but very low precision due to numerous false positives. 
 Thus, an experiment was done with different classificationt thresholds on the validation set only, without retraining the model. 
  
@@ -96,7 +97,9 @@ Classification threshold: **0.50 for both conditions**
 -ILBBB ROC-AUC decreased from 0.977 on validation to 0.875 on the test set, indicating less consistent ranking performance across splits. However, the small number of positive ILBBB cases limits confidence in this comparison.
 
 ----------------------------------------------------
+
 Limitations: 
+
 -Since we are testing CLBBB and ILBBB seperating, this created a major limitation as ILBBB has only 77 total recordings, and only 62 of those are being used for positive training recordings. Only 7 ILBBB positve recordings are used for validation, and 8 for testing. This limited the amount of positive data available for learning. 
 -ILBBB recieved a positive class weight of approximately 123.73, which may have encouraged the model to prioritize recall over precision. 
 -Though increasing threshold improved validation performance, optimal threshold has yet to be established because validation improvement may not generalize to unseen recordings. 
