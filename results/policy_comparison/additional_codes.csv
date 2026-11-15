@@ -1,0 +1,35 @@
+Code,Description,Metadata category,Excluded CLBBB recordings
+1AVB,first degree AV block,diagnostic,93
+AFIB,atrial fibrillation,rhythm,71
+PVC,ventricular premature complex,form,55
+LAO/LAE,left atrial overload/enlargement,diagnostic,54
+STACH,sinus tachycardia,rhythm,31
+ASMI,anteroseptal myocardial infarction,diagnostic,26
+LVH,left ventricular hypertrophy,diagnostic,24
+LPR,prolonged PR interval,form,16
+SARRH,sinus arrhythmia,rhythm,12
+ABQRS,abnormal QRS,form,12
+SBRAD,sinus bradycardia,rhythm,11
+SVARR,supraventricular arrhythmia,rhythm,9
+ISC_,non-specific ischemic,diagnostic,8
+ILMI,inferolateral myocardial infarction,diagnostic,7
+ANEUR,ST-T changes compatible with ventricular aneurysm,diagnostic,7
+PAC,atrial premature complex,form,7
+LMI,lateral myocardial infarction,diagnostic,6
+IMI,inferior myocardial infarction,diagnostic,4
+ALMI,anterolateral myocardial infarction,diagnostic,4
+NST_,non-specific ST changes,"diagnostic, form",4
+3AVB,third degree AV block,diagnostic,3
+QWAVE,Q waves present,form,2
+DIG,digitalis-effect,"diagnostic, form",2
+BIGU,"bigeminal pattern (unknown origin, SV or Ventricular)",rhythm,2
+RAO/RAE,right atrial overload/enlargement,diagnostic,2
+RVH,right ventricular hypertrophy,diagnostic,1
+LPFB,left posterior fascicular block,diagnostic,1
+ISCAL,ischemic in anterolateral leads,diagnostic,1
+AMI,anterior myocardial infarction,diagnostic,1
+SVTAC,supraventricular tachycardia,rhythm,1
+IVCD,non-specific intraventricular conduction disturbance (block),diagnostic,1
+PACE,normal functioning artificial pacemaker,rhythm,1
+INJAS,subendocardial injury in anteroseptal leads,diagnostic,1
+IPLMI,inferoposterolateral myocardial infarction,diagnostic,1

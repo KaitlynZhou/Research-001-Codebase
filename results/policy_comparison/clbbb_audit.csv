@@ -1,0 +1,537 @@
+ecg_id,patient_id,strat_fold,scp_codes,current_reason,broader_positive
+180,15592.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+256,565.0,7,"{'CLBBB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+279,437.0,5,"{'CLBBB': 100.0, 'STACH': 0.0}",additional_statement,True
+286,6410.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+287,6437.0,9,"{'ASMI': 50.0, 'CLBBB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+338,7479.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+346,565.0,7,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+489,7705.0,5,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+517,12006.0,4,{'CLBBB': 100.0},selected,True
+545,15734.0,9,"{'IMI': 50.0, 'LVH': 100.0, 'ISC_': 100.0, 'CLBBB': 100.0, 'SR': 0.0}",additional_statement,True
+598,583.0,10,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+618,6417.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+635,392.0,1,"{'CLBBB': 100.0, 'LPFB': 100.0, 'RVH': 15.0, 'SR': 0.0}",additional_statement,True
+711,6903.0,7,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+712,565.0,7,"{'CLBBB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+730,565.0,7,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+796,21542.0,9,"{'CLBBB': 100.0, 'PVC': 100.0, 'LAO/LAE': 50.0, 'SR': 0.0}",additional_statement,True
+798,21542.0,9,"{'CLBBB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+822,6708.0,1,"{'CLBBB': 100.0, '1AVB': 100.0}",additional_statement,True
+833,4930.0,2,"{'ASMI': 50.0, 'ILMI': 50.0, 'CLBBB': 100.0, 'PVC': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+946,5891.0,9,{'CLBBB': 100.0},selected,True
+1056,7772.0,10,"{'ILMI': 100.0, 'ASMI': 100.0, 'CLBBB': 100.0, '1AVB': 100.0}",additional_statement,True
+1072,5552.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+1156,6411.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+1367,21233.0,9,"{'CLBBB': 100.0, 'LAO/LAE': 50.0, 'SR': 0.0}",additional_statement,True
+1500,21616.0,4,"{'ASMI': 15.0, 'ILMI': 15.0, 'ANEUR': 50.0, 'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+1564,2281.0,10,{'CLBBB': 100.0},selected,True
+1667,16596.0,7,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+1694,413.0,5,"{'CLBBB': 100.0, '1AVB': 100.0, 'LAO/LAE': 100.0, 'SARRH': 0.0}",additional_statement,True
+1710,13878.0,8,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+1797,6478.0,3,"{'CLBBB': 100.0, '1AVB': 100.0, 'LAO/LAE': 100.0, 'LPR': 0.0, 'SR': 0.0}",additional_statement,True
+1800,4397.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+1986,1363.0,2,"{'CLBBB': 100.0, 'STACH': 0.0}",additional_statement,True
+1990,7693.0,9,"{'CLBBB': 100.0, 'LPR': 0.0, 'SR': 0.0}",additional_statement,True
+2066,3870.0,5,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+2135,8046.0,9,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+2136,1914.0,4,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+2225,6757.0,3,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+2245,2154.0,5,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+2365,17061.0,2,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+2402,16555.0,9,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+2567,13319.0,2,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'PVC': 100.0}",additional_statement,True
+2581,15501.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+2615,3876.0,6,{'CLBBB': 100.0},selected,True
+2672,7476.0,7,"{'CLBBB': 100.0, 'LAO/LAE': 50.0, 'SR': 0.0}",additional_statement,True
+2741,3386.0,6,{'CLBBB': 100.0},selected,True
+2818,12814.0,1,"{'CLBBB': 100.0, 'QWAVE': 0.0, 'AFIB': 0.0}",additional_statement,True
+2940,17501.0,9,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+2988,3489.0,2,"{'CLBBB': 100.0, '1AVB': 100.0, 'LPR': 0.0, 'SR': 0.0}",additional_statement,True
+3037,2642.0,4,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+3074,1005.0,8,"{'CLBBB': 100.0, 'PVC': 100.0, 'AFIB': 0.0}",additional_statement,True
+3096,6296.0,5,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+3145,11192.0,4,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+3294,6101.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+3304,7897.0,2,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+3479,16121.0,10,"{'CLBBB': 100.0, '1AVB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+3484,16121.0,10,"{'CLBBB': 100.0, 'ISCAL': 100.0, 'SBRAD': 0.0}",additional_statement,True
+3828,4626.0,1,"{'ASMI': 15.0, 'CLBBB': 100.0}",additional_statement,True
+3835,3490.0,9,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+3932,1436.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+4016,3457.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+4148,13836.0,9,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+4320,6075.0,8,"{'CLBBB': 100.0, '1AVB': 100.0, 'PVC': 100.0, 'STACH': 0.0}",additional_statement,True
+4331,3433.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+4358,2191.0,2,"{'ALMI': 15.0, 'CLBBB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+4366,20475.0,7,"{'ALMI': 50.0, 'ASMI': 50.0, 'CLBBB': 100.0, '1AVB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+4415,2405.0,9,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+4432,510.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+4442,14353.0,6,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+4467,14353.0,6,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+4495,14353.0,6,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+4502,14353.0,6,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+4534,1398.0,4,"{'CLBBB': 100.0, '1AVB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+4538,14353.0,6,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+4560,510.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+4563,2480.0,8,"{'CLBBB': 100.0, 'PVC': 100.0, 'AFIB': 0.0}",additional_statement,True
+4575,14353.0,6,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+4580,21364.0,3,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+4788,20770.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+4800,20991.0,2,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+4893,5052.0,10,"{'CLBBB': 100.0, 'STACH': 0.0}",additional_statement,True
+4919,8270.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+4934,16347.0,9,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+4985,15450.0,3,"{'CLBBB': 100.0, 'PVC': 100.0}",additional_statement,True
+5042,16543.0,6,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+5059,2804.0,6,"{'CLBBB': 100.0, '1AVB': 100.0, 'LAO/LAE': 100.0, 'LPR': 0.0, 'SR': 0.0}",additional_statement,True
+5084,3492.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+5089,5202.0,2,"{'CLBBB': 100.0, 'SBRAD': 0.0}",additional_statement,True
+5168,8308.0,4,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+5191,21215.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+5241,16317.0,7,"{'CLBBB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+5249,16317.0,7,"{'CLBBB': 100.0, 'STACH': 0.0}",additional_statement,True
+5320,17822.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+5353,9504.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+5354,20770.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+5367,7988.0,3,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+5394,16243.0,4,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+5398,15528.0,1,"{'ASMI': 100.0, 'IMI': 15.0, 'ANEUR': 50.0, 'CLBBB': 100.0, 'SR': 0.0}",additional_statement,True
+5432,8633.0,5,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+5439,16432.0,6,"{'CLBBB': 100.0, 'LVH': 100.0, 'STACH': 0.0}",additional_statement,True
+5504,16389.0,3,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+5510,18386.0,4,"{'CLBBB': 100.0, 'LVH': 100.0, 'SR': 0.0}",additional_statement,True
+5517,9504.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+5574,17531.0,9,"{'ASMI': 50.0, 'ILMI': 50.0, 'CLBBB': 100.0, 'ANEUR': 50.0, 'STACH': 0.0}",additional_statement,True
+5606,11736.0,10,"{'CLBBB': 100.0, 'DIG': 100.0}",additional_statement,True
+5715,14083.0,5,"{'CLBBB': 100.0, 'SBRAD': 0.0}",additional_statement,True
+5840,8202.0,7,{'CLBBB': 100.0},selected,True
+5858,8202.0,7,{'CLBBB': 100.0},selected,True
+5865,6225.0,4,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+5871,8202.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+5872,2232.0,2,"{'CLBBB': 100.0, '1AVB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+5913,12172.0,2,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+5920,16910.0,9,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+5925,16910.0,9,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+6014,6542.0,8,"{'CLBBB': 100.0, 'NST_': 0.0, 'SR': 0.0}",additional_statement,True
+6153,3064.0,9,"{'CLBBB': 100.0, '1AVB': 100.0, 'LPR': 0.0, 'SR': 0.0}",additional_statement,True
+6154,7228.0,10,{'CLBBB': 100.0},selected,True
+6174,19919.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+6315,4712.0,5,"{'CLBBB': 100.0, 'LAO/LAE': 50.0, 'SR': 0.0}",additional_statement,True
+6332,3101.0,9,"{'CLBBB': 100.0, '1AVB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+6334,5923.0,4,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+6382,8067.0,2,"{'CLBBB': 100.0, '1AVB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+6395,9825.0,1,"{'CLBBB': 100.0, '1AVB': 100.0, 'PVC': 100.0, 'AFIB': 0.0}",additional_statement,True
+6396,8067.0,2,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+6405,8067.0,2,"{'CLBBB': 100.0, '1AVB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+6412,8067.0,2,"{'CLBBB': 100.0, 'LVH': 50.0, 'ISC_': 100.0, '1AVB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+6444,1643.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+6447,8067.0,2,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+6484,9825.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+6517,1033.0,9,"{'CLBBB': 100.0, '1AVB': 100.0, 'STACH': 0.0}",additional_statement,True
+6560,9825.0,1,"{'CLBBB': 100.0, 'SARRH': 0.0}",additional_statement,True
+6572,3396.0,8,"{'CLBBB': 100.0, 'PAC': 0.0, 'SR': 0.0}",additional_statement,True
+6589,853.0,9,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+6652,6543.0,4,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+6661,3120.0,3,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+6678,9137.0,4,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+6738,1594.0,5,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+6750,8986.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+6842,11345.0,3,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+6876,8550.0,3,"{'CLBBB': 100.0, 'ABQRS': 0.0, 'SR': 0.0}",additional_statement,True
+6895,19426.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+6908,21483.0,3,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+6955,15763.0,2,"{'CLBBB': 100.0, 'LVH': 100.0, 'SR': 0.0, 'BIGU': 0.0}",additional_statement,True
+7035,6744.0,3,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+7036,1130.0,4,"{'CLBBB': 100.0, '1AVB': 100.0, 'LAO/LAE': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+7043,5201.0,3,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+7090,6872.0,5,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+7105,7079.0,5,"{'AMI': 50.0, 'ANEUR': 50.0, 'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+7143,19963.0,2,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+7227,16420.0,3,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'STACH': 0.0}",additional_statement,True
+7234,10548.0,5,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+7271,18195.0,3,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+7295,18195.0,3,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+7296,16637.0,9,{'CLBBB': 100.0},selected,True
+7304,16637.0,9,{'CLBBB': 100.0},selected,True
+7393,18195.0,3,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+7440,8553.0,8,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+7456,19912.0,4,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+7485,19885.0,4,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'RAO/RAE': 100.0, 'SR': 0.0}",additional_statement,True
+7495,10548.0,5,"{'CLBBB': 100.0, 'LVH': 100.0, 'SR': 0.0}",additional_statement,True
+7511,11425.0,5,"{'CLBBB': 100.0, 'ABQRS': 0.0, 'SR': 0.0}",additional_statement,True
+7539,13262.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+7565,14370.0,3,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+7592,14370.0,3,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+7613,14370.0,3,"{'ASMI': 100.0, 'CLBBB': 100.0, 'SR': 0.0}",additional_statement,True
+7678,20599.0,2,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+7686,5605.0,3,"{'ASMI': 50.0, 'ILMI': 50.0, 'CLBBB': 100.0, 'LAO/LAE': 100.0, '1AVB': 100.0, 'PAC': 0.0, 'LPR': 0.0, 'PVC': 0.0, 'SR': 0.0}",additional_statement,True
+7713,20717.0,4,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+7731,20599.0,2,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+7919,12893.0,10,"{'CLBBB': 100.0, 'LVH': 100.0, 'ISC_': 100.0, 'SR': 0.0}",additional_statement,True
+7960,358.0,4,"{'CLBBB': 100.0, 'SVTAC': 0.0}",additional_statement,True
+7962,358.0,4,"{'CLBBB': 100.0, 'LPR': 0.0, 'SR': 0.0}",additional_statement,True
+7967,1787.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+8018,501.0,7,"{'CLBBB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+8082,3091.0,8,"{'CLBBB': 100.0, '1AVB': 100.0, 'PAC': 0.0, 'LPR': 0.0, 'SR': 0.0}",additional_statement,True
+8092,512.0,9,"{'CLBBB': 100.0, 'NST_': 0.0, 'AFIB': 0.0}",additional_statement,True
+8163,20655.0,5,"{'ALMI': 100.0, '1AVB': 100.0, 'CLBBB': 100.0, 'SBRAD': 0.0}",additional_statement,True
+8312,17679.0,7,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+8316,6072.0,2,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+8332,3824.0,3,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+8374,6196.0,3,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+8411,3726.0,2,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'STACH': 0.0}",additional_statement,True
+8432,19107.0,4,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+8436,1986.0,2,"{'ASMI': 15.0, 'CLBBB': 100.0, 'SR': 0.0}",additional_statement,True
+8581,385.0,9,{'CLBBB': 100.0},selected,True
+8610,3398.0,5,"{'CLBBB': 100.0, '1AVB': 100.0, 'LPR': 0.0, 'SR': 0.0}",additional_statement,True
+8620,385.0,9,"{'CLBBB': 100.0, '3AVB': 100.0}",additional_statement,True
+8681,2226.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+8695,4823.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+8714,7633.0,1,"{'CLBBB': 80.0, 'PACE': 100.0, 'IVCD': 100.0, 'AFIB': 0.0}",uncertain_target,False
+8868,5072.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+8957,15298.0,4,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+9070,12074.0,7,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+9081,19253.0,9,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+9110,4136.0,10,"{'CLBBB': 100.0, 'LVH': 15.0}",additional_statement,True
+9122,1466.0,3,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+9163,805.0,7,"{'CLBBB': 100.0, '1AVB': 100.0, 'STACH': 0.0}",additional_statement,True
+9194,20325.0,5,"{'CLBBB': 100.0, 'PVC': 100.0, 'ABQRS': 0.0, 'SR': 0.0}",additional_statement,True
+9284,19844.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+9326,19844.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+9347,17021.0,3,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+9364,18383.0,4,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+9387,17030.0,1,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+9400,18383.0,4,"{'CLBBB': 100.0, 'LVH': 50.0, 'SR': 0.0}",additional_statement,True
+9424,17030.0,1,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+9485,17030.0,1,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+9562,14721.0,10,"{'CLBBB': 100.0, 'STACH': 0.0}",additional_statement,True
+9628,14983.0,8,"{'CLBBB': 100.0, 'LVH': 50.0, 'SR': 0.0}",additional_statement,True
+9662,14983.0,8,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+9663,14996.0,1,"{'CLBBB': 100.0, 'LVH': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+9717,4725.0,5,"{'CLBBB': 100.0, '1AVB': 100.0, 'LPR': 0.0, 'SR': 0.0}",additional_statement,True
+9787,9618.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+9813,13317.0,9,"{'CLBBB': 100.0, 'LAO/LAE': 100.0}",additional_statement,True
+10092,2057.0,3,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+10130,5649.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+10133,3546.0,4,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+10190,9017.0,3,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+10283,14800.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+10296,21606.0,9,"{'CLBBB': 100.0, 'SARRH': 0.0}",additional_statement,True
+10381,2223.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+10395,7375.0,9,"{'CLBBB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+10456,4564.0,4,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'RAO/RAE': 100.0, 'SR': 0.0}",additional_statement,True
+10709,5563.0,7,{'CLBBB': 100.0},selected,True
+10727,14552.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+10751,4732.0,5,"{'CLBBB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+10754,5067.0,9,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+10802,15940.0,7,"{'CLBBB': 100.0, 'LVH': 50.0, 'ISC_': 50.0, 'PVC': 100.0, 'SVARR': 0.0}",additional_statement,True
+10861,8016.0,1,"{'CLBBB': 100.0, '1AVB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+10862,17954.0,1,"{'CLBBB': 100.0, 'SBRAD': 0.0}",additional_statement,True
+10875,17954.0,1,"{'CLBBB': 100.0, '1AVB': 100.0, 'LAO/LAE': 100.0, 'SARRH': 0.0}",additional_statement,True
+10877,14711.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+10897,8016.0,1,"{'CLBBB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+10967,6138.0,5,"{'CLBBB': 100.0, 'PVC': 100.0, 'PAC': 0.0, 'SR': 0.0}",additional_statement,True
+10999,3777.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+11091,21040.0,4,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+11093,15952.0,8,"{'CLBBB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+11095,11331.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+11135,2851.0,2,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+11174,20764.0,9,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+11193,11084.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+11203,21305.0,6,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+11208,11203.0,6,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+11218,11203.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+11269,11203.0,6,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+11284,17161.0,3,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+11288,11203.0,6,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+11334,15108.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+11387,8988.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+11418,13679.0,10,"{'CLBBB': 100.0, 'STACH': 0.0, 'BIGU': 0.0}",additional_statement,True
+11441,12916.0,10,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+11474,13400.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+11495,11752.0,2,"{'CLBBB': 100.0, '1AVB': 100.0, 'LAO/LAE': 100.0, 'STACH': 0.0}",additional_statement,True
+11618,13918.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+11621,19151.0,3,"{'ASMI': 15.0, 'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+11642,21718.0,5,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+11665,20162.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+11804,13757.0,9,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+11828,4412.0,4,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+11830,5290.0,3,"{'CLBBB': 100.0, 'STACH': 0.0}",additional_statement,True
+11870,16664.0,8,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+11919,16998.0,4,"{'ASMI': 15.0, 'CLBBB': 100.0, 'SR': 0.0}",additional_statement,True
+12178,19226.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+12247,13954.0,4,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+12375,11571.0,4,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+12538,7368.0,6,"{'CLBBB': 100.0, '1AVB': 100.0, 'LPR': 0.0, 'SR': 0.0}",additional_statement,True
+12571,20619.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+12703,4015.0,10,"{'CLBBB': 100.0, '1AVB': 100.0, 'LPR': 0.0, 'SBRAD': 0.0}",additional_statement,True
+12718,6930.0,6,"{'CLBBB': 100.0, 'NST_': 0.0, 'SR': 0.0}",additional_statement,True
+12762,19678.0,3,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+12780,7090.0,8,"{'ASMI': 50.0, 'CLBBB': 100.0, 'ANEUR': 50.0}",additional_statement,True
+12826,14685.0,2,"{'CLBBB': 100.0, 'STACH': 0.0}",additional_statement,True
+12889,11676.0,3,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+12921,12693.0,4,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+12942,12591.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+12950,6642.0,2,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+13046,20764.0,9,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+13061,21126.0,5,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+13182,8061.0,5,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+13223,13684.0,7,"{'CLBBB': 100.0, '1AVB': 100.0, 'STACH': 0.0}",additional_statement,True
+13261,11676.0,3,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+13264,16361.0,2,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+13277,16422.0,5,"{'CLBBB': 100.0, 'STACH': 0.0}",additional_statement,True
+13281,13547.0,9,"{'CLBBB': 100.0, '1AVB': 50.0, 'SR': 0.0}",additional_statement,True
+13444,14994.0,6,"{'CLBBB': 100.0, 'LVH': 50.0, 'SR': 0.0}",additional_statement,True
+13457,9841.0,8,"{'LMI': 15.0, 'CLBBB': 100.0, 'ABQRS': 0.0, 'SR': 0.0}",additional_statement,True
+13614,21309.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+13618,21470.0,6,"{'LMI': 15.0, 'CLBBB': 100.0, '1AVB': 100.0, 'STACH': 0.0}",additional_statement,True
+13620,19407.0,8,"{'CLBBB': 100.0, '1AVB': 100.0, 'PVC': 100.0, 'STACH': 0.0}",additional_statement,True
+13665,5743.0,8,"{'CLBBB': 100.0, 'INJAS': 100.0, '1AVB': 100.0, 'LAO/LAE': 100.0, 'LPR': 0.0, 'SR': 0.0}",additional_statement,True
+13732,11571.0,4,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+13820,17916.0,9,"{'CLBBB': 100.0, 'ABQRS': 0.0, 'SR': 0.0}",additional_statement,True
+13984,6675.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+14047,15010.0,9,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+14181,11355.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+14219,10518.0,9,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+14369,7781.0,4,"{'CLBBB': 100.0, 'LVH': 100.0, 'ISC_': 100.0, 'SR': 0.0}",additional_statement,True
+14430,20986.0,5,"{'ALMI': 15.0, 'CLBBB': 100.0, 'SR': 0.0}",additional_statement,True
+14434,5919.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+14467,1716.0,9,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'PAC': 0.0, 'LPR': 0.0, 'SR': 0.0}",additional_statement,True
+14493,3716.0,9,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+14511,8755.0,5,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+14593,3692.0,2,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+14707,8575.0,5,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+14721,1800.0,6,"{'CLBBB': 100.0, 'LAO/LAE': 50.0, 'SR': 0.0}",additional_statement,True
+14726,19180.0,5,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+14744,20452.0,9,"{'CLBBB': 100.0, 'PVC': 100.0}",additional_statement,True
+14815,20597.0,7,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+14819,7960.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+14887,1841.0,9,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+14888,9412.0,2,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+14917,14107.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+14926,10343.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+14959,5167.0,4,"{'CLBBB': 100.0, 'NST_': 0.0, 'AFIB': 0.0}",additional_statement,True
+14983,12936.0,7,"{'ASMI': 15.0, 'CLBBB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+14992,16838.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+15031,18279.0,8,"{'CLBBB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+15063,14501.0,6,"{'CLBBB': 100.0, 'LAO/LAE': 50.0, 'SR': 0.0}",additional_statement,True
+15101,1050.0,10,"{'CLBBB': 100.0, '1AVB': 100.0, 'PAC': 0.0, 'SR': 0.0}",additional_statement,True
+15128,4194.0,9,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+15129,1995.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+15135,10343.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+15157,14249.0,7,"{'CLBBB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+15219,13599.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+15244,8755.0,5,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+15265,20343.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+15311,14662.0,4,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+15337,10327.0,8,"{'ILMI': 100.0, 'ASMI': 100.0, 'CLBBB': 100.0, 'SR': 0.0}",additional_statement,True
+15357,10327.0,8,"{'CLBBB': 100.0, 'STACH': 0.0}",additional_statement,True
+15364,10327.0,8,"{'CLBBB': 100.0, 'STACH': 0.0}",additional_statement,True
+15367,15391.0,2,"{'CLBBB': 100.0, 'SBRAD': 0.0}",additional_statement,True
+15434,8755.0,5,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+15438,14800.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+15447,8521.0,10,"{'CLBBB': 100.0, 'PVC': 100.0, 'AFIB': 0.0}",additional_statement,True
+15467,18680.0,2,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+15492,18279.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+15576,17227.0,5,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+15577,17947.0,2,"{'CLBBB': 100.0, 'LVH': 100.0, '1AVB': 100.0, 'LAO/LAE': 100.0, 'SARRH': 0.0}",additional_statement,True
+15628,8755.0,5,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+15681,20597.0,7,"{'CLBBB': 100.0, '1AVB': 100.0, 'SARRH': 0.0}",additional_statement,True
+15688,5302.0,5,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+15701,12224.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+15703,14249.0,7,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+15798,11257.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+15812,16224.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+15822,16224.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+15853,21223.0,9,"{'CLBBB': 100.0, 'LVH': 50.0, 'ISC_': 50.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+15906,3959.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+15958,16462.0,10,"{'ILMI': 15.0, 'ASMI': 15.0, 'CLBBB': 100.0, 'PVC': 100.0, 'QWAVE': 0.0, 'AFIB': 0.0}",additional_statement,True
+16046,14193.0,10,"{'CLBBB': 100.0, 'STACH': 0.0}",additional_statement,True
+16096,1783.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+16100,10455.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+16151,10224.0,1,"{'CLBBB': 100.0, '3AVB': 100.0, 'SBRAD': 0.0}",additional_statement,True
+16171,13559.0,9,"{'ASMI': 100.0, 'IMI': 50.0, 'CLBBB': 100.0, '1AVB': 100.0, 'SVARR': 0.0}",additional_statement,True
+16189,4680.0,3,"{'CLBBB': 100.0, 'LVH': 100.0, 'ISC_': 100.0, 'SR': 0.0}",additional_statement,True
+16234,1437.0,2,"{'ASMI': 100.0, 'IMI': 50.0, 'ANEUR': 50.0, 'CLBBB': 100.0, 'SR': 0.0}",additional_statement,True
+16243,8470.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+16430,19109.0,2,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+16496,16533.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+16501,518.0,2,{'CLBBB': 100.0},selected,True
+16530,518.0,2,{'CLBBB': 100.0},selected,True
+16593,3811.0,9,"{'LMI': 15.0, 'CLBBB': 100.0, '1AVB': 100.0}",additional_statement,True
+16639,12711.0,2,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+16640,12252.0,3,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+16657,12711.0,2,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+16682,17671.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+16698,19112.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+16762,21481.0,5,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+16883,17664.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+16906,15473.0,8,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+16907,6973.0,5,"{'CLBBB': 100.0, '1AVB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+16920,8013.0,10,"{'CLBBB': 100.0, 'STACH': 0.0}",additional_statement,True
+16928,12086.0,3,"{'CLBBB': 100.0, 'STACH': 0.0}",additional_statement,True
+16949,21481.0,5,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+16985,12086.0,3,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+16990,21481.0,5,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+17017,12086.0,3,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+17041,9114.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+17094,15473.0,8,"{'CLBBB': 100.0, 'PVC': 100.0}",additional_statement,True
+17095,21481.0,5,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+17136,12714.0,4,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+17164,21481.0,5,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+17177,17835.0,2,"{'LMI': 15.0, 'CLBBB': 100.0, '1AVB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+17270,19469.0,5,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+17274,21041.0,3,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+17287,9245.0,4,"{'CLBBB': 100.0, 'SVARR': 0.0}",additional_statement,True
+17308,18325.0,7,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+17310,19469.0,5,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+17332,8102.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+17364,19096.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+17365,9518.0,3,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+17382,9518.0,3,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+17390,9518.0,3,"{'CLBBB': 100.0, 'SBRAD': 0.0}",additional_statement,True
+17410,13694.0,1,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+17426,9518.0,3,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+17427,9518.0,3,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+17467,19883.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+17500,9518.0,3,"{'CLBBB': 100.0, 'LVH': 100.0, 'SR': 0.0}",additional_statement,True
+17546,3157.0,5,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+17588,1343.0,8,"{'CLBBB': 100.0, '1AVB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+17604,1196.0,4,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+17640,6884.0,2,"{'CLBBB': 100.0, '1AVB': 100.0, 'LAO/LAE': 100.0, 'LPR': 0.0, 'SR': 0.0}",additional_statement,True
+17682,11355.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+17690,12182.0,10,"{'CLBBB': 100.0, 'LVH': 100.0, 'ISC_': 100.0, 'SR': 0.0}",additional_statement,True
+17719,2349.0,10,"{'IPLMI': 50.0, 'ASMI': 15.0, 'CLBBB': 100.0, '1AVB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+17724,5917.0,8,"{'CLBBB': 100.0, '1AVB': 100.0, 'PVC': 100.0, 'PAC': 0.0, 'LPR': 0.0, 'SR': 0.0}",additional_statement,True
+17757,4795.0,6,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+17833,1911.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+17837,1958.0,2,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+17906,16492.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+17965,2471.0,1,"{'ASMI': 15.0, 'CLBBB': 100.0, '1AVB': 100.0}",additional_statement,True
+17973,660.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+17988,7017.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+17989,660.0,6,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+18037,500.0,9,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'STACH': 0.0}",additional_statement,True
+18108,11264.0,9,"{'CLBBB': 100.0, '1AVB': 100.0, 'SBRAD': 0.0}",additional_statement,True
+18220,2900.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+18258,19009.0,5,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+18278,5283.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+18293,500.0,9,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+18376,4604.0,2,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+18396,21786.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+18414,11088.0,3,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+18499,9407.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+18548,9407.0,10,"{'CLBBB': 100.0, '1AVB': 100.0, 'STACH': 0.0}",additional_statement,True
+18659,18765.0,3,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+18690,12215.0,6,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+18700,18903.0,3,{'CLBBB': 100.0},selected,True
+18707,15582.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+18722,15582.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+18729,15582.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+18730,15582.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+18759,10991.0,5,"{'CLBBB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+18777,9407.0,10,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+18862,15755.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+18916,14800.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+18943,12215.0,6,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+19068,9640.0,5,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+19094,21026.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+19131,11017.0,2,"{'CLBBB': 100.0, '1AVB': 100.0, 'SVARR': 0.0}",additional_statement,True
+19138,9641.0,8,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+19155,11017.0,2,"{'CLBBB': 100.0, 'SVARR': 0.0}",additional_statement,True
+19161,10396.0,9,"{'CLBBB': 100.0, 'STACH': 0.0}",additional_statement,True
+19190,10396.0,9,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+19202,15393.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+19216,21360.0,1,"{'CLBBB': 100.0, 'DIG': 100.0, 'AFIB': 0.0}",additional_statement,True
+19281,18903.0,3,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+19345,12182.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+19403,9525.0,4,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+19443,12687.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+19452,11072.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+19453,17285.0,4,"{'CLBBB': 100.0, 'ABQRS': 0.0, 'SR': 0.0}",additional_statement,True
+19506,9525.0,4,"{'CLBBB': 100.0, '1AVB': 100.0, 'LAO/LAE': 50.0, 'SR': 0.0}",additional_statement,True
+19519,17285.0,4,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+19528,17285.0,4,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+19535,13515.0,8,"{'ASMI': 50.0, 'ANEUR': 50.0, 'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+19539,17285.0,4,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+19550,21033.0,5,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+19555,11226.0,2,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+19563,17285.0,4,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+19604,8364.0,2,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+19761,20323.0,3,"{'CLBBB': 100.0, 'PVC': 100.0, 'SARRH': 0.0}",additional_statement,True
+19772,12233.0,8,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+19816,13302.0,4,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+19818,20622.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+19821,16004.0,2,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+19847,11460.0,6,"{'ASMI': 50.0, 'CLBBB': 100.0, 'SR': 0.0}",additional_statement,True
+19858,8166.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+19967,21033.0,5,"{'CLBBB': 100.0, 'LVH': 50.0, 'SR': 0.0}",additional_statement,True
+19974,11561.0,9,"{'CLBBB': 100.0, 'PVC': 100.0, 'AFIB': 0.0}",additional_statement,True
+19995,21595.0,4,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+20019,11881.0,8,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+20021,11881.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+20040,11881.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+20059,21595.0,4,"{'CLBBB': 100.0, 'SVARR': 0.0}",additional_statement,True
+20100,20027.0,10,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+20120,20027.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+20189,16383.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+20224,19973.0,10,"{'CLBBB': 100.0, 'ASMI': 100.0, 'SR': 0.0}",additional_statement,True
+20245,12917.0,9,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+20319,20248.0,1,"{'CLBBB': 100.0, 'SVARR': 0.0}",additional_statement,True
+20352,15185.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+20364,13295.0,4,"{'CLBBB': 100.0, 'ABQRS': 0.0, 'SR': 0.0}",additional_statement,True
+20370,19020.0,6,"{'CLBBB': 100.0, 'SBRAD': 0.0}",additional_statement,True
+20378,8586.0,9,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+20399,13295.0,4,"{'CLBBB': 100.0, 'ABQRS': 0.0, 'STACH': 0.0}",additional_statement,True
+20404,13295.0,4,"{'CLBBB': 100.0, 'ABQRS': 0.0, 'SR': 0.0}",additional_statement,True
+20443,21460.0,4,"{'CLBBB': 100.0, 'PVC': 100.0, 'AFIB': 0.0}",additional_statement,True
+20494,11427.0,6,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+20506,19043.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+20545,21330.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+20634,15688.0,6,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+20641,19056.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+20656,14713.0,3,"{'ASMI': 15.0, 'CLBBB': 100.0, 'ABQRS': 0.0, 'AFIB': 0.0}",additional_statement,True
+20675,12744.0,2,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+20761,13409.0,4,"{'CLBBB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+20790,13544.0,2,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+20802,10622.0,3,"{'CLBBB': 100.0, 'STACH': 0.0}",additional_statement,True
+20806,12156.0,7,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+20823,15695.0,6,"{'LMI': 15.0, 'CLBBB': 100.0, '1AVB': 100.0, 'SARRH': 0.0}",additional_statement,True
+20832,15452.0,5,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+20847,12156.0,7,"{'CLBBB': 100.0, 'PVC': 100.0, 'SARRH': 0.0}",additional_statement,True
+20849,17080.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+20874,11871.0,5,"{'CLBBB': 100.0, 'ABQRS': 0.0, 'AFIB': 0.0}",additional_statement,True
+20877,11871.0,5,"{'CLBBB': 100.0, 'ABQRS': 0.0, 'AFIB': 0.0}",additional_statement,True
+20893,17409.0,10,"{'CLBBB': 100.0, 'STACH': 0.0}",additional_statement,True
+20942,17890.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+20945,8065.0,6,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+20950,9934.0,10,"{'CLBBB': 100.0, '1AVB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+20966,19420.0,10,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+20983,20248.0,1,"{'CLBBB': 100.0, 'LVH': 100.0, 'SR': 0.0}",additional_statement,True
+21008,11074.0,7,"{'CLBBB': 100.0, 'PVC': 100.0, 'SARRH': 0.0}",additional_statement,True
+21072,18607.0,2,"{'CLBBB': 100.0, 'LVH': 100.0, 'SR': 0.0}",additional_statement,True
+21074,11565.0,7,"{'CLBBB': 100.0, 'PVC': 100.0, 'SR': 0.0}",additional_statement,True
+21085,19420.0,10,"{'CLBBB': 100.0, 'PVC': 100.0, 'AFIB': 0.0}",additional_statement,True
+21093,19420.0,10,"{'CLBBB': 100.0, 'PVC': 100.0, 'AFIB': 0.0}",additional_statement,True
+21141,17975.0,1,"{'CLBBB': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+21148,17570.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+21152,17766.0,4,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, '1AVB': 100.0, 'SR': 0.0}",additional_statement,True
+21163,17570.0,10,"{'LMI': 15.0, 'CLBBB': 100.0, 'SR': 0.0}",additional_statement,True
+21181,17570.0,10,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+21291,11621.0,8,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+21331,15401.0,2,"{'CLBBB': 100.0, 'LVH': 50.0, 'SR': 0.0}",additional_statement,True
+21375,10317.0,1,"{'CLBBB': 100.0, '1AVB': 100.0, 'SVARR': 0.0}",additional_statement,True
+21405,12577.0,5,"{'CLBBB': 100.0, 'SARRH': 0.0}",additional_statement,True
+21450,20687.0,8,"{'CLBBB': 100.0, 'LAO/LAE': 100.0, 'SR': 0.0}",additional_statement,True
+21454,15401.0,2,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+21463,14927.0,5,"{'CLBBB': 100.0, 'SARRH': 0.0}",additional_statement,True
+21482,18970.0,3,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+21484,18825.0,1,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+21533,10108.0,6,"{'ASMI': 15.0, 'CLBBB': 100.0, '3AVB': 100.0}",additional_statement,True
+21592,19606.0,7,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True
+21643,16888.0,6,"{'CLBBB': 100.0, '1AVB': 100.0, 'LVH': 50.0, 'SR': 0.0}",additional_statement,True
+21660,12160.0,2,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+21676,14490.0,7,"{'CLBBB': 100.0, 'SR': 0.0}",selected,True
+21690,10317.0,1,"{'CLBBB': 100.0, 'SVARR': 0.0}",additional_statement,True
+21761,13747.0,3,"{'CLBBB': 100.0, 'AFIB': 0.0}",additional_statement,True

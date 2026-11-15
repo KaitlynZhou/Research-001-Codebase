@@ -1,0 +1,4 @@
+# Data processing only; Python 3.11. Original broader requirements preserved separately.
+numpy>=1.26,<3
+pandas>=2.2,<3
+wfdb>=4.1,<5
