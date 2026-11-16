@@ -1,270 +1,322 @@
-# Research-001-Codebase
+# PTB-XL ECG Classification Experiments
 
-## Lida's Experiment 5: six leads at 500 Hz
+This project evaluates one-dimensional ResNet classifiers on PTB-XL ECG
+recordings. The completed experiments use native **500 Hz** signals with
+**5,000 samples per lead**, representing 10 seconds. Metrics are reported per
+recording. Feature attribution and external validation remain future work.
 
-Experiment 5 uses original PTB-XL `records500` recordings via `filename_hr`:
-**II, III, aVR, aVF, V3, V4**, with **5,000 samples per lead at 500 Hz**.
-It adapts Prisha's Dataset 1 selection and ResNet, preserving separate CLBBB/ILBBB
-outputs and patient-separated official folds 1–8/9/10.
+## Experiment summary
 
-The fresh 500 Hz run selected epoch 3 and stopped after 10 epochs. At threshold
-0.5, Dataset 1 test F1 is 81.25% for CLBBB and 9.66% for ILBBB. ILBBB has only
-eight test positives and produced 130 false positives. These are internal
-held-out results; the source test fold has historical development exposure.
-Experiment 6 and Dataset 2 evaluations remain pending until the team provides
-Dataset 2. Historical 100 Hz results are stored separately and are superseded.
+| Experiment | Dataset | Leads, in input order | Input shape per ECG | Targets | Status |
+|---|---|---|---|---|---|
+| V6 baseline | Strict Normal vs. isolated CLBBB | V6 | `(1,5000)` at 500 Hz | Mutually exclusive Normal / CLBBB | Completed |
+| Experiment 5 | Dataset 1: LBBB vs. Normal | II, III, aVR, aVF, V3, V4 | `(6,5000)` at 500 Hz | Independent CLBBB and ILBBB | Training and Dataset 1 test evaluation completed; Dataset 2 evaluation pending |
+| Experiment 6 | Dataset 2: LBBB vs. All Others | Planned: II, III, aVR, aVF, V3, V4 | Required: `(6,5000)` at 500 Hz | Planned independent CLBBB and ILBBB | Pending: dataset policy, exports, training and evaluation |
 
-See the [experiment documentation](docs/lida_non_diagnostic_leads.md) for
-preparation/training commands, architecture diagram, counts and limitations,
-and the [500 Hz result bundle](reports/lida_non_diagnostic_leads/README.md)
-for aggregate metrics and provenance. Tests are in
-`tests/test_non_diagnostic_leads.py`. Raw data, waveform arrays, predictions and
-model weights are excluded from Git; the locally saved checkpoint is
-`outputs/lida/experiment5_500hz_mps/best_model.pt`.
+## Shared data handling
 
-## V6 ResNet baseline at 500 Hz
+The source files are `ptbxl_database.csv`, `scp_statements.csv`, and native WFDB
+recordings in `records500/`, selected using **`filename_hr`**. Signals are stored
+as float32 physical amplitudes in mV, with channels before time. No filtering,
+resampling, upsampling, padding, truncation, augmentation or fitted amplitude
+normalization is applied.
 
-**Evaluating the Stability of Neural Network-Identified ECG Features** uses
-original PTB-XL `records500` recordings: V6, 500 Hz, 10 seconds, **5000 samples**.
-Normal is class 0; complete LBBB (`CLBBB`) is class 1. No waveform is downsampled,
-resampled, filtered, padded, truncated, or normalized by this pipeline. Synthetic
-signals exercise software only. Feature attribution and stability experiments
-remain future work.
+Official PTB-XL folds are retained: **1–8 for training, 9 for validation, and
+10 for testing**. There is no random resplitting. Repeated recordings within a
+patient's assigned split remain included. The completed cohorts have zero
+cross-split patient overlap. Loaders validate identifiers, folds, shapes,
+finite samples and label alignment, and reject duplicate recordings or paths.
+BatchNorm learns statistics during training and freezes them for evaluation.
 
-### Installation and tests
+## V6 baseline
 
-Use Python 3.10 or newer (validated with Python 3.11):
+### Dataset and labels
+
+A recording must contain exactly one target, `NORM` or `CLBBB`, with confidence
+100. Only optional `SR` is allowed in addition; any other code excludes the
+recording. Labels are integers: **0 = Normal, 1 = CLBBB**, shape `(N,)`.
+
+| Split | Recordings | Unique patients | Normal | CLBBB |
+|---|---:|---:|---:|---:|
+| Train | 5,278 | 4,994 | 5,095 | 183 |
+| Validation | 614 | 593 | 595 | 19 |
+| Test | 640 | 593 | 615 | 25 |
+
+V6 is selected by channel name, with 500 Hz, 5,000-sample and mV validation.
+All 6,532 exported recordings matched the raw V6 samples after float32 conversion
+in the saved verification. Inputs have shape **`(batch_size,1,5000)`**.
+
+### Architecture and training
+
+`ResNet1D` in `resnet_model.py` contains a kernel-7, stride-2 stem convolution
+from 1 to 16 channels, BatchNorm and ReLU. Three residual blocks use widths
+**16→16, 16→32, 32→64** and strides **1,2,2**. Each block contains two kernel-7
+convolutions with BatchNorm, an identity or kernel-1 projection shortcut, and
+ReLU after the first convolution and shortcut addition. Convolutions use
+`bias=False`. Adaptive average pooling and a **64→2** linear layer produce
+Normal/CLBBB logits; softmax gives the CLBBB probability. The default model has
+**60,818 trainable parameters**.
+
+| Training setting | Recorded run |
+|---|---|
+| Optimizer / learning rate | Adam / 0.001 |
+| Seed / batch size / device | 42 / 32 / CPU |
+| Loss | Weighted cross entropy |
+| Class weights | `N_train / (2 × class_count)`: Normal 0.51795876; CLBBB 14.42076492 |
+| Maximum epochs | 30; the CLI default is 10, so specify 30 explicitly |
+| Early stopping | Validation weighted loss; patience 5, `min_delta=0.0001` for patience reset |
+| Checkpoint | Absolute lowest validation loss; restored before test inference |
+| Completed epochs / best epoch | 13 / 8 |
+| Best validation loss | 0.0019281085 |
+
+Weights are calculated from training labels and held fixed for validation.
+The actual loss is weighted cross entropy, not binary cross entropy.
+
+### Test results
+
+The decision rule is **CLBBB probability ≥ 0.5**. The evaluator reports accuracy,
+precision, recall, F1, confusion matrix, ROC-AUC, trapezoidal PR-AUC and average
+precision. The last two are distinct metrics.
+
+| Accuracy | CLBBB precision | CLBBB recall | CLBBB F1 | ROC-AUC | PR-AUC | Average precision |
+|---:|---:|---:|---:|---:|---:|---:|
+| 99.69% | 92.59% | 100.00% | 96.15% | 1.0 | 1.0 | 1.0 |
+
+Confusion matrix, true rows / predicted columns, Normal then CLBBB:
+**`[[613,2],[0,25]]`**. All 25 CLBBB recordings were detected; two Normal
+recordings were classified as CLBBB.
+
+## Experiment 5: six leads at 500 Hz
+
+### Dataset 1 and labels
+
+A recording is selected if it contains CLBBB, ILBBB, or qualifies as Normal.
+The targets are separate binary values, ordered **`[CLBBB,ILBBB]`**, determined
+by SCP code presence without an additional confidence threshold. LBBB-positive
+recordings may have other diagnoses and may have both labels.
+
+Normal recordings must contain `NORM` and no other code marked `diagnostic == 1`
+in `scp_statements.csv`. Non-diagnostic rhythm/form statements are permitted.
+Normal has targets `[0,0]`.
+
+| Split | Recordings | Unique patients | CLBBB positive / negative | ILBBB positive / negative |
+|---|---:|---:|---:|---:|
+| Train | 7,733 | 7,174 | 428 / 7,305 | 62 / 7,671 |
+| Validation | 975 | 916 | 54 / 921 | 7 / 968 |
+| Test | 974 | 883 | 54 / 920 | 8 / 966 |
+
+Each negative count refers to that output independently. The exact lead order
+is **II, III, aVR, aVF, V3, V4**. Headers are matched case-insensitively.
+The extractor requires raw shape `(5000,12)` at 500 Hz and saves
+**`(N,6,5000)`**. All 9,682 exports were independently reread from native WFDB
+files and matched every selected float32 sample exactly.
+
+### ResNet architecture
+
+`ECGResNet` in `learning_pipeline/07_resnet_model.py` has:
+
+- A kernel-7, stride-1 stem convolution from **6 to 32** channels, BatchNorm and ReLU.
+- Three residual blocks with widths **32→32, 32→64, 64→128** and strides **1,2,2**.
+  Each block contains two kernel-7 convolutions with BatchNorm, an identity or
+  kernel-1 projection shortcut, and ReLU after the first convolution and addition.
+- Adaptive average pooling over time and a **128→2** linear classifier.
+  Sigmoid maps the logits to independent CLBBB/ILBBB probabilities.
+
+The six-input model has **243,234 trainable parameters**. Adaptive pooling
+supports 5,000-sample recordings. Input **`(batch_size,6,5000)`** produces
+**`(batch_size,2)`**, with forward/backward execution covered by tests.
+
+### Training and model selection
+
+| Training setting | Final 500 Hz run |
+|---|---|
+| Optimizer / learning rate | Adam / 0.001 |
+| Seed / batch size / device | 42 / 32 / Apple Silicon MPS |
+| Loss | `BCEWithLogitsLoss` with separate positive weights |
+| Positive weights | Training negatives / positives: CLBBB 17.06775665; ILBBB 123.72580719 |
+| Maximum epochs / early stopping | 30 / patience 7, monitoring validation weighted BCE |
+| Checkpoint | Lowest validation loss; restored before test inference |
+| Completed epochs / best epoch | **10 / 3** |
+| Best validation loss | **0.4496812247** |
+| Main threshold | **0.5** for each sigmoid output |
+
+Training starts from fresh initialization. Positive weights use training labels
+only and stay fixed for validation. Both completed pipelines shuffle training
+batches, use validation-based model selection and request deterministic PyTorch
+operations. Test scores do not control the implemented optimization, stopping,
+weights or thresholds. Experiment 5 has no additional-seed study,
+cross-validation, architecture comparison or validation threshold sweep.
+
+### Final 500 Hz test results
+
+The evaluator reports **accuracy, precision, recall, F1 and confusion matrices
+separately for each label**, using probability ≥ 0.5. It does not calculate
+ROC-AUC or average precision. Undefined precision/recall/F1 use zero.
+
+| Label | Accuracy | Precision | Recall | F1 | TN | FP | FN | TP |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| CLBBB | **97.54%** | **70.27%** | **96.30%** | **81.25%** | 898 | 22 | 2 | 52 |
+| ILBBB | **86.55%** | **5.11%** | **87.50%** | **9.66%** | 836 | 130 | 1 | 7 |
+
+Confusion matrices use true rows / predicted columns, negative then positive:
+CLBBB **`[[898,22],[2,52]]`**; ILBBB **`[[836,130],[1,7]]`**.
+
+These results are from the **final native 500 Hz run**, with its epoch-3 weights.
+CLBBB detects 52/54 positives. ILBBB detects 7/8 positives but produces 130 false
+positives, yielding low precision and F1. No earlier 100 Hz results are presented
+as 500 Hz results.
+
+## Experiment 6 and Dataset 2: pending
+
+Dataset 2 is intended for **LBBB vs. All Others**. Its exact selection policy,
+including ambiguous-code handling and negative definitions, and validated
+exports are unavailable. Dataset 1 is not substituted. No counts, trained
+weights or performance are available for Experiment 6.
+
+The six-lead runner supports a future approved Dataset 2 export using 500 Hz,
+5,000 samples, the same ordered six leads, separate `[CLBBB,ILBBB]` targets,
+and official patient-separated folds. It requires `contract.json`,
+`train.csv`, `val.csv`, `test.csv`, and corresponding `X_*.npy` / `y_*.npy` files.
+Arrays must have shapes `(N,6,5000)` and `(N,2)`. Manifests require `ecg_id`,
+`patient_id`, `strat_fold`, `filename_hr`, `CLBBB` and `ILBBB`.
+
+The contract must declare `dataset=dataset2`, ordered `leads` and `labels`,
+`fs=500`, `samples=5000`, `source_column=filename_hr`,
+`waveform_directory=records500`, `units=mV`, `normalization=none`, and a nonempty
+label-policy description. Export consistency checks do not establish whether
+an external builder correctly implements the approved selection policy.
+
+| Model | Dataset 1 test | Dataset 2 test |
+|---|---|---|
+| Experiment 5 | Completed | **Pending: dataset unavailable** |
+| Experiment 6 | **Pending: model not trained** | **Pending: dataset and model unavailable** |
+
+## Reproduction
+
+### Environment and input files
+
+Recorded runs used Python **3.11.9** and PyTorch **2.15.0** on macOS arm64.
+Full package pins are in `requirements-reproducible.txt`.
 
 ```bash
-python3 -m venv .venv
+python3.11 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements.txt
-python -m pytest -q
+python -m pip install -r requirements-reproducible.txt
 python -m pip check
+OMP_NUM_THREADS=1 MPLCONFIGDIR=/tmp/ecg-mpl python -m pytest -q
 ```
 
-### Prepare existing local 500 Hz recordings
+Provide local PTB-XL metadata and `records500` WFDB `.hea`/`.dat` files; the
+runners do not download data. Replace the example raw-data location below with
+your own. Choose new output directories to preserve existing artifacts.
 
-Keep raw and processed ECG data outside the repository. The local source is
-`~/Desktop/PTB-XL`, containing `ptbxl_database.csv`, `scp_statements.csv` and
-`records500/`. Use a new output directory:
+### V6 baseline
+
+The V6 preparation helper requires its expected source snapshot to be available
+locally. Its processed output must be new and **outside the repository**.
 
 ```bash
 python prepare_ptbxl.py --raw-root "$HOME/Desktop/PTB-XL" \
-  --output "$HOME/Desktop/PTB-XL-ResNet-500Hz-processed"
+  --output "$HOME/Desktop/PTB-XL-V6-500Hz-reproduction"
+OMP_NUM_THREADS=1 python resnet_model.py \
+  --data "$HOME/Desktop/PTB-XL-V6-500Hz-reproduction/v6" \
+  --raw-root "$HOME/Desktop/PTB-XL" --device cpu \
+  --epochs 30 --patience 5 --min-delta 0.0001 \
+  --batch-size 32 --learning-rate 0.001 --seed 42 \
+  --output outputs/v6_500hz_reproduction
 ```
 
-This runner reads a pinned snapshot of Prisha's code at commit
-`77873b1309ec049f204fbbec3d4af7bdb7976911` on
-`origin/feature/ptbxl-data-processing`. It executes a temporary copy without
-checking out, merging, or modifying her branch or files. If this Git object is
-missing in a fresh clone, first run
-`git fetch origin feature/ptbxl-data-processing`.
+Training restores the best checkpoint before evaluating fold 10. The directory
+loader requires `preprocessing.json`, split arrays and `*_manifest.csv` files.
+`--raw-root` verifies every exported V6 recording against raw samples.
+For evaluation only, add `--checkpoint PATH_TO_BEST_MODEL` and use matching
+exports plus a new output directory. The V6 trainer can overwrite existing run
+files, so always choose a new run path.
 
-Her metadata inspection, strict label selection and patient/fold checks are
-unchanged. Her original extractor supports only `filename_lr`, `records100`,
-100 Hz and 1000 samples. The temporary extraction copy is adapted to
-**`filename_hr`, `records500`, 500 Hz and 5000 samples**. It selects V6 by channel
-name, checks mV units and finite samples, and saves all original samples as
-float32. There is no sample-rate conversion. Metadata still contains both path
-columns; only `filename_hr` supplies training waveforms. The unchanged metadata
-report's `waveform_headers_present` field counts low-resolution headers and is
-not evidence of 500 Hz extraction; use raw waveform verification described below.
-
-The runner requires existing local files, performs no downloads, never changes
-raw recordings, and refuses an existing output directory. Outputs are
-`metadata/`, `v6/`, and `pipeline_source.json`, which records the exact adaptation.
-Previous 100 Hz outputs remain separate and are rejected by the current loader.
-
-### Train and evaluate
+### Experiment 5
 
 ```bash
-# Full real-data run, including every-row comparison to original 500 Hz V6.
-python resnet_model.py \
-  --data "$HOME/Desktop/PTB-XL-ResNet-500Hz-processed/v6" \
-  --raw-root "$HOME/Desktop/PTB-XL" --epochs 30 --output outputs/real_500hz
-
-# Evaluate a saved 500 Hz checkpoint without retraining.
-python resnet_model.py \
-  --data "$HOME/Desktop/PTB-XL-ResNet-500Hz-processed/v6" \
-  --raw-root "$HOME/Desktop/PTB-XL" \
-  --checkpoint outputs/real_500hz/best_model.pt \
-  --output outputs/real_500hz_evaluation
-
-# Explicit synthetic software test, also using 5000 samples at 500 Hz.
-python resnet_model.py --synthetic --epochs 2 --output outputs/synthetic_500hz
+python non_diagnostic_leads.py prepare \
+  --raw-root "$HOME/Desktop/PTB-XL" --output data/experiment5_500hz
+OMP_NUM_THREADS=1 MPLCONFIGDIR=/tmp/ecg-mpl python non_diagnostic_leads.py train \
+  --dataset1 data/experiment5_500hz --epochs 30 --device mps \
+  --output outputs/experiment5_500hz
 ```
 
-Real data is the default; without `--data` it looks for `data/processed/v6_500hz`.
-Missing real files fail clearly, without falling back to synthetic signals.
-Default outputs are `outputs/real_500hz` and `outputs/synthetic_500hz`.
-CUDA, Apple Silicon MPS and CPU are selected in that order; override with
-`--device cpu`, `cuda` or `mps`. Seed defaults to 42 (`--seed` to change it).
-Deterministic operations are requested, but exact results across devices or
-PyTorch versions are not guaranteed. Use CPU if a backend reports unsupported
-deterministic operations.
+Use `--device cpu` when MPS is unavailable; CPU is the six-lead CLI default.
+Preparation and training refuse existing output directories. The loader requires
+`contract.json` and the split CSV/array files. Training restores the lowest-loss
+checkpoint and evaluates Dataset 1 test automatically.
 
-The architecture retains its original residual blocks, batch normalization,
-ReLU, skip connections, convolution strides, global average pooling and two
-output logits. Inputs are now `(N, 1, 5000)`; the convolution strides reduce
-internal feature lengths, while the input ECG remains at its original 500 Hz.
-CrossEntropyLoss and Adam are unchanged. Labels remain int64; do not cast them
-to float. Softmax class 1 is the CLBBB score; predictions use threshold 0.5.
-The wider input does not require changing the global pooling classifier.
-The full experiment uses training-derived weights and validation-based selection.
-The test split was viewed during earlier smoke runs; historical test independence
-cannot be certified. See the qualified audit below before interpreting results.
-
-### Data contract and leakage checks
-
-`ptbxl_data.py` reads Prisha's directory export directly:
-
-| Split | Signals | Labels | Row-aligned metadata |
-| --- | --- | --- | --- |
-| Train | `X_train.npy` | `y_train.npy` | `train_manifest.csv` |
-| Validation | `X_val.npy` | `y_val.npy` | `val_manifest.csv` |
-| Test | `X_test.npy` | `y_test.npy` | `test_manifest.csv` |
-
-`preprocessing.json` must declare V6, fs=500, samples=5000, mV, float32 signals,
-int64 labels, no normalization, and the selection manifest SHA-256. Directory
-signals must have shape `(N, 1, 5000)` and labels `(N,)`, with both classes in
-each split. Manifests require `ecg_id`, `patient_id`, `scp_codes`, `strat_fold`,
-`filename_hr`, `label` and `split`.
-
-Prisha's `strict-v1` policy requires exactly one target (`CLBBB` or `NORM`),
-confidence 100 and no additional statement except optional `SR`. Incomplete LBBB,
-conflicting targets, uncertain targets and other statements are excluded.
-The adapter independently checks labels against this unchanged policy.
-
-Original folds 1–8 remain train, 9 validation, 10 test. The adapter rejects
-missing IDs, invalid folds, any patient in multiple folds, duplicate ECG IDs or
-waveform paths, label/manifest disagreement, wrong shapes, nonfinite samples,
-and unexpected lead/rate/preprocessing. No resplitting or learned normalization
-occurs. If normalization is added later, fit it on training data only.
-
-`--raw-root` independently compares **every exported row** with its original
-`filename_hr` WFDB recording, checking the header's 500 Hz, 5000 samples, unique
-V6 channel, mV units and exact float32 sample agreement. Without this argument,
-lead/rate verification relies on exported preprocessing metadata. Official raw
-file checksums are not independently revalidated by this integration.
-
-A legacy NPZ interface remains available with `--data archive.npz` and keys
-`X_train`, `X_val`, `X_test`, `y_train`, `y_val`, `y_test`, plus
-`patient_ids_train`, `patient_ids_val`, `patient_ids_test`. It accepts signals
-shaped `(N, 5000)` or `(N, 1, 5000)` and checks finite values, binary labels and
-patient separation, but has no manifests or raw-header verification. Prefer the
-directory adapter for real experiments.
-
-### Artifacts and model selection
-
-Each run saves `best_model.pt` (lowest validation loss), `history.json`,
-`training_curves.png`, `run_metadata.json`, `metrics.json`, `evaluation.png` and
-`predictions.npz`. Checkpoints include model/optimizer state, epoch, validation
-loss, 500 Hz/5000-sample input configuration and data provenance. Old 100 Hz
-checkpoints are rejected. Export fingerprints prevent evaluating a checkpoint
-against changed exports. Outputs and model files are Git-ignored.
-
-The best validation checkpoint is restored before test evaluation. Metrics are
-accuracy, precision, recall, F1, confusion matrix (true rows, predicted columns,
-class order 0,1), AUROC, trapezoidal PR-AUC and separately average precision.
-Single-class test AUROC and PR-AUC are null; undefined precision/recall/F1 use
-zero. Test arrays are checked for integrity during loading, but never used for
-optimization or checkpoint selection. Do not tune using the resulting test scores.
-
-### Local cohort
-
-The 500 Hz extraction retains Prisha's cohort and split counts:
-
-| Split | Normal | CLBBB | Recordings | Unique patients |
-| --- | ---: | ---: | ---: | ---: |
-| Train (folds 1–8) | 5095 | 183 | 5278 | 4994 |
-| Validation (fold 9) | 595 | 19 | 614 | 593 |
-| Test (fold 10) | 615 | 25 | 640 | 593 |
-
-Review this conservative cohort policy and imbalance with the research team
-before interpreting results. Short integration runs establish software execution,
-not clinical validity or feature stability. Full CPU training is complete;
-CUDA/MPS execution, external validation and feature-stability experiments remain untested. WFDB currently emits pandas deprecation warnings
-which do not prevent the tests from passing.
-
-### 500 Hz integration validation
-
-All 6,532 selected 500 Hz exports were independently compared with their original
-V6 waveforms and matched exactly after float32 conversion. All headers satisfied
-500 Hz, 5000 samples and mV units. No patient overlap was found. The full
-one-epoch CPU run completed training, validation-based checkpoint selection,
-checkpoint reload and held-out evaluation. Local ignored artifacts are in
-`outputs/real_500hz_integration_smoke/`.
-
-The 51 automated tests pass, including forward/backward passes on 5000 samples,
-training, predictions, checkpoint restoration, original-rate V6 verification,
-label/fold validation, and rejection of 100 Hz inputs, paths and checkpoints.
-Prisha's five original metadata tests also pass unchanged; the new extractor
-test verifies her adapted extraction at 500 Hz and rejects 100 Hz. Dependency
-consistency checks passed. ECG data, checkpoints and temporary generated outputs
-are excluded from Git. Only the small aggregate review bundle under `reports/`
-is prepared for version control.
-
-### Balanced training and early stopping
-
-Training now defaults to class-weighted cross entropy. Weights are computed only
-from training labels as `N_train / (2 * class_count)`; validation uses the same
-fixed weights. Epoch loss is the sum of weighted losses divided by the sum of
-sample weights, so its aggregation does not depend on validation batch sizes.
-`--unweighted` disables balancing for explicit comparison experiments.
-
-Early stopping monitors validation weighted loss with `--patience 5` and
-`--min-delta 0.0001` by default. The checkpoint always preserves the absolute
-lowest validation loss; patience resets after an improvement larger than
-`min_delta`. A full run can use `--epochs 30` as the maximum. Training history
-and curves include class-1 recall and F1 alongside loss and accuracy.
-`training_config.json` records class weights, optimizer settings and stopping
-configuration; `training_summary.json` records the best epoch and stopping epoch.
-The decision threshold stays at 0.5, and test data never influences stopping,
-class weighting or checkpoint selection. Weighted losses should not be compared
-directly with earlier unweighted-loss runs.
-
-
-### Qualified leakage audit and epoch-8 review results
-
-See [the experiment and leakage report](reports/ptbxl_resnet_500hz/README.md)
-for exact reproduction commands, selection settings, limitations and the result
-bundle. This bundle is ready for review, **not an unconditional leakage-free or
-independent-test certification**: earlier integration runs evaluated fold 10
-before the full balanced run. The code guards against test-driven optimization
-and selection, but cannot retrospectively establish absence of human adaptation.
-No further tuning should use this exposed test split; external, untouched data
-are needed for a stronger independent-validation claim.
-
-The audit found zero cross-split patient, ECG ID, path, exact V6 waveform or raw
-multilead DAT overlap. All samples match raw V6, and the input contains no target
-metadata. No pair met the all-pair centered-correlation screen at 0.99. The
-strongest train/test pair (0.9801) has different beat timing and similar slow
-baseline artifacts; transformed copies and acquisition shortcuts are not ruled
-out categorically. Class/device/age imbalance and the strict selected cohort
-are additional generalization risks. The audit changes neither the cohort nor
-the checkpoint and does not retrain.
+To evaluate a checkpoint without retraining, use its matching exports:
 
 ```bash
-OMP_NUM_THREADS=1 python leakage_audit.py \
-  --data "$HOME/Desktop/PTB-XL-ResNet-500Hz-processed/v6" \
-  --raw-root "$HOME/Desktop/PTB-XL" --run outputs/real_500hz_full_20261109 \
-  --output outputs/leakage_audit/audit.json
+OMP_NUM_THREADS=1 python non_diagnostic_leads.py train \
+  --dataset1 data/experiment5_500hz --device mps \
+  --checkpoint outputs/experiment5_500hz/best_model.pt \
+  --output outputs/experiment5_500hz_evaluation
 ```
 
-Add `--bundle reports/ptbxl_resnet_500hz` to regenerate only the aggregate review
-artifacts after technical checks pass with the documented historical caveat.
-The audit is deliberately specific to the recorded epoch-8 checkpoint; it
-rejects a different selected epoch. A fresh clone includes no trained weights:
-reproduce training with the pinned runtime versions in
-`requirements-reproducible.txt`, or supply the original checkpoint locally.
-Expected full-run settings are CPU, seed 42, batch 32, lr 0.001, maximum 30
-epochs, patience 5 and minimum improvement 0.0001; original training stopped at
-13 and selected 8. Exact results across hardware/library versions can differ.
+The paths above create reproduction runs. A new training run may select a
+different epoch or score; exact results across devices/library versions are
+not guaranteed. Exact inference for a saved run requires that run's original
+checkpoint and matching export fingerprints.
 
-The review bundle includes aggregate metrics, 13-epoch history, audit evidence,
-configuration and small plots. It excludes patient IDs, ECG IDs, per-record
-predictions, waveforms, checkpoints, absolute local data paths and temporary
-inspection plots. Model input/training logic is unchanged by this audit; tests
-add guards for duplicate detection, metadata-independent predictions,
-validation BatchNorm freezing and training-only class weighting.
+### Future Dataset 2 runs
+
+Run these **only after the approved Dataset 2 export is available**. There is
+no Dataset 2 preparation command implemented here.
+
+```bash
+# Train Experiment 6 and evaluate its best checkpoint on both test cohorts.
+OMP_NUM_THREADS=1 python non_diagnostic_leads.py train \
+  --dataset1 data/experiment5_500hz --dataset2 data/dataset2_500hz \
+  --train dataset2 --device mps --output outputs/experiment6_500hz
+
+# Evaluate an Experiment 5 checkpoint on both test cohorts without retraining.
+OMP_NUM_THREADS=1 python non_diagnostic_leads.py train \
+  --dataset1 data/experiment5_500hz --dataset2 data/dataset2_500hz \
+  --checkpoint outputs/experiment5_500hz/best_model.pt --device mps \
+  --output outputs/experiment5_both_tests
+```
+
+The runner rejects test patients present in that model's training or validation
+cohort, including across datasets, without silently resplitting the data.
+
+## Artifacts and verification
+
+The six-lead run saves `best_model.pt`, `history.json`, `training_config.json`,
+`provenance.json`, `metrics.json`, and per-dataset test predictions in NPZ format.
+The checkpoint records model state, selected epoch/loss, seed, weights,
+lead/label order, training configuration, architecture hash and export provenance.
+V6 additionally saves Adam state, training curves and evaluation plots.
+Evaluation-only modes check export fingerprints. Neither pipeline provides
+all state required for exact interrupted-training resumption.
+
+Small aggregate metrics and verification reports are under `reports/`.
+The completed checkpoints can be identified by their recorded SHA-256 hashes:
+
+| Checkpoint | SHA-256 |
+|---|---|
+| V6 baseline, epoch 8 | `9aca38801d6e4ab729ae5c87e8c8eb9bcdb6c6320a743636f63ebd75f229b178` |
+| Experiment 5, epoch 3 | `92ae4d18f654a5ab9a6a8933735c6e5d6dae7d984c442890131bf74aa6144a35` |
+
+The latest full-suite check passed **61 tests**, with existing WFDB/pandas
+deprecation warnings. Verification covers shapes, label rules, patient
+separation, checkpoint restoration and saved-prediction metrics. Synthetic
+fixtures are software checks, not experimental results. Raw datasets, waveform
+arrays, per-record predictions and weights are Git-ignored and are not included
+in a fresh checkout.
+
+## Limitations
+
+- ILBBB has only 62 training, seven validation and eight test positives. One
+  test error changes recall by 12.5 percentage points. Accuracy alone is
+  insufficient for this imbalanced task.
+- Fold 10 has prior development exposure. These are internal held-out results,
+  not pristine independent final validation. No further tuning should use it.
+- Patient separation and raw-sample agreement do not exclude acquisition
+  confounding, transformed duplicates or source patient-identity errors.
+  Metrics are recording-level rather than independent patient-level estimates.
+- Dataset 2 testing, Experiment 6 training, external validation and feature
+  stability analysis remain pending. No clinical deployment validation is claimed.
