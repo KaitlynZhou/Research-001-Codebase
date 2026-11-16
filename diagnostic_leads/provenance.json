@@ -1,0 +1,24 @@
+{
+  "repository": "KaitlynZhou/Research-001-Codebase",
+  "reference_branch": "feature/dataset1-12lead-clean",
+  "reference_commit": "4d82a777d7b811ea35e57d1abfc9cfb5c8128f6e",
+  "reference_author": "prisha / jainprisha055-spec",
+  "dataset2_definition_branch": "kevin/experiment2-dataset2-all12",
+  "dataset2_definition_commit": "3e01b5ebedc1ec2db3f6ac71714d1d86b0f28127",
+  "inspected_other_branches": [
+    "feature/ptbxl-data-processing",
+    "feature/ptbxl-resnet-training",
+    "feature/non-diagnostic-leads"
+  ],
+  "data_source": "https://physionet.org/content/ptb-xl/1.0.3/",
+  "intentional_training_difference": "Six diagnostic input leads instead of twelve. Keep all optimizer/training hyperparameters fixed for a controlled lead comparison.",
+  "changes_for_robustness": [
+    "batched evaluation",
+    "explicit patient split assertions",
+    "lead selection by WFDB channel name",
+    "training completion guard before test evaluation",
+    "export record-level predictions and provenance"
+  ],
+  "training_run_used_github_writes": false,
+  "publication_branch": "feature/dataset1-diagnostic-leads"
+}

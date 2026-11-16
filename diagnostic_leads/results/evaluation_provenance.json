@@ -1,0 +1,10 @@
+{
+  "checkpoint_epoch": 3,
+  "checkpoint_sha256": "f967c80f805b799bd41efded06af521479c958f0d9c7c1e0b400d99b8884b874",
+  "thresholds": [
+    0.5,
+    0.5
+  ],
+  "test_fold": 10,
+  "dataset1_is_subset_of_dataset2": true
+}

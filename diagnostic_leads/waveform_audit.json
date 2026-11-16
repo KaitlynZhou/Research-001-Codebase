@@ -1,0 +1,5 @@
+{
+  "cross_split_exact_waveform_duplicates": [],
+  "within_split_exact_waveform_duplicates": 0,
+  "method": "SHA-256 of six-lead float32 arrays for every included recording"
+}

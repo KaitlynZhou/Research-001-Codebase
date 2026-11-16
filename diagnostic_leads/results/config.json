@@ -1,0 +1,39 @@
+{
+  "seed": 42,
+  "batch_size": 32,
+  "max_epochs": 30,
+  "learning_rate": 0.001,
+  "patience": 7,
+  "optimizer": "Adam",
+  "weight_decay": 0,
+  "pos_weight": [
+    17.06775665283203,
+    123.7258071899414
+  ],
+  "leads": [
+    "I",
+    "aVL",
+    "V1",
+    "V2",
+    "V5",
+    "V6"
+  ],
+  "outcomes": [
+    "CLBBB",
+    "ILBBB"
+  ],
+  "selection": "minimum validation weighted BCE",
+  "thresholds": [
+    0.5,
+    0.5
+  ],
+  "sampling_hz": 100,
+  "samples": 1000,
+  "normalization": "none; physical mV",
+  "device": "cpu",
+  "threads": 3,
+  "torch": "2.15.0+cpu",
+  "numpy": "2.3.5",
+  "parameters": 243234,
+  "reference_commit": "4d82a777d7b811ea35e57d1abfc9cfb5c8128f6e"
+}

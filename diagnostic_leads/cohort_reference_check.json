@@ -1,0 +1,14 @@
+{
+  "all_dataset1_metadata_matches_reference": true,
+  "train_matches": true,
+  "validation_matches": true,
+  "test_matches": true,
+  "compared_columns": [
+    "ecg_id",
+    "patient_id",
+    "CLBBB",
+    "ILBBB",
+    "strat_fold",
+    "filename_lr"
+  ]
+}

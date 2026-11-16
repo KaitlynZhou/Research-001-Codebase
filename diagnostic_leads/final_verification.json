@@ -1,0 +1,11 @@
+{
+  "prediction_counts_match_cohorts": true,
+  "scores_finite_in_0_1": true,
+  "shared_records_have_identical_scores": true,
+  "test_patients_absent_from_train_and_validation": true,
+  "checkpoint_hashes_match": true,
+  "cohort_reference_parity_passed": true,
+  "architecture_and_label_tests_passed": true,
+  "metric_sanity_checks_passed": true,
+  "plots_visually_inspected": true
+}
