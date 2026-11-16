@@ -1,0 +1,5 @@
+numpy
+pandas
+wfdb
+torch
+scikit-learn
