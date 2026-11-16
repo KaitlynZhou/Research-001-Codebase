@@ -8,7 +8,7 @@ Classify CLBBB and ILBBB separately using 12-lead ECG recordings from PTB-XL.
 - Dataset 1: LBBB vs. Normal
 - Training recordings: 7,733
 - Validation recordings: 975
-- Test recordings: 974 (not yet evaluated)
+- Test recordings: 974 
 - Input shape: (12, 1000)
 - Patient-disjoint train/validation/test splits
 
