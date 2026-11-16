@@ -6,7 +6,8 @@ results and limitations are in [the README](../README.md).
 
 ## Export contract
 
-The actual Dataset 1 export is `data/dataset1_500hz/`. Dataset 2 is pending.
+The verified exports are `data/dataset1_500hz/` and `data/dataset2_500hz/`.
+Both match the designated source builders; see `reports/dataset_sources_verification.json`.
 Each dataset must supply:
 
 - `contract.json` with its dataset identifier (`dataset1` or `dataset2`),
@@ -24,8 +25,8 @@ Normal negatives require NORM without another diagnostic code. Official folds
 1–8/9/10 define train/validation/test. The loader rejects invalid contracts,
 label misalignment, duplicate recordings and patients spanning folds. Across
 datasets, test patients cannot occur in the trained model's training or
-validation cohorts. A future Dataset 2 builder still needs review against its
-approved selection policy; the loader does not invent a cohort.
+validation cohorts. Dataset 2 selection is implemented from its pinned source builder and verified
+record-for-record; the loader additionally checks export consistency.
 
 ## Architecture
 
@@ -55,4 +56,8 @@ numerical metrics were preserved; no retraining was performed. Source/checkpoint
 hashes and the model tensor digest are recorded in the aggregate summary.
 Only metadata changes account for the new serialized checkpoint checksum.
 
-Dataset 2 evaluation and Experiment 6 training/evaluation remain pending.
+Experiment 6 and both models' evaluations on both test datasets are complete.
+Exact results and configurations are in `reports/assignment_results.json`.
+Dataset 2 includes all source ECGs; its builder preserves the source assertion
+that no recording has both LBBB labels. This holds in the current corpus.
+Dataset 1 keeps the diagnostic-only Normal rule, including form/rhythm annotations.

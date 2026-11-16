@@ -1,0 +1,21 @@
+{
+  "fs": 500,
+  "samples": 5000,
+  "leads": [
+    "II",
+    "III",
+    "aVR",
+    "aVF",
+    "V3",
+    "V4"
+  ],
+  "source_column": "filename_hr",
+  "source_directory": "records500",
+  "all_exported_samples_match_original_raw": true,
+  "recordings_checked": {
+    "train": 17418,
+    "val": 2183,
+    "test": 2198
+  },
+  "method": "Independent WFDB reread; exact float32 equality on all six channels; no resampling"
+}

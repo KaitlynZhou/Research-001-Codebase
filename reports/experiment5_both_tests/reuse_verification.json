@@ -1,0 +1,8 @@
+{
+  "checkpoint_reused_without_retraining": true,
+  "checkpoint_sha256": "1b34cdb13233090218e78976156c653c2c4f8f7206c21c4fd4f51433befde3e5",
+  "original_dataset1_metrics_identical": true,
+  "same_record_cross_dataset_probabilities_match": true,
+  "max_subset_probability_difference": 0.0,
+  "best_epoch": 3
+}

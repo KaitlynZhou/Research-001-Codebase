@@ -1,0 +1,91 @@
+{
+  "fs": 500,
+  "samples": 5000,
+  "leads": [
+    "II",
+    "III",
+    "aVR",
+    "aVF",
+    "V3",
+    "V4"
+  ],
+  "labels": [
+    "CLBBB",
+    "ILBBB"
+  ],
+  "train_dataset": "dataset2",
+  "best_epoch": 11,
+  "threshold": 0.5,
+  "confusion_matrix_order": "true rows / predicted columns: negative, positive",
+  "dataset2_status": "available",
+  "tests": {
+    "dataset1": {
+      "CLBBB": {
+        "accuracy": 0.9876796714579056,
+        "precision": 0.8181818181818182,
+        "recall": 1.0,
+        "f1": 0.9,
+        "confusion_matrix": [
+          [
+            908,
+            12
+          ],
+          [
+            0,
+            54
+          ]
+        ]
+      },
+      "ILBBB": {
+        "accuracy": 0.8870636550308009,
+        "precision": 0.0603448275862069,
+        "recall": 0.875,
+        "f1": 0.11290322580645161,
+        "confusion_matrix": [
+          [
+            857,
+            109
+          ],
+          [
+            1,
+            7
+          ]
+        ]
+      }
+    },
+    "dataset2": {
+      "CLBBB": {
+        "accuracy": 0.9454049135577798,
+        "precision": 0.3103448275862069,
+        "recall": 1.0,
+        "f1": 0.47368421052631576,
+        "confusion_matrix": [
+          [
+            2024,
+            120
+          ],
+          [
+            0,
+            54
+          ]
+        ]
+      },
+      "ILBBB": {
+        "accuracy": 0.7961783439490446,
+        "precision": 0.015418502202643172,
+        "recall": 0.875,
+        "f1": 0.030303030303030304,
+        "confusion_matrix": [
+          [
+            1743,
+            447
+          ],
+          [
+            1,
+            7
+          ]
+        ]
+      }
+    }
+  }
+}

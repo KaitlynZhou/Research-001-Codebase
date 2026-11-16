@@ -1,0 +1,26 @@
+{
+  "test_patient_checks": {
+    "dataset1": {
+      "test_patients": 883,
+      "overlap_with_training_or_validation": 0
+    },
+    "dataset2": {
+      "test_patients": 1904,
+      "overlap_with_training_or_validation": 0
+    }
+  },
+  "subset_checks": {
+    "train": {
+      "dataset1_subset": true,
+      "matching_records": 7733
+    },
+    "val": {
+      "dataset1_subset": true,
+      "matching_records": 975
+    },
+    "test": {
+      "dataset1_subset": true,
+      "matching_records": 974
+    }
+  }
+}

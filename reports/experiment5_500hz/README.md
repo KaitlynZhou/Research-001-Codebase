@@ -18,13 +18,15 @@ internal held-out results, not external validation.
 - `history.json` and `training_config.json`: training and checkpoint selection.
 - `provenance.json`: contracts, split counts and export fingerprints.
 - `raw_verification.json`: exact comparisons against all 9,682 native waveforms.
-- `summary.json`: source/checkpoint hashes, preservation checks and pending work.
+- `summary.json`: source/checkpoint hashes, preservation checks and completed-evaluation links.
 - `cleanup_verification.json`: 11 passing tests, unchanged tensors/arrays, and exact
   full-test probability reproduction with optimizer steps disabled.
 
-The local checkpoint and predictions are in `outputs/experiment5_500hz/` and are
-Git-ignored. Cleanup changed paths and embedded provenance only: model tensors,
+The final checkpoint is included at `outputs/experiment5_500hz/best_model.pt`;
+predictions in the same directory remain Git-ignored. Cleanup changed paths and embedded provenance only: model tensors,
 input arrays, labels, saved predictions and numerical results are unchanged.
-No model was retrained. Dataset 2 evaluation and Experiment 6 remain pending.
+This original Dataset 1 run was preserved without retraining. Both-test results
+are now in [the completed evaluation bundle](../experiment5_both_tests/README.md);
+Experiment 6 results are in [its bundle](../experiment6_500hz/README.md).
 See [the project README](../../README.md) and
 [contract/model details](../../docs/non_diagnostic_leads.md).

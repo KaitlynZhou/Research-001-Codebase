@@ -1,0 +1,192 @@
+{
+  "dataset1": {
+    "source": {
+      "branch": "feature/dataset1-12lead-clean",
+      "commit": "4d82a777d7b811ea35e57d1abfc9cfb5c8128f6e",
+      "builder": "learning_pipeline/02_build_dataset1.py"
+    },
+    "source_builder_sha256": "96aa81221384b5e98f5d5f029b50ae92cfe402a7d973607226fdfddc82f4ba07",
+    "checks": {
+      "train": {
+        "recordings": 7733,
+        "record_ids_match": true,
+        "patient_ids_match": true,
+        "separate_labels_match": true,
+        "folds_match": true,
+        "row_order_matches": true,
+        "native_hr_paths_match": true
+      },
+      "val": {
+        "recordings": 975,
+        "record_ids_match": true,
+        "patient_ids_match": true,
+        "separate_labels_match": true,
+        "folds_match": true,
+        "row_order_matches": true,
+        "native_hr_paths_match": true
+      },
+      "test": {
+        "recordings": 974,
+        "record_ids_match": true,
+        "patient_ids_match": true,
+        "separate_labels_match": true,
+        "folds_match": true,
+        "row_order_matches": true,
+        "native_hr_paths_match": true
+      }
+    },
+    "counts": {
+      "train": {
+        "recordings": 7733,
+        "patients": 7174,
+        "CLBBB": {
+          "positive": 428,
+          "negative": 7305
+        },
+        "ILBBB": {
+          "positive": 62,
+          "negative": 7671
+        }
+      },
+      "val": {
+        "recordings": 975,
+        "patients": 916,
+        "CLBBB": {
+          "positive": 54,
+          "negative": 921
+        },
+        "ILBBB": {
+          "positive": 7,
+          "negative": 968
+        }
+      },
+      "test": {
+        "recordings": 974,
+        "patients": 883,
+        "CLBBB": {
+          "positive": 54,
+          "negative": 920
+        },
+        "ILBBB": {
+          "positive": 8,
+          "negative": 966
+        }
+      }
+    },
+    "export_sha256": {
+      "X_train.npy": "177158b349734ee50bf3fbaf4b6335c94fb975452ae0431a36433e785d5480fa",
+      "y_train.npy": "427953e498455e48c2e00f99f83b32edac1210f640cf5db505fa74cbf6ec38cc",
+      "train.csv": "12120d584d880940459e2659f02bc2fa657ece5dd8d7e27809c62a19161113d5",
+      "X_val.npy": "72dd99ee3a8101cb73b9cc7da480c0beaf0232f8dc959c1ca8e4bb708ce78cfc",
+      "y_val.npy": "6cb3e608c898df976f8029fdaa4793996782fbc8431f8e75388a9e17ce14e9bd",
+      "val.csv": "38e5c25adb5858aa76312429ab2428dd4f62ec501ffe99b6e0b283e2adda676a",
+      "X_test.npy": "990a9d50f4ece6f2981a18b00f54ea04a91237e735159dcb9d613f13eafb645d",
+      "y_test.npy": "e5d83dc007b3367c33450f9309b1cab183da92019bc83b76517a0badde3541a4",
+      "test.csv": "e7716b514bf5ccf212e150b1a112c8e744ad215b8f49c28640219f53e1d30a3d",
+      "contract.json": "f50fb798e9132ca3e98a1a28d037de631b34c0828f14dababc794ca1113110c0"
+    },
+    "cross_split_patient_overlap": 0
+  },
+  "dataset2": {
+    "source": {
+      "branch": "kevin/experiment2-dataset2-all12",
+      "commit": "3e01b5ebedc1ec2db3f6ac71714d1d86b0f28127",
+      "builder": "experiment2/01_build_dataset2.py"
+    },
+    "source_builder_sha256": "6ed24e4a5fdf246102e4a37d5e33e1e36bd196478cab6a650bef3beac6f8de42",
+    "checks": {
+      "train": {
+        "recordings": 17418,
+        "record_ids_match": true,
+        "patient_ids_match": true,
+        "separate_labels_match": true,
+        "folds_match": true,
+        "row_order_matches": true,
+        "native_hr_paths_match": true
+      },
+      "val": {
+        "recordings": 2183,
+        "record_ids_match": true,
+        "patient_ids_match": true,
+        "separate_labels_match": true,
+        "folds_match": true,
+        "row_order_matches": true,
+        "native_hr_paths_match": true
+      },
+      "test": {
+        "recordings": 2198,
+        "record_ids_match": true,
+        "patient_ids_match": true,
+        "separate_labels_match": true,
+        "folds_match": true,
+        "row_order_matches": true,
+        "native_hr_paths_match": true
+      }
+    },
+    "counts": {
+      "train": {
+        "recordings": 17418,
+        "patients": 15023,
+        "CLBBB": {
+          "positive": 428,
+          "negative": 16990
+        },
+        "ILBBB": {
+          "positive": 62,
+          "negative": 17356
+        }
+      },
+      "val": {
+        "recordings": 2183,
+        "patients": 1942,
+        "CLBBB": {
+          "positive": 54,
+          "negative": 2129
+        },
+        "ILBBB": {
+          "positive": 7,
+          "negative": 2176
+        }
+      },
+      "test": {
+        "recordings": 2198,
+        "patients": 1904,
+        "CLBBB": {
+          "positive": 54,
+          "negative": 2144
+        },
+        "ILBBB": {
+          "positive": 8,
+          "negative": 2190
+        }
+      }
+    },
+    "export_sha256": {
+      "X_train.npy": "cff8af7432fd81b91309f994c6ff305356176d39a4fba08faa88e93957c19541",
+      "y_train.npy": "c730fb4a2dec28f7eeed5b71dc38832742571f1bb0711a63fbeaea4422b57b5a",
+      "train.csv": "57c2e25e1d78b6f49f6dc285ec2b73f3fa4a96136947810c38879819f2b7f45d",
+      "X_val.npy": "02991bd15ffafd0907092624e0c740aa12a329df0261aa85369e536576fe5c7d",
+      "y_val.npy": "54e1ae42fd8f36d4d061b8797c3d5cc8e298184841e489c938c2294f67140fc7",
+      "val.csv": "954864e0c6983e30b5bd7b15f6ec1b6b65df109cb96b756ef89a6a225556dfbe",
+      "X_test.npy": "cbc1e175ca5da78936a92f7962e3d7ba87dba68233bc8fe940aabd48e13c21d8",
+      "y_test.npy": "98ba2d1992dab0bfc160a7317c21defeccff17a3f93c317f5625354595eafd85",
+      "test.csv": "458b57e268ff9e43291b10fb9619d8fb3d20bdd71d84f8170eabfb383313aa87",
+      "contract.json": "2034e27fb1627d3aed5ed1dbea1db5243449ac57f60ab07b40409a947ce72bd7"
+    },
+    "cross_split_patient_overlap": 0
+  },
+  "cross_dataset_checks": {
+    "train": {
+      "dataset1_subset": true,
+      "matching_records": 7733
+    },
+    "val": {
+      "dataset1_subset": true,
+      "matching_records": 975
+    },
+    "test": {
+      "dataset1_subset": true,
+      "matching_records": 974
+    }
+  }
+}

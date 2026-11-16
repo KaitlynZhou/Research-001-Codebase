@@ -1,7 +1,7 @@
 .venv/
 __pycache__/
 .pytest_cache/
-outputs/
+outputs/*
 *.npz
 data/
 results/
@@ -10,3 +10,11 @@ results/
 *.pth
 *.hea
 *.dat
+
+# Publish only the two final checkpoints; other generated outputs stay local.
+!outputs/experiment5_500hz/
+!outputs/experiment6_500hz/
+outputs/experiment5_500hz/*
+outputs/experiment6_500hz/*
+!outputs/experiment5_500hz/best_model.pt
+!outputs/experiment6_500hz/best_model.pt

@@ -1,0 +1,18 @@
+{
+  "same_parameter_keys_and_shapes": true,
+  "identical_forward_output": true,
+  "input_shape": [
+    2,
+    6,
+    5000
+  ],
+  "output_shape": [
+    2,
+    2
+  ],
+  "trainable_parameters": 243234,
+  "source_file": "experiment2/04_resnet_model.py",
+  "source_commit": "3e01b5ebedc1ec2db3f6ac71714d1d86b0f28127",
+  "adaptation": "First convolution receives six channels; all residual layers and classifier unchanged",
+  "local_model_sha256": "4ee23dff7817665bc268c43447be99910d4b7bbc9d7aebcdf1a50aec411e255c"
+}

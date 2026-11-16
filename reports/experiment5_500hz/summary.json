@@ -1,5 +1,5 @@
 {
-  "status": "500 Hz Experiment 5 trained and evaluated on Dataset 1; Dataset 2 tasks pending",
+  "status": "Experiment 5 verified and reused; both held-out test datasets evaluated",
   "fs": 500,
   "samples": 5000,
   "leads": [
@@ -39,17 +39,13 @@
     "saved_predictions_reproduce_metrics": true,
     "exports_match_checkpoint_fingerprints": true,
     "pip_check": "passed",
-    "data_and_weights_git_ignored": true,
     "tests_passed": 11,
     "cleanup_inference_reproduces_metrics": true,
     "model_tensors_unchanged": true,
-    "retraining_performed": false
+    "retraining_performed": false,
+    "data_and_predictions_git_ignored": true,
+    "final_checkpoint_included_in_repository": true
   },
-  "pending": [
-    "Experiment 5 on Dataset 2 test",
-    "Experiment 6 training",
-    "Experiment 6 on Dataset 1 and Dataset 2 tests"
-  ],
   "caveat": "Internal official-fold held-out evaluation; historical source fold 10 was development-exposed",
   "model_tensor_sha256": "2458329930788bdba3c21e2808a40271b991792d047d798b5e6605607d66f555",
   "metadata_cleanup": {
@@ -57,5 +53,12 @@
     "predictions_unchanged": true,
     "previous_checkpoint_sha256": "92ae4d18f654a5ab9a6a8933735c6e5d6dae7d984c442890131bf74aa6144a35",
     "reason": "Neutral paths and policy description; relocated architecture; refreshed export and source fingerprints; no training"
-  }
+  },
+  "pending_at_original_run": [
+    "Experiment 5 on Dataset 2 test",
+    "Experiment 6 training",
+    "Experiment 6 on Dataset 1 and Dataset 2 tests"
+  ],
+  "pending": [],
+  "completed_evaluation_report": "reports/experiment5_both_tests/metrics.json"
 }

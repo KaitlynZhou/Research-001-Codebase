@@ -1,0 +1,309 @@
+{
+  "status": "complete",
+  "fs": 500,
+  "samples": 5000,
+  "leads": [
+    "II",
+    "III",
+    "aVR",
+    "aVF",
+    "V3",
+    "V4"
+  ],
+  "labels": [
+    "CLBBB",
+    "ILBBB"
+  ],
+  "threshold": 0.5,
+  "confusion_matrix_order": "true rows / predicted columns: negative, positive",
+  "tests_passed": 15,
+  "datasets": {
+    "dataset1": {
+      "branch": "feature/dataset1-12lead-clean",
+      "commit": "4d82a777d7b811ea35e57d1abfc9cfb5c8128f6e",
+      "builder": "learning_pipeline/02_build_dataset1.py"
+    },
+    "dataset2": {
+      "branch": "kevin/experiment2-dataset2-all12",
+      "commit": "3e01b5ebedc1ec2db3f6ac71714d1d86b0f28127",
+      "builder": "experiment2/01_build_dataset2.py"
+    }
+  },
+  "experiment5_checkpoint_reused_unchanged": true,
+  "models": {
+    "experiment5": {
+      "training_dataset": "dataset1",
+      "best_epoch": 3,
+      "epochs_completed": 10,
+      "best_validation_loss": 0.44968122471601535,
+      "training_config": {
+        "train_dataset": "dataset1",
+        "seed": 42,
+        "batch_size": 32,
+        "max_epochs": 30,
+        "patience": 7,
+        "learning_rate": 0.001,
+        "optimizer": "Adam",
+        "device": "mps",
+        "fs": 500,
+        "samples": 5000,
+        "source_column": "filename_hr",
+        "waveform_directory": "records500",
+        "pos_weight": [
+          17.06775665283203,
+          123.7258071899414
+        ],
+        "selection": "lowest validation weighted BCE",
+        "threshold": 0.5
+      },
+      "checkpoint_path": "outputs/experiment5_500hz/best_model.pt",
+      "checkpoint_sha256": "1b34cdb13233090218e78976156c653c2c4f8f7206c21c4fd4f51433befde3e5",
+      "architecture_sha256": "4ee23dff7817665bc268c43447be99910d4b7bbc9d7aebcdf1a50aec411e255c",
+      "max_subset_probability_difference": 0.0,
+      "metrics_recomputed_from_saved_predictions": true,
+      "checkpoint_is_minimum_validation_loss": true
+    },
+    "experiment6": {
+      "training_dataset": "dataset2",
+      "best_epoch": 11,
+      "epochs_completed": 18,
+      "best_validation_loss": 0.5225658352310593,
+      "training_config": {
+        "train_dataset": "dataset2",
+        "seed": 42,
+        "batch_size": 32,
+        "max_epochs": 30,
+        "patience": 7,
+        "learning_rate": 0.001,
+        "optimizer": "Adam",
+        "device": "mps",
+        "fs": 500,
+        "samples": 5000,
+        "source_column": "filename_hr",
+        "waveform_directory": "records500",
+        "pos_weight": [
+          39.69626235961914,
+          279.93548583984375
+        ],
+        "selection": "lowest validation weighted BCE",
+        "threshold": 0.5
+      },
+      "checkpoint_path": "outputs/experiment6_500hz/best_model.pt",
+      "checkpoint_sha256": "b82afa8a2964d961c0b0ea40edab6eb31862fedccb5486b74a63df30e45d2af2",
+      "architecture_sha256": "4ee23dff7817665bc268c43447be99910d4b7bbc9d7aebcdf1a50aec411e255c",
+      "max_subset_probability_difference": 0.0,
+      "metrics_recomputed_from_saved_predictions": true,
+      "checkpoint_is_minimum_validation_loss": true
+    }
+  },
+  "evaluations": {
+    "experiment5": {
+      "dataset1": {
+        "CLBBB": {
+          "accuracy": 0.9753593429158111,
+          "precision": 0.7027027027027027,
+          "recall": 0.9629629629629629,
+          "f1": 0.8125,
+          "confusion_matrix": [
+            [
+              898,
+              22
+            ],
+            [
+              2,
+              52
+            ]
+          ]
+        },
+        "ILBBB": {
+          "accuracy": 0.8655030800821355,
+          "precision": 0.051094890510948905,
+          "recall": 0.875,
+          "f1": 0.09655172413793103,
+          "confusion_matrix": [
+            [
+              836,
+              130
+            ],
+            [
+              1,
+              7
+            ]
+          ]
+        }
+      },
+      "dataset2": {
+        "CLBBB": {
+          "accuracy": 0.8826205641492265,
+          "precision": 0.16883116883116883,
+          "recall": 0.9629629629629629,
+          "f1": 0.287292817679558,
+          "confusion_matrix": [
+            [
+              1888,
+              256
+            ],
+            [
+              2,
+              52
+            ]
+          ]
+        },
+        "ILBBB": {
+          "accuracy": 0.6856232939035487,
+          "precision": 0.010043041606886656,
+          "recall": 0.875,
+          "f1": 0.019858156028368795,
+          "confusion_matrix": [
+            [
+              1500,
+              690
+            ],
+            [
+              1,
+              7
+            ]
+          ]
+        }
+      }
+    },
+    "experiment6": {
+      "dataset1": {
+        "CLBBB": {
+          "accuracy": 0.9876796714579056,
+          "precision": 0.8181818181818182,
+          "recall": 1.0,
+          "f1": 0.9,
+          "confusion_matrix": [
+            [
+              908,
+              12
+            ],
+            [
+              0,
+              54
+            ]
+          ]
+        },
+        "ILBBB": {
+          "accuracy": 0.8870636550308009,
+          "precision": 0.0603448275862069,
+          "recall": 0.875,
+          "f1": 0.11290322580645161,
+          "confusion_matrix": [
+            [
+              857,
+              109
+            ],
+            [
+              1,
+              7
+            ]
+          ]
+        }
+      },
+      "dataset2": {
+        "CLBBB": {
+          "accuracy": 0.9454049135577798,
+          "precision": 0.3103448275862069,
+          "recall": 1.0,
+          "f1": 0.47368421052631576,
+          "confusion_matrix": [
+            [
+              2024,
+              120
+            ],
+            [
+              0,
+              54
+            ]
+          ]
+        },
+        "ILBBB": {
+          "accuracy": 0.7961783439490446,
+          "precision": 0.015418502202643172,
+          "recall": 0.875,
+          "f1": 0.030303030303030304,
+          "confusion_matrix": [
+            [
+              1743,
+              447
+            ],
+            [
+              1,
+              7
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "leakage_checks": {
+    "experiment5": {
+      "test_patient_checks": {
+        "dataset1": {
+          "test_patients": 883,
+          "overlap_with_training_or_validation": 0
+        },
+        "dataset2": {
+          "test_patients": 1904,
+          "overlap_with_training_or_validation": 0
+        }
+      },
+      "subset_checks": {
+        "train": {
+          "dataset1_subset": true,
+          "matching_records": 7733
+        },
+        "val": {
+          "dataset1_subset": true,
+          "matching_records": 975
+        },
+        "test": {
+          "dataset1_subset": true,
+          "matching_records": 974
+        }
+      }
+    },
+    "experiment6": {
+      "test_patient_checks": {
+        "dataset1": {
+          "test_patients": 883,
+          "overlap_with_training_or_validation": 0
+        },
+        "dataset2": {
+          "test_patients": 1904,
+          "overlap_with_training_or_validation": 0
+        }
+      },
+      "subset_checks": {
+        "train": {
+          "dataset1_subset": true,
+          "matching_records": 7733
+        },
+        "val": {
+          "dataset1_subset": true,
+          "matching_records": 975
+        },
+        "test": {
+          "dataset1_subset": true,
+          "matching_records": 974
+        }
+      }
+    }
+  },
+  "runner_sha256": "b041bf37dd5e0145ba3bc880fc8c594d7c8d3e5e2a821ab5c01bc7c70a88e523",
+  "utilities_sha256": "620001299fbeecbe0d6b68529053fb7a9f33043a4a630dc47d06ccca40db3539",
+  "checks": {
+    "source_selection_and_splits_match": true,
+    "all_four_evaluations_complete": true,
+    "both_models_saved": true,
+    "all_metrics_match_saved_predictions": true,
+    "all_four_test_patient_overlaps_zero": true,
+    "model_architecture_identical": true,
+    "native_raw_samples_verified": true,
+    "readme_values_verified": true,
+    "tests_passed": 15,
+    "pip_check": "passed"
+  }
+}

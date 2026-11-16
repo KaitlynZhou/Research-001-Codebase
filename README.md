@@ -1,140 +1,186 @@
-# Six-Lead PTB-XL ECG Modeling
+# Six-Lead PTB-XL ECG Modeling: Experiments 5 and 6
 
-This project trains one-dimensional ResNet classifiers for complete and incomplete
-left bundle branch block using six PTB-XL ECG leads: **II, III, aVR, aVF, V3, V4**.
-Inputs are native **500 Hz** recordings with **5,000 samples per lead** (10 seconds).
+Both experiments classify complete and incomplete left bundle branch block using
+native PTB-XL **500 Hz** recordings. Inputs have exactly **5,000 samples per lead**
+(10 seconds), ordered **II, III, aVR, aVF, V3, V4**, shape **`(6,5000)`**.
+CLBBB and ILBBB are independent binary outputs of the same ResNet architecture.
 
 ## Experiment summary
 
-| Experiment | Dataset | Leads, in input order | Input shape per ECG | Targets | Status |
-|---|---|---|---|---|---|
-| Experiment 5 | Dataset 1: LBBB vs. Normal | II, III, aVR, aVF, V3, V4 | `(6,5000)` at 500 Hz | Independent CLBBB and ILBBB | Training and Dataset 1 test evaluation completed; Dataset 2 evaluation pending |
-| Experiment 6 | Dataset 2: LBBB vs. All Others | II, III, aVR, aVF, V3, V4 | Required: `(6,5000)` at 500 Hz | Planned independent CLBBB and ILBBB | Pending: dataset policy, exports, training and evaluation |
+| Experiment | Training cohort | Model | Dataset 1 test | Dataset 2 test |
+|---|---|---|---|---|
+| Experiment 5 | Dataset 1: LBBB vs. Normal | Verified existing epoch-3 checkpoint reused | Completed | Completed |
+| Experiment 6 | Dataset 2: LBBB vs. All Others | Separate model trained from fresh initialization | Completed | Completed |
 
-## Shared data handling
+The existing Dataset 1 export and Experiment 5 model were reused after exact
+source verification. Dataset 2 was prepared from its designated builder's logic;
+only waveform extraction was changed to the six native 500 Hz channels.
 
-The source files are `ptbxl_database.csv`, `scp_statements.csv`, and native WFDB
-recordings in `records500/`, selected using **`filename_hr`**. Signals are stored
-as float32 physical amplitudes in mV, with channels before time. No filtering,
-resampling, upsampling, padding, truncation, augmentation or fitted amplitude
-normalization is applied.
+## Dataset sources and verification
 
-Official PTB-XL folds are retained: **1–8 for training, 9 for validation, and
-10 for testing**. There is no random resplitting. Repeated recordings within a
-patient's assigned split remain included. The completed Dataset 1 cohort has zero
-cross-split patient overlap. Loaders validate identifiers, folds, shapes,
-finite samples and label alignment, and reject duplicate recordings or paths.
-BatchNorm learns statistics during training and freezes them for evaluation.
+| Dataset | Authoritative source | Preparation file | Pinned revision |
+|---|---|---|---|
+| Dataset 1 | `feature/dataset1-12lead-clean` | `learning_pipeline/02_build_dataset1.py` | `4d82a777d7b811ea35e57d1abfc9cfb5c8128f6e` |
+| Dataset 2 | `kevin/experiment2-dataset2-all12` | `experiment2/01_build_dataset2.py` | `3e01b5ebedc1ec2db3f6ac71714d1d86b0f28127` |
 
-## Experiment 5: six leads at 500 Hz
+`verify_dataset_sources.py` executes only the pinned builders' in-memory selection
+statements, excluding their output-writing code. It compares actual exports with
+those references: record IDs, patient IDs, CLBBB/ILBBB labels, folds, row order and
+native high-resolution paths all match. Raw metadata SHA-256 hashes are checked.
+See [source verification](reports/dataset_sources_verification.json).
 
-### Dataset 1 and labels
+### Dataset 1 selection
 
-A recording is selected if it contains CLBBB, ILBBB, or qualifies as Normal.
-The targets are separate binary values, ordered **`[CLBBB,ILBBB]`**, determined
-by SCP code presence without an additional confidence threshold. LBBB-positive
-recordings may have other diagnoses and may have both labels.
+Include every recording containing CLBBB or ILBBB, allowing additional diagnoses.
+Include a Normal negative when `NORM` is present and no other code is marked
+`diagnostic == 1` in `scp_statements.csv`. Targets are `[CLBBB,ILBBB]` based on
+code presence without an additional confidence cutoff; Normal is `[0,0]`.
 
-Normal recordings must contain `NORM` and no other code marked `diagnostic == 1`
-in `scp_statements.csv`. Non-diagnostic rhythm/form statements are permitted.
-Normal has targets `[0,0]`.
+**This is the source branch's diagnostic-only Normal rule.** It permits form/rhythm
+annotations, including abnormalities not flagged diagnostic. The assignment
+preserves that rule exactly; the cohort must not be described as guaranteed
+free of every abnormality or disease. No stricter negative filter was introduced.
 
-| Split | Recordings | Unique patients | CLBBB positive / negative | ILBBB positive / negative |
-|---|---:|---:|---:|---:|
-| Train | 7,733 | 7,174 | 428 / 7,305 | 62 / 7,671 |
-| Validation | 975 | 916 | 54 / 921 | 7 / 968 |
-| Test | 974 | 883 | 54 / 920 | 8 / 966 |
+### Dataset 2 selection
 
-Each negative count refers to that output independently. The exact lead order
-is **II, III, aVR, aVF, V3, V4**. Headers are matched case-insensitively.
-The extractor requires raw shape `(5000,12)` at 500 Hz and saves
-**`(N,6,5000)`**. All 9,682 exports were independently reread from native WFDB
-files and matched every selected float32 sample exactly.
+Include **all 21,799 source recordings**. CLBBB/ILBBB code presence gives the two
+labels; every recording with neither code is an All Others negative, including
+other diagnoses and abnormalities. Positive recordings retain comorbidities.
+The source builder also asserts that no recording has both labels; that assertion
+passes in this local corpus and is preserved. Model outputs still use independent
+sigmoids and binary loss, not a mutually exclusive softmax.
 
-### ResNet architecture
+### Counts and official patient splits
 
-`ECGResNet` in `ecg_resnet.py` has:
+Official folds **1–8 train, 9 validate, 10 test** are retained without resplitting.
+Repeated recordings within a patient's assigned split remain included.
 
-- A kernel-7, stride-1 stem convolution from **6 to 32** channels, BatchNorm and ReLU.
-- Three residual blocks with widths **32→32, 32→64, 64→128** and strides **1,2,2**.
-  Each block contains two kernel-7 convolutions with BatchNorm, an identity or
-  kernel-1 projection shortcut, and ReLU after the first convolution and addition.
-- Adaptive average pooling over time and a **128→2** linear classifier.
-  Sigmoid maps the logits to independent CLBBB/ILBBB probabilities.
+| Dataset | Split | Recordings | Unique patients | CLBBB positive / negative | ILBBB positive / negative |
+|---|---|---:|---:|---:|---:|
+| Dataset 1 | Train | 7,733 | 7,174 | 428 / 7,305 | 62 / 7,671 |
+| Dataset 1 | Validation | 975 | 916 | 54 / 921 | 7 / 968 |
+| Dataset 1 | Test | 974 | 883 | 54 / 920 | 8 / 966 |
+| Dataset 2 | Train | 17,418 | 15,023 | 428 / 16,990 | 62 / 17,356 |
+| Dataset 2 | Validation | 2,183 | 1,942 | 54 / 2,129 | 7 / 2,176 |
+| Dataset 2 | Test | 2,198 | 1,904 | 54 / 2,144 | 8 / 2,190 |
 
-The six-input model has **243,234 trainable parameters**. Adaptive pooling
-supports 5,000-sample recordings. Input **`(batch_size,6,5000)`** produces
-**`(batch_size,2)`**, with forward/backward execution covered by tests.
+Negative counts refer to each output separately. Dataset 2 has 16,928/2,122/2,136
+recordings with neither LBBB label in train/validation/test. Dataset 1 is an exact
+same-fold subset of Dataset 2, with matching patient IDs, labels and filenames.
 
-### Training and model selection
+## Native 500 Hz preprocessing and validation
 
-| Training setting | Final 500 Hz run |
-|---|---|
-| Optimizer / learning rate | Adam / 0.001 |
-| Seed / batch size / device | 42 / 32 / Apple Silicon MPS |
-| Loss | `BCEWithLogitsLoss` with separate positive weights |
-| Positive weights | Training negatives / positives: CLBBB 17.06775665; ILBBB 123.72580719 |
-| Maximum epochs / early stopping | 30 / patience 7, monitoring validation weighted BCE |
-| Checkpoint | Lowest validation loss; restored before test inference |
-| Completed epochs / best epoch | **10 / 3** |
-| Best validation loss | **0.4496812247** |
-| Main threshold | **0.5** for each sigmoid output |
+`non_diagnostic_leads.py` reads `ptbxl_database.csv`, `scp_statements.csv` and WFDB
+recordings from `records500/`, using **`filename_hr`**. It verifies native 500 Hz,
+raw shape `(5000,12)`, finite amplitudes, unique header lead names and mV units.
+It selects the six channels by case-insensitive header names and saves float32
+arrays with shape `(N,6,5000)` and labels `(N,2)`.
 
-Training starts from fresh initialization. Positive weights use training labels
-only and stay fixed for validation. Training batches are shuffled, validation controls model selection, and
-PyTorch deterministic operations are requested. Test scores do not control the implemented optimization, stopping,
-weights or thresholds. Experiment 5 has no additional-seed study,
-cross-validation, architecture comparison or validation threshold sweep.
+There is no resampling, upsampling, filtering, padding, truncation, augmentation
+or fitted amplitude normalization. All 9,682 Dataset 1 and 21,799 Dataset 2 exports
+were independently compared with their native WFDB samples; every selected
+float32 sample matched exactly. Dataset 2 evidence is in
+[raw verification](reports/dataset2_raw_verification.json).
 
-### Final 500 Hz test results
+Waveform writing and loading are disk-backed to bound memory usage. Each batch
+copies waveform rows into tensors. `contract.json` declares dataset, ordered
+leads/labels, 500 Hz, 5,000 samples, mV, native HR paths, no normalization, and
+label policy. Dataset 2 also records its source revision. The loader verifies
+contracts, finite inputs, labels aligned to manifests, identifiers, duplicates,
+fold membership and patient separation. Invalid data fails rather than being
+silently substituted or resplit.
 
-The evaluator reports **accuracy, precision, recall, F1 and confusion matrices
-separately for each label**, using probability ≥ 0.5. It does not calculate
-ROC-AUC or average precision. Undefined precision/recall/F1 use zero.
+## Shared ResNet architecture
 
-| Label | Accuracy | Precision | Recall | F1 | TN | FP | FN | TP |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| CLBBB | **97.54%** | **70.27%** | **96.30%** | **81.25%** | 898 | 22 | 2 | 52 |
-| ILBBB | **86.55%** | **5.11%** | **87.50%** | **9.66%** | 836 | 130 | 1 | 7 |
+`ecg_resnet.ECGResNet` has **243,234 trainable parameters**:
 
-Confusion matrices use true rows / predicted columns, negative then positive:
-CLBBB **`[[898,22],[2,52]]`**; ILBBB **`[[836,130],[1,7]]`**.
-
-These results are from the **final native 500 Hz run**, with its epoch-3 weights.
-CLBBB detects 52/54 positives. ILBBB detects 7/8 positives but produces 130 false
-positives, yielding low precision and F1. No earlier 100 Hz results are presented
-as 500 Hz results.
-
-## Experiment 6 and Dataset 2: pending
-
-Dataset 2 is intended for **LBBB vs. All Others**. Its exact selection policy,
-including ambiguous-code handling and negative definitions, and validated
-exports are unavailable. Dataset 1 is not substituted. No counts, trained
-weights or performance are available for Experiment 6.
-
-The six-lead runner supports a future approved Dataset 2 export using 500 Hz,
-5,000 samples, the same ordered six leads, separate `[CLBBB,ILBBB]` targets,
-and official patient-separated folds. It requires `contract.json`,
-`train.csv`, `val.csv`, `test.csv`, and corresponding `X_*.npy` / `y_*.npy` files.
-Arrays must have shapes `(N,6,5000)` and `(N,2)`. Manifests require `ecg_id`,
-`patient_id`, `strat_fold`, `filename_hr`, `CLBBB` and `ILBBB`.
-
-The contract must declare `dataset=dataset2`, ordered `leads` and `labels`,
-`fs=500`, `samples=5000`, `source_column=filename_hr`,
-`waveform_directory=records500`, `units=mV`, `normalization=none`, and a nonempty
-label-policy description. Export consistency checks do not establish whether
-an external builder correctly implements the approved selection policy.
-
-| Model | Dataset 1 test | Dataset 2 test |
+| Stage | Operation | Output per recording |
 |---|---|---|
-| Experiment 5 | Completed | **Pending: dataset unavailable** |
-| Experiment 6 | **Pending: model not trained** | **Pending: dataset and model unavailable** |
+| Input | Six ordered ECG channels | `(6,5000)` |
+| Stem | Conv1D 6→32, kernel 7, padding 3, stride 1; BatchNorm; ReLU | `(32,5000)` |
+| Residual block 1 | 32→32, stride 1 | `(32,5000)` |
+| Residual block 2 | 32→64, stride 2 | `(64,2500)` |
+| Residual block 3 | 64→128, stride 2 | `(128,1250)` |
+| Pool | Adaptive average pooling over time | `(128,1)` |
+| Classifier | Linear 128→2 | Two logits |
+| Probabilities | Independent sigmoid per logit | `[P(CLBBB),P(ILBBB)]` |
+
+Each block contains two kernel-7 convolutions with BatchNorm, an identity or
+kernel-1 projected shortcut, and ReLU after the first convolution and shortcut
+addition. Convolution biases are enabled. BatchNorm statistics learn during
+training and freeze for validation/test. Adaptive pooling supports 5,000 samples.
+Both models use this exact architecture and ordered outputs. Verification against
+the Dataset 2 source model confirms matching parameter keys/shapes and identical
+forward output with six input channels; see
+[architecture verification](reports/model_architecture_verification.json).
+
+## Training configuration
+
+| Setting | Experiment 5 | Experiment 6 |
+|---|---|---|
+| Training dataset | Dataset 1 | Dataset 2 |
+| Architecture | Shared six-lead ECGResNet | Same |
+| Seed / batch size | 42 / 32 | 42 / 32 |
+| Optimizer / learning rate | Adam / 0.001 | Adam / 0.001 |
+| Device | Apple Silicon MPS | Apple Silicon MPS |
+| Loss | Weighted `BCEWithLogitsLoss` | Same loss |
+| Positive weight: CLBBB | 17.06775665 | 39.69626236 |
+| Positive weight: ILBBB | 123.72580719 | 279.93548584 |
+| Maximum epochs / patience | 30 / 7 | 30 / 7 |
+| Completed epochs / best epoch | 10 / 3 | 18 / 11 |
+| Best validation weighted BCE | 0.4496812247 | 0.5225658352 |
+| Main probability threshold | 0.5 per label | 0.5 per label |
+
+For each label, positive weight is training negatives divided by training
+positives. The same fixed weights are used for validation. Only training batches
+are shuffled. Early stopping counts seven consecutive epochs without a strictly
+lower validation loss; the absolute lowest-loss checkpoint is saved and restored
+before either test evaluation. Test data never drives weights, optimization,
+checkpoint selection, stopping or thresholds.
+
+Experiment 5's saved model was reused without changing its tensor values.
+Experiment 6 started from fresh initialization and did not load Experiment 5
+weights. Deterministic PyTorch operations are requested. No additional seeds,
+cross-validation, architecture experiments or threshold tuning were run.
+
+## All four held-out evaluations
+
+Both models use the same two test exports. Accuracy, precision, recall, F1 and
+confusion matrices are computed **separately for CLBBB and ILBBB**, using sigmoid
+probability **≥ 0.5**. Undefined precision/recall/F1 use zero. ROC-AUC and average
+precision are not computed by this runner. All metrics are recording-level.
+
+| Model | Test cohort | Label | Accuracy | Precision | Recall | F1 | TN | FP | FN | TP |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Experiment 5 | Dataset 1 | CLBBB | 97.54% | 70.27% | 96.30% | 81.25% | 898 | 22 | 2 | 52 |
+| Experiment 5 | Dataset 1 | ILBBB | 86.55% | 5.11% | 87.50% | 9.66% | 836 | 130 | 1 | 7 |
+| Experiment 5 | Dataset 2 | CLBBB | 88.26% | 16.88% | 96.30% | 28.73% | 1888 | 256 | 2 | 52 |
+| Experiment 5 | Dataset 2 | ILBBB | 68.56% | 1.00% | 87.50% | 1.99% | 1500 | 690 | 1 | 7 |
+| Experiment 6 | Dataset 1 | CLBBB | 98.77% | 81.82% | 100.00% | 90.00% | 908 | 12 | 0 | 54 |
+| Experiment 6 | Dataset 1 | ILBBB | 88.71% | 6.03% | 87.50% | 11.29% | 857 | 109 | 1 | 7 |
+| Experiment 6 | Dataset 2 | CLBBB | 94.54% | 31.03% | 100.00% | 47.37% | 2024 | 120 | 0 | 54 |
+| Experiment 6 | Dataset 2 | ILBBB | 79.62% | 1.54% | 87.50% | 3.03% | 1743 | 447 | 1 | 7 |
+
+TN/FP/FN/TP define each confusion matrix as `[[TN,FP],[FN,TP]]`, true rows and
+predicted columns, negative then positive. Exact values and saved-score checks
+are in [the completed assignment report](reports/assignment_results.json).
+
+Experiment 5 retains CLBBB recall 96.30% on Dataset 2, but its CLBBB precision is 16.88% and ILBBB precision is 1.00%. Its Dataset 2 false positives are 256 CLBBB and 690 ILBBB.
+
+Experiment 6's F1 on Dataset 1 / Dataset 2 is 90.00% / 47.37% for CLBBB and 11.29% / 3.03% for ILBBB. All results use the prespecified 0.5 threshold; no test-driven retuning was performed.
+
+### Leakage controls
+
+Each dataset has zero patient overlap between train/validation/test. Before
+cross-dataset inference, every test patient is checked against that model's
+training **and validation** patient sets: all four overlaps are zero. Shared
+recordings must have identical patient IDs, labels, official folds and HR paths.
+Predictions for the Dataset 1 subset are checked against the same records in
+Dataset 2. The test cohorts overlap and are **not independent external datasets**.
 
 ## Reproduction
 
-### Environment and input files
-
-The completed Experiment 5 run used Python **3.11.9** and PyTorch **2.15.0** on macOS arm64.
+Recorded runs used Python **3.11.9**, PyTorch **2.15.0**, and macOS arm64/MPS.
 Direct dependency pins are in `requirements-reproducible.txt`.
 
 ```bash
@@ -142,107 +188,101 @@ python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements-reproducible.txt
 python -m pip check
-OMP_NUM_THREADS=1 MPLCONFIGDIR=/tmp/ecg-mpl python -m pytest -q
+OMP_NUM_THREADS=1 python -m pytest -q -p no:cacheprovider
 ```
 
-Provide local PTB-XL metadata and `records500` WFDB `.hea`/`.dat` files; the
-runners do not download data. Replace the example raw-data location below with
-your own. Choose new output directories to preserve existing artifacts.
+Provide local `ptbxl_database.csv`, `scp_statements.csv` and native `records500`
+WFDB pairs. No downloads are performed. Use new output paths; existing exports,
+models and reports are not overwritten. Replace the example raw-data path below.
 
-### Experiment 5
+### Prepare both datasets
 
 ```bash
-python non_diagnostic_leads.py prepare \
+python non_diagnostic_leads.py prepare --dataset dataset1 \
   --raw-root "$HOME/Desktop/PTB-XL" --output data/dataset1_500hz_reproduction
-OMP_NUM_THREADS=1 MPLCONFIGDIR=/tmp/ecg-mpl python non_diagnostic_leads.py train \
-  --dataset1 data/dataset1_500hz_reproduction --epochs 30 --device mps \
-  --output outputs/experiment5_500hz_reproduction
+python non_diagnostic_leads.py prepare --dataset dataset2 \
+  --raw-root "$HOME/Desktop/PTB-XL" --output data/dataset2_500hz_reproduction
 ```
 
-Use `--device cpu` when MPS is unavailable; CPU is the six-lead CLI default.
-Preparation and training refuse existing output directories. The loader requires
-`contract.json` and the split CSV/array files. Training restores the lowest-loss
-checkpoint and evaluates Dataset 1 test automatically.
+For source verification, the two pinned source revisions must be available in
+local Git objects. If needed, fetch their designated branches without merging:
 
-To evaluate a checkpoint without retraining, use its matching exports:
+```bash
+git fetch --no-tags origin feature/dataset1-12lead-clean kevin/experiment2-dataset2-all12
+python verify_dataset_sources.py --raw-root "$HOME/Desktop/PTB-XL" \
+  --dataset1 data/dataset1_500hz_reproduction --dataset2 data/dataset2_500hz_reproduction \
+  --output reports/dataset_sources_reproduction.json
+```
+
+### Train each model and evaluate both test datasets
 
 ```bash
 OMP_NUM_THREADS=1 python non_diagnostic_leads.py train \
-  --dataset1 data/dataset1_500hz --device mps \
-  --checkpoint outputs/experiment5_500hz/best_model.pt \
-  --output outputs/experiment5_500hz_evaluation
+  --dataset1 data/dataset1_500hz_reproduction --dataset2 data/dataset2_500hz_reproduction \
+  --train dataset1 --epochs 30 --device mps --output outputs/experiment5_reproduction
+OMP_NUM_THREADS=1 python non_diagnostic_leads.py train \
+  --dataset1 data/dataset1_500hz_reproduction --dataset2 data/dataset2_500hz_reproduction \
+  --train dataset2 --epochs 30 --device mps --output outputs/experiment6_reproduction
 ```
 
-The paths above create reproduction runs. A new training run may select a
-different epoch or score; exact results across devices/library versions are
-not guaranteed. Exact inference for a saved run requires that run's original
-checkpoint and matching export fingerprints.
+Use `--device cpu` if MPS is unavailable. Fresh training may produce different
+checkpoints/results across hardware or package versions.
 
-### Future Dataset 2 runs
-
-Run these **only after the approved Dataset 2 export is available**. There is
-no Dataset 2 preparation command implemented here.
+### Evaluate the saved completed models without retraining
 
 ```bash
-# Train Experiment 6 and evaluate its best checkpoint on both test cohorts.
 OMP_NUM_THREADS=1 python non_diagnostic_leads.py train \
-  --dataset1 data/dataset1_500hz --dataset2 data/dataset2_500hz \
-  --train dataset2 --device mps --output outputs/experiment6_500hz
-
-# Evaluate an Experiment 5 checkpoint on both test cohorts without retraining.
-OMP_NUM_THREADS=1 python non_diagnostic_leads.py train \
-  --dataset1 data/dataset1_500hz --dataset2 data/dataset2_500hz \
+  --dataset1 data/dataset1_500hz --dataset2 data/dataset2_500hz --train dataset1 \
   --checkpoint outputs/experiment5_500hz/best_model.pt --device mps \
-  --output outputs/experiment5_both_tests
+  --output outputs/experiment5_evaluation_repeat
+OMP_NUM_THREADS=1 python non_diagnostic_leads.py train \
+  --dataset1 data/dataset1_500hz --dataset2 data/dataset2_500hz --train dataset2 \
+  --checkpoint outputs/experiment6_500hz/best_model.pt --device mps \
+  --output outputs/experiment6_evaluation_repeat
 ```
 
-The runner rejects test patients present in that model's training or validation
-cohort, including across datasets, without silently resplitting the data.
+Although the subcommand is named `train`, supplying `--checkpoint` skips all
+optimizer steps. The checkpoint's training export fingerprints, architecture,
+dataset identity and lead/label order must match.
 
-## Artifacts and verification
+## Artifacts and checks
 
-The implementation is `non_diagnostic_leads.py`; the model is
-`ecg_resnet.py`. Hashing and deterministic seeding are in `experiment_utils.py`. A training run saves `best_model.pt`,
-`history.json`, `training_config.json`, `provenance.json`, `metrics.json`, and
-per-dataset test predictions in NPZ format with truths and probability scores.
-The checkpoint records model state, selected epoch/loss, seed, positive weights,
-lead/label order, training configuration, architecture hash and export provenance.
-Evaluation-only mode verifies the training dataset identity, export fingerprints,
-architecture hash and ordered leads/labels before inference. The checkpoint does
-not include all state required for exact interrupted-training resumption.
+| Location | Contents |
+|---|---|
+| `data/dataset1_500hz/`, `data/dataset2_500hz/` | Local validated manifests, contracts and native six-lead waveform/label arrays |
+| `outputs/experiment5_500hz/best_model.pt` | Preserved Experiment 5 weights |
+| `outputs/experiment5_both_tests/` | Both Experiment 5 evaluations, scores, export provenance and leakage checks |
+| `outputs/experiment6_500hz/` | Experiment 6 weights, epoch history, configuration, both evaluations and scores |
+| `reports/experiment5_both_tests/`, `reports/experiment6_500hz/` | Small aggregate review bundles without weights or per-record predictions |
+| `reports/assignment_results.json` | All eight per-label result rows and completion/preservation checks |
+| `reports/dataset_sources_verification.json` | Exact matches to both pinned cohort builders |
 
-Small aggregate results and raw-input verification evidence are under `reports/`.
-The completed Experiment 5 epoch-3 checkpoint is identified by SHA-256:
+The suite passes **15 tests**. Model shape, BCE outputs, source labeling policies,
+Dataset 2 overlap assertion, lead selection, source frequency, patient checks,
+cross-dataset alignment and evaluation-only mode are covered. Existing WFDB/pandas
+deprecation warnings do not prevent checks from passing. Dependency consistency
+checks pass. Saved truths/scores reproduce all final metrics, checkpoints match
+minimum validation loss, and the existing Experiment 5 checkpoint is unchanged.
 
-```text
-1b34cdb13233090218e78976156c653c2c4f8f7206c21c4fd4f51433befde3e5
-```
-
-The local data and checkpoint are `data/dataset1_500hz/` and
-`outputs/experiment5_500hz/best_model.pt`; aggregate results are in
-[the Experiment 5 report](reports/experiment5_500hz/README.md). The checkpoint
-metadata was refreshed for neutral paths and source/export fingerprints; every
-model tensor and all recorded predictions and metrics are unchanged.
-
-Its history contains 10 epochs, and epoch 3 has the minimum validation loss.
-Saved predictions reproduce the reported test metrics. Export contracts and
-fingerprints establish the 500 Hz, 5,000-sample input configuration.
-The six-lead suite passes **11 tests** without optimizer steps, with existing WFDB/pandas
-deprecation warnings. Six-lead checks cover forward/backward execution, labels,
-patient separation, sampling frequency, lead order, checkpoint restoration and
-evaluation-only execution. Synthetic fixtures are software checks, not experimental results; no models are retrained during verification.
-Raw data, waveform exports, per-record predictions, model weights and caches
-are Git-ignored and absent from a fresh checkout.
+The two final `best_model.pt` checkpoints are included in the repository (about
+1 MB each) at the paths listed above. Other generated outputs, raw data, arrays,
+per-record predictions and caches remain Git-ignored. A fresh checkout contains
+code, aggregate reports and both final checkpoints; ECG data must be supplied locally.
+Checkpoints preserve parameters and provenance; they do not contain all state
+needed for exact interrupted-training resumption.
 
 ## Limitations
 
+- Dataset 1 follows the designated branch's diagnostic-only negative filter,
+  permitting abnormal form/rhythm statements; it is not a disease-free cohort.
 - ILBBB has only 62 training, seven validation and eight test positives. One
-  test error changes recall by 12.5 percentage points. Accuracy alone is
-  insufficient for this imbalanced task.
-- Fold 10 has prior development exposure. These are internal held-out results,
-  not pristine independent final validation. No further tuning should use it.
-- Patient separation and raw-sample agreement do not exclude acquisition
-  confounding, transformed duplicates or source patient-identity errors.
-  Metrics are recording-level rather than independent patient-level estimates.
-- Dataset 2 testing, Experiment 6 training, external validation and feature
-  stability analysis remain pending. No clinical deployment validation is claimed.
+  test miss changes recall by 12.5 percentage points. Read precision, recall and
+  confusion matrices together; high negative-class accuracy can be misleading.
+- The source fold 10 has previous development exposure. Results are internal
+  held-out evaluations, not untouched final external validation. No settings were
+  adjusted using these scores.
+- Dataset 1 test is contained in Dataset 2 test, so the evaluations are correlated.
+  Patient separation does not exclude device/age confounding, transformed copies,
+  errors in source IDs, or other acquisition shortcuts.
+- No clinical deployment validation, external validation or feature-stability
+  analysis is claimed by these experiments.

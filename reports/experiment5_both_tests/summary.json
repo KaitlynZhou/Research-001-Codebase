@@ -1,0 +1,32 @@
+{
+  "training_dataset": "dataset1",
+  "best_epoch": 3,
+  "epochs_completed": 10,
+  "best_validation_loss": 0.44968122471601535,
+  "training_config": {
+    "train_dataset": "dataset1",
+    "seed": 42,
+    "batch_size": 32,
+    "max_epochs": 30,
+    "patience": 7,
+    "learning_rate": 0.001,
+    "optimizer": "Adam",
+    "device": "mps",
+    "fs": 500,
+    "samples": 5000,
+    "source_column": "filename_hr",
+    "waveform_directory": "records500",
+    "pos_weight": [
+      17.06775665283203,
+      123.7258071899414
+    ],
+    "selection": "lowest validation weighted BCE",
+    "threshold": 0.5
+  },
+  "checkpoint_path": "outputs/experiment5_500hz/best_model.pt",
+  "checkpoint_sha256": "1b34cdb13233090218e78976156c653c2c4f8f7206c21c4fd4f51433befde3e5",
+  "architecture_sha256": "4ee23dff7817665bc268c43447be99910d4b7bbc9d7aebcdf1a50aec411e255c",
+  "max_subset_probability_difference": 0.0,
+  "metrics_recomputed_from_saved_predictions": true,
+  "checkpoint_is_minimum_validation_loss": true
+}

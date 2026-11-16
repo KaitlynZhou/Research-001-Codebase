@@ -135,3 +135,41 @@ def test_model_rejects_other_leads_and_lengths():
     for shape in [(2, 1, 5000), (2, 6, 1000)]:
         with pytest.raises(ValueError, match='input shape'):
             model(torch.zeros(shape))
+
+
+def test_dataset2_retains_all_other_diagnoses_and_comorbid_lbbb(tmp_path):
+    from non_diagnostic_leads import dataset2_metadata
+    frame = pd.DataFrame(dict(ecg_id=[1, 2, 3, 4], patient_id=[1, 2, 3, 4],
+        strat_fold=[1, 9, 10, 10], filename_hr=['records500/a']*4,
+        scp_codes=["{'CLBBB':100,'MI':100}", "{'ILBBB':0}", "{'MI':100}", "{}"] ))
+    frame.to_csv(tmp_path/'ptbxl_database.csv', index=False)
+    actual = dataset2_metadata(tmp_path)
+    assert actual.ecg_id.tolist() == [1, 2, 3, 4]
+    assert actual[LABELS].values.tolist() == [[1, 0], [0, 1], [0, 0], [0, 0]]
+
+
+def test_dataset2_preserves_source_overlap_assertion(tmp_path):
+    from non_diagnostic_leads import dataset2_metadata
+    pd.DataFrame(dict(ecg_id=[1], patient_id=[1], strat_fold=[1], filename_hr=['records500/a'],
+        scp_codes=["{'CLBBB':100,'ILBBB':100}"])).to_csv(tmp_path/'ptbxl_database.csv', index=False)
+    with pytest.raises(ValueError, match='overlapping'):
+        dataset2_metadata(tmp_path)
+
+
+def test_dataset1_matches_team_diagnostic_only_normal_rule(tmp_path):
+    pd.DataFrame(dict(ecg_id=[1], scp_codes=["{'NORM':100,'PVC':100}"])).to_csv(tmp_path/'ptbxl_database.csv', index=False)
+    pd.DataFrame(dict(diagnostic=[1, np.nan], form=[np.nan, 1]),
+        index=['NORM','PVC']).to_csv(tmp_path/'scp_statements.csv')
+    assert dataset1_metadata(tmp_path).ecg_id.tolist() == [1]
+
+
+def test_cross_dataset_record_alignment_rejects_wrong_patient():
+    from non_diagnostic_leads import verify_cross_dataset
+    frames = [pd.DataFrame(dict(ecg_id=[i], patient_id=[i], strat_fold=[fold],
+        filename_hr=[f'records500/{i}'], CLBBB=[1], ILBBB=[0]))
+        for i,fold in [(1,1),(2,9),(3,10)]]
+    assert verify_cross_dataset(frames, frames)['test']['matching_records'] == 1
+    changed = [frame.copy() for frame in frames]
+    changed[2].loc[0,'patient_id'] = 999
+    with pytest.raises(ValueError, match='patient_id'):
+        verify_cross_dataset(frames, changed)
