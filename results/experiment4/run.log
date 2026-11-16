@@ -1,0 +1,278 @@
+Running: 00_build_dataset1.py
+Total recordings: 9682
+CLBBB: 536
+ILBBB: 77
+Normal: 9069
+
+Training:
+Total recordings: 7733
+CLBBB: 428
+ILBBB: 62
+Normal: 7243
+
+Validation:
+Total recordings: 975
+CLBBB: 54
+ILBBB: 7
+Normal: 914
+
+Testing:
+Total recordings: 974
+CLBBB: 54
+ILBBB: 8
+Normal: 912
+Train/validation overlap: 0
+Train/test overlap: 0
+Validation/test overlap: 0
+Dataset 1 metadata saved successfully!
+Running: 01_build_dataset2.py
+metadata: N=21799 CLBBB=536 ILBBB=77
+train: N=17418 CLBBB=428 ILBBB=62
+val: N=2183 CLBBB=54 ILBBB=7
+test: N=2198 CLBBB=54 ILBBB=8
+Cross-dataset ECG IDs, folds, patients and labels match.
+Running: 02_prepare_waveforms.py
+train: 1000/17418
+train: 2000/17418
+train: 3000/17418
+train: 4000/17418
+train: 5000/17418
+train: 6000/17418
+train: 7000/17418
+train: 8000/17418
+train: 9000/17418
+train: 10000/17418
+train: 11000/17418
+train: 12000/17418
+train: 13000/17418
+train: 14000/17418
+train: 15000/17418
+train: 16000/17418
+train: 17000/17418
+train: X=(17418, 6, 5000), y=(17418, 2) saved under data/processed/experiment4/dataset2
+val: 1000/2183
+val: 2000/2183
+val: X=(2183, 6, 5000), y=(2183, 2) saved under data/processed/experiment4/dataset2
+test: 1000/2198
+test: 2000/2198
+test: X=(2198, 6, 5000), y=(2198, 2) saved under data/processed/experiment4/dataset2
+test_dataset1: X=(974, 6, 5000), y=(974, 2) saved under data/processed/experiment4/dataset2
+Running: 08_verify.py
+{
+  "dataset1": {
+    "train_val_patient_overlap": 0,
+    "train_test_patient_overlap": 0,
+    "val_test_patient_overlap": 0,
+    "train": {
+      "records": 7733,
+      "patients": 7174,
+      "positives": {
+        "CLBBB": 428,
+        "ILBBB": 62
+      }
+    },
+    "val": {
+      "records": 975,
+      "patients": 916,
+      "positives": {
+        "CLBBB": 54,
+        "ILBBB": 7
+      }
+    },
+    "test": {
+      "records": 974,
+      "patients": 883,
+      "positives": {
+        "CLBBB": 54,
+        "ILBBB": 8
+      }
+    }
+  },
+  "dataset2": {
+    "train_val_patient_overlap": 0,
+    "train_test_patient_overlap": 0,
+    "val_test_patient_overlap": 0,
+    "train": {
+      "records": 17418,
+      "patients": 15023,
+      "positives": {
+        "CLBBB": 428,
+        "ILBBB": 62
+      }
+    },
+    "val": {
+      "records": 2183,
+      "patients": 1942,
+      "positives": {
+        "CLBBB": 54,
+        "ILBBB": 7
+      }
+    },
+    "test": {
+      "records": 2198,
+      "patients": 1904,
+      "positives": {
+        "CLBBB": 54,
+        "ILBBB": 8
+      }
+    }
+  },
+  "split_metadata_sha256": {
+    "data/processed/experiment4/dataset2/val.csv": "c60bb0e9b0ed3846d00e41f6152c3141b8251b3feff4aa8f465f00a9e374fe3d",
+    "data/processed/experiment4/dataset2/test.csv": "234b7c879d8e4074ff12247725caf48061b23f097b9ce2eaa723ae3454d5a716",
+    "data/processed/experiment4/dataset2/metadata.csv": "038fa79c0eaff5786df3c7c7692a5f24761736663f95aa1c90f71bfe073b5060",
+    "data/processed/experiment4/dataset2/train.csv": "172de0cdfae3e6ca4034f2807864691081f1a394008cdb4dafffe444293d1f66",
+    "data/processed/dataset1/val.csv": "38aefc0fe51418dcb46f65340800940c372b6f52d5e924715494aad939cfeb4c",
+    "data/processed/dataset1/test.csv": "56bd5273b8c88f92f1351ab476fe69a57d96a83ad5de08b65942a70ef444ca09",
+    "data/processed/dataset1/metadata.csv": "f1e6369073349c82817e786328b114d4767daa321830328ca65858c3afc4ba4c",
+    "data/processed/dataset1/train.csv": "e2966a2af9a2aeb041ea25fb0ba14086820e18371e9c54a3a7089bba3af7e232"
+  },
+  "dataset1_test_subset_of_dataset2_test": true,
+  "cross_dataset_test_vs_training_validation_patient_overlap": 0
+}
+Running: 05_train_resnet.py
+Device: mps
+Parameters: 243234
+Positive weights: [ 39.696262 279.9355  ]
+  Training batch 100/545
+  Training batch 200/545
+  Training batch 300/545
+  Training batch 400/545
+  Training batch 500/545
+Epoch 01 | Train loss: 0.7287 | Val loss: 0.7819
+  Saved new best model
+  Training batch 100/545
+  Training batch 200/545
+  Training batch 300/545
+  Training batch 400/545
+  Training batch 500/545
+Epoch 02 | Train loss: 0.6477 | Val loss: 0.6410
+  Saved new best model
+  Training batch 100/545
+  Training batch 200/545
+  Training batch 300/545
+  Training batch 400/545
+  Training batch 500/545
+Epoch 03 | Train loss: 0.5541 | Val loss: 0.5965
+  Saved new best model
+  Training batch 100/545
+  Training batch 200/545
+  Training batch 300/545
+  Training batch 400/545
+  Training batch 500/545
+Epoch 04 | Train loss: 0.5903 | Val loss: 0.9384
+  Training batch 100/545
+  Training batch 200/545
+  Training batch 300/545
+  Training batch 400/545
+  Training batch 500/545
+Epoch 05 | Train loss: 0.4794 | Val loss: 0.6109
+  Training batch 100/545
+  Training batch 200/545
+  Training batch 300/545
+  Training batch 400/545
+  Training batch 500/545
+Epoch 06 | Train loss: 0.4482 | Val loss: 0.5873
+  Saved new best model
+  Training batch 100/545
+  Training batch 200/545
+  Training batch 300/545
+  Training batch 400/545
+  Training batch 500/545
+Epoch 07 | Train loss: 0.4409 | Val loss: 0.7666
+  Training batch 100/545
+  Training batch 200/545
+  Training batch 300/545
+  Training batch 400/545
+  Training batch 500/545
+Epoch 08 | Train loss: 0.4341 | Val loss: 0.6316
+  Training batch 100/545
+  Training batch 200/545
+  Training batch 300/545
+  Training batch 400/545
+  Training batch 500/545
+Epoch 09 | Train loss: 0.4158 | Val loss: 0.6244
+  Training batch 100/545
+  Training batch 200/545
+  Training batch 300/545
+  Training batch 400/545
+  Training batch 500/545
+Epoch 10 | Train loss: 0.3645 | Val loss: 0.6349
+  Training batch 100/545
+  Training batch 200/545
+  Training batch 300/545
+  Training batch 400/545
+  Training batch 500/545
+Epoch 11 | Train loss: 0.3624 | Val loss: 0.4800
+  Saved new best model
+  Training batch 100/545
+  Training batch 200/545
+  Training batch 300/545
+  Training batch 400/545
+  Training batch 500/545
+Epoch 12 | Train loss: 0.3928 | Val loss: 0.5161
+  Training batch 100/545
+  Training batch 200/545
+  Training batch 300/545
+  Training batch 400/545
+  Training batch 500/545
+Epoch 13 | Train loss: 0.3251 | Val loss: 0.7046
+  Training batch 100/545
+  Training batch 200/545
+  Training batch 300/545
+  Training batch 400/545
+  Training batch 500/545
+Epoch 14 | Train loss: 0.2970 | Val loss: 0.5474
+  Training batch 100/545
+  Training batch 200/545
+  Training batch 300/545
+  Training batch 400/545
+  Training batch 500/545
+Epoch 15 | Train loss: 0.3269 | Val loss: 0.5051
+  Training batch 100/545
+  Training batch 200/545
+  Training batch 300/545
+  Training batch 400/545
+  Training batch 500/545
+Epoch 16 | Train loss: 0.2952 | Val loss: 0.6530
+  Training batch 100/545
+  Training batch 200/545
+  Training batch 300/545
+  Training batch 400/545
+  Training batch 500/545
+Epoch 17 | Train loss: 0.3112 | Val loss: 0.5828
+  Training batch 100/545
+  Training batch 200/545
+  Training batch 300/545
+  Training batch 400/545
+  Training batch 500/545
+Epoch 18 | Train loss: 0.2975 | Val loss: 0.5914
+Early stopping triggered
+Training complete. Best validation loss: 0.47995994365985273
+Running: 06_evaluate_validation.py
+Best epoch: 11 Validation loss: 0.47995994365985273
+label  threshold  accuracy  precision   recall       f1  roc_auc  average_precision   TN  FP  FN  TP
+CLBBB        0.5  0.972515   0.470588 0.888889 0.615385 0.974653           0.663246 2075  54   6  48
+ILBBB        0.5  0.908841   0.029412 0.857143 0.056872 0.962119           0.138063 1978 198   1   6
+ILBBB validation sensitivity (report primary results at 0.50):  threshold  precision   recall       f1  true_positives  false_positives
+       0.5   0.029412 0.857143 0.056872               6              198
+       0.6   0.031746 0.571429 0.060150               4              122
+       0.7   0.052632 0.571429 0.096386               4               72
+       0.8   0.086957 0.571429 0.150943               4               42
+       0.9   0.100000 0.285714 0.148148               2               18
+Running: 07_evaluate_test.py
+Best epoch: 11
+dataset1 test results: test_dataset label  threshold  accuracy  precision   recall       f1  roc_auc  average_precision  TN  FP  FN  TP
+    dataset1 CLBBB        0.5  0.990760   0.868852 0.981481 0.921739 0.997947           0.958982 912   8   1  53
+    dataset1 ILBBB        0.5  0.943532   0.087719 0.625000 0.153846 0.753106           0.181886 914  52   3   5
+dataset2 test results: test_dataset label  threshold  accuracy  precision   recall       f1  roc_auc  average_precision   TN  FP  FN  TP
+    dataset2 CLBBB        0.5  0.978162   0.530000 0.981481 0.688312 0.995137           0.809510 2097  47   1  53
+    dataset2 ILBBB        0.5  0.914468   0.026316 0.625000 0.050505 0.745377           0.095896 2005 185   3   5
+Saved all results under: results/experiment4
+Running: 09_summarize.py
+test_dataset label  threshold  accuracy  precision   recall       f1  roc_auc  average_precision   TN  FP  FN  TP
+    dataset1 CLBBB        0.5  0.990760   0.868852 0.981481 0.921739 0.997947           0.958982  912   8   1  53
+    dataset1 ILBBB        0.5  0.943532   0.087719 0.625000 0.153846 0.753106           0.181886  914  52   3   5
+    dataset2 CLBBB        0.5  0.978162   0.530000 0.981481 0.688312 0.995137           0.809510 2097  47   1  53
+    dataset2 ILBBB        0.5  0.914468   0.026316 0.625000 0.050505 0.745377           0.095896 2005 185   3   5
+Experiment 4 training and both evaluations complete.

@@ -1,0 +1,31 @@
+{
+  "leads": [
+    "I",
+    "aVL",
+    "V1",
+    "V2",
+    "V5",
+    "V6"
+  ],
+  "fs": 500,
+  "samples": 5000,
+  "normalization": "none; WFDB physical units (mV)",
+  "seed": 42,
+  "batch_size": 32,
+  "max_epochs": 30,
+  "learning_rate": 0.001,
+  "patience": 7,
+  "optimizer": "Adam",
+  "loss": "BCEWithLogitsLoss; training-set positive weights",
+  "selection": "lowest validation loss",
+  "threshold": 0.5,
+  "training_dataset": "dataset2",
+  "labels": [
+    "CLBBB",
+    "ILBBB"
+  ],
+  "sources": {
+    "kevin/experiment2-dataset2-all12": "3e01b5ebedc1ec2db3f6ac71714d1d86b0f28127",
+    "feature/dataset1-12lead-clean": "4d82a777d7b811ea35e57d1abfc9cfb5c8128f6e"
+  }
+}

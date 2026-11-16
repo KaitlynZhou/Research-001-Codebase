@@ -1,0 +1,6 @@
+{
+  "dataset_version": "1.0.3",
+  "source": "https://physionet.org/content/ptb-xl/1.0.3/",
+  "native_500hz_files_and_metadata_verified": 43600,
+  "sha256_match": true
+}
