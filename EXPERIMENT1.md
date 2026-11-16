@@ -1,4 +1,4 @@
-# Experiment 1: 12-Lead ResNet
+# Experiment 2 - 12 Leads
 
 ## Objective
 Establish a baseline for detecting **complete left bundle branch block (CLBBB)** and **incomplete left bundle branch block (ILBBB)** from standard 12-lead ECGs. This baseline supports comparison with Experiment 2.
