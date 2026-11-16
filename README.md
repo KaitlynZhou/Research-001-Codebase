@@ -1,17 +1,15 @@
-# PTB-XL ECG Classification Experiments
+# Six-Lead PTB-XL ECG Modeling
 
-This project evaluates one-dimensional ResNet classifiers on PTB-XL ECG
-recordings. The completed experiments use native **500 Hz** signals with
-**5,000 samples per lead**, representing 10 seconds. Metrics are reported per
-recording. Feature attribution and external validation remain future work.
+This project trains one-dimensional ResNet classifiers for complete and incomplete
+left bundle branch block using six PTB-XL ECG leads: **II, III, aVR, aVF, V3, V4**.
+Inputs are native **500 Hz** recordings with **5,000 samples per lead** (10 seconds).
 
 ## Experiment summary
 
 | Experiment | Dataset | Leads, in input order | Input shape per ECG | Targets | Status |
 |---|---|---|---|---|---|
-| V6 baseline | Strict Normal vs. isolated CLBBB | V6 | `(1,5000)` at 500 Hz | Mutually exclusive Normal / CLBBB | Completed |
 | Experiment 5 | Dataset 1: LBBB vs. Normal | II, III, aVR, aVF, V3, V4 | `(6,5000)` at 500 Hz | Independent CLBBB and ILBBB | Training and Dataset 1 test evaluation completed; Dataset 2 evaluation pending |
-| Experiment 6 | Dataset 2: LBBB vs. All Others | Planned: II, III, aVR, aVF, V3, V4 | Required: `(6,5000)` at 500 Hz | Planned independent CLBBB and ILBBB | Pending: dataset policy, exports, training and evaluation |
+| Experiment 6 | Dataset 2: LBBB vs. All Others | II, III, aVR, aVF, V3, V4 | Required: `(6,5000)` at 500 Hz | Planned independent CLBBB and ILBBB | Pending: dataset policy, exports, training and evaluation |
 
 ## Shared data handling
 
@@ -23,68 +21,10 @@ normalization is applied.
 
 Official PTB-XL folds are retained: **1–8 for training, 9 for validation, and
 10 for testing**. There is no random resplitting. Repeated recordings within a
-patient's assigned split remain included. The completed cohorts have zero
+patient's assigned split remain included. The completed Dataset 1 cohort has zero
 cross-split patient overlap. Loaders validate identifiers, folds, shapes,
 finite samples and label alignment, and reject duplicate recordings or paths.
 BatchNorm learns statistics during training and freezes them for evaluation.
-
-## V6 baseline
-
-### Dataset and labels
-
-A recording must contain exactly one target, `NORM` or `CLBBB`, with confidence
-100. Only optional `SR` is allowed in addition; any other code excludes the
-recording. Labels are integers: **0 = Normal, 1 = CLBBB**, shape `(N,)`.
-
-| Split | Recordings | Unique patients | Normal | CLBBB |
-|---|---:|---:|---:|---:|
-| Train | 5,278 | 4,994 | 5,095 | 183 |
-| Validation | 614 | 593 | 595 | 19 |
-| Test | 640 | 593 | 615 | 25 |
-
-V6 is selected by channel name, with 500 Hz, 5,000-sample and mV validation.
-All 6,532 exported recordings matched the raw V6 samples after float32 conversion
-in the saved verification. Inputs have shape **`(batch_size,1,5000)`**.
-
-### Architecture and training
-
-`ResNet1D` in `resnet_model.py` contains a kernel-7, stride-2 stem convolution
-from 1 to 16 channels, BatchNorm and ReLU. Three residual blocks use widths
-**16→16, 16→32, 32→64** and strides **1,2,2**. Each block contains two kernel-7
-convolutions with BatchNorm, an identity or kernel-1 projection shortcut, and
-ReLU after the first convolution and shortcut addition. Convolutions use
-`bias=False`. Adaptive average pooling and a **64→2** linear layer produce
-Normal/CLBBB logits; softmax gives the CLBBB probability. The default model has
-**60,818 trainable parameters**.
-
-| Training setting | Recorded run |
-|---|---|
-| Optimizer / learning rate | Adam / 0.001 |
-| Seed / batch size / device | 42 / 32 / CPU |
-| Loss | Weighted cross entropy |
-| Class weights | `N_train / (2 × class_count)`: Normal 0.51795876; CLBBB 14.42076492 |
-| Maximum epochs | 30; the CLI default is 10, so specify 30 explicitly |
-| Early stopping | Validation weighted loss; patience 5, `min_delta=0.0001` for patience reset |
-| Checkpoint | Absolute lowest validation loss; restored before test inference |
-| Completed epochs / best epoch | 13 / 8 |
-| Best validation loss | 0.0019281085 |
-
-Weights are calculated from training labels and held fixed for validation.
-The actual loss is weighted cross entropy, not binary cross entropy.
-
-### Test results
-
-The decision rule is **CLBBB probability ≥ 0.5**. The evaluator reports accuracy,
-precision, recall, F1, confusion matrix, ROC-AUC, trapezoidal PR-AUC and average
-precision. The last two are distinct metrics.
-
-| Accuracy | CLBBB precision | CLBBB recall | CLBBB F1 | ROC-AUC | PR-AUC | Average precision |
-|---:|---:|---:|---:|---:|---:|---:|
-| 99.69% | 92.59% | 100.00% | 96.15% | 1.0 | 1.0 | 1.0 |
-
-Confusion matrix, true rows / predicted columns, Normal then CLBBB:
-**`[[613,2],[0,25]]`**. All 25 CLBBB recordings were detected; two Normal
-recordings were classified as CLBBB.
 
 ## Experiment 5: six leads at 500 Hz
 
@@ -141,9 +81,8 @@ supports 5,000-sample recordings. Input **`(batch_size,6,5000)`** produces
 | Main threshold | **0.5** for each sigmoid output |
 
 Training starts from fresh initialization. Positive weights use training labels
-only and stay fixed for validation. Both completed pipelines shuffle training
-batches, use validation-based model selection and request deterministic PyTorch
-operations. Test scores do not control the implemented optimization, stopping,
+only and stay fixed for validation. Training batches are shuffled, validation controls model selection, and
+PyTorch deterministic operations are requested. Test scores do not control the implemented optimization, stopping,
 weights or thresholds. Experiment 5 has no additional-seed study,
 cross-validation, architecture comparison or validation threshold sweep.
 
@@ -195,7 +134,7 @@ an external builder correctly implements the approved selection policy.
 
 ### Environment and input files
 
-Recorded runs used Python **3.11.9** and PyTorch **2.15.0** on macOS arm64.
+The completed Experiment 5 run used Python **3.11.9** and PyTorch **2.15.0** on macOS arm64.
 Full package pins are in `requirements-reproducible.txt`.
 
 ```bash
@@ -209,29 +148,6 @@ OMP_NUM_THREADS=1 MPLCONFIGDIR=/tmp/ecg-mpl python -m pytest -q
 Provide local PTB-XL metadata and `records500` WFDB `.hea`/`.dat` files; the
 runners do not download data. Replace the example raw-data location below with
 your own. Choose new output directories to preserve existing artifacts.
-
-### V6 baseline
-
-The V6 preparation helper requires its expected source snapshot to be available
-locally. Its processed output must be new and **outside the repository**.
-
-```bash
-python prepare_ptbxl.py --raw-root "$HOME/Desktop/PTB-XL" \
-  --output "$HOME/Desktop/PTB-XL-V6-500Hz-reproduction"
-OMP_NUM_THREADS=1 python resnet_model.py \
-  --data "$HOME/Desktop/PTB-XL-V6-500Hz-reproduction/v6" \
-  --raw-root "$HOME/Desktop/PTB-XL" --device cpu \
-  --epochs 30 --patience 5 --min-delta 0.0001 \
-  --batch-size 32 --learning-rate 0.001 --seed 42 \
-  --output outputs/v6_500hz_reproduction
-```
-
-Training restores the best checkpoint before evaluating fold 10. The directory
-loader requires `preprocessing.json`, split arrays and `*_manifest.csv` files.
-`--raw-root` verifies every exported V6 recording against raw samples.
-For evaluation only, add `--checkpoint PATH_TO_BEST_MODEL` and use matching
-exports plus a new output directory. The V6 trainer can overwrite existing run
-files, so always choose a new run path.
 
 ### Experiment 5
 
@@ -285,28 +201,32 @@ cohort, including across datasets, without silently resplitting the data.
 
 ## Artifacts and verification
 
-The six-lead run saves `best_model.pt`, `history.json`, `training_config.json`,
-`provenance.json`, `metrics.json`, and per-dataset test predictions in NPZ format.
-The checkpoint records model state, selected epoch/loss, seed, weights,
+The implementation is `non_diagnostic_leads.py`; the model is
+`learning_pipeline/07_resnet_model.py`. A training run saves `best_model.pt`,
+`history.json`, `training_config.json`, `provenance.json`, `metrics.json`, and
+per-dataset test predictions in NPZ format with truths and probability scores.
+The checkpoint records model state, selected epoch/loss, seed, positive weights,
 lead/label order, training configuration, architecture hash and export provenance.
-V6 additionally saves Adam state, training curves and evaluation plots.
-Evaluation-only modes check export fingerprints. Neither pipeline provides
-all state required for exact interrupted-training resumption.
+Evaluation-only mode verifies the training dataset identity, export fingerprints,
+architecture hash and ordered leads/labels before inference. The checkpoint does
+not include all state required for exact interrupted-training resumption.
 
-Small aggregate metrics and verification reports are under `reports/`.
-The completed checkpoints can be identified by their recorded SHA-256 hashes:
+Small aggregate results and raw-input verification evidence are under `reports/`.
+The completed Experiment 5 epoch-3 checkpoint is identified by SHA-256:
 
-| Checkpoint | SHA-256 |
-|---|---|
-| V6 baseline, epoch 8 | `9aca38801d6e4ab729ae5c87e8c8eb9bcdb6c6320a743636f63ebd75f229b178` |
-| Experiment 5, epoch 3 | `92ae4d18f654a5ab9a6a8933735c6e5d6dae7d984c442890131bf74aa6144a35` |
+```text
+92ae4d18f654a5ab9a6a8933735c6e5d6dae7d984c442890131bf74aa6144a35
+```
 
+Its history contains 10 epochs, and epoch 3 has the minimum validation loss.
+Saved predictions reproduce the reported test metrics. Export contracts and
+fingerprints establish the 500 Hz, 5,000-sample input configuration.
 The latest full-suite check passed **61 tests**, with existing WFDB/pandas
-deprecation warnings. Verification covers shapes, label rules, patient
-separation, checkpoint restoration and saved-prediction metrics. Synthetic
-fixtures are software checks, not experimental results. Raw datasets, waveform
-arrays, per-record predictions and weights are Git-ignored and are not included
-in a fresh checkout.
+deprecation warnings. Six-lead checks cover forward/backward execution, labels,
+patient separation, sampling frequency, lead order, checkpoint restoration and
+evaluation-only execution. Synthetic fixtures are software checks, not results.
+Raw data, waveform exports, per-record predictions, model weights and caches
+are Git-ignored and absent from a fresh checkout.
 
 ## Limitations
 
