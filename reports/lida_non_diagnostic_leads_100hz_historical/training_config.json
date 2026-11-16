@@ -1,0 +1,16 @@
+{
+  "train_dataset": "dataset1",
+  "seed": 42,
+  "batch_size": 32,
+  "max_epochs": 30,
+  "patience": 7,
+  "learning_rate": 0.001,
+  "optimizer": "Adam",
+  "device": "mps",
+  "pos_weight": [
+    17.06775665283203,
+    123.7258071899414
+  ],
+  "selection": "lowest validation weighted BCE",
+  "threshold": 0.5
+}

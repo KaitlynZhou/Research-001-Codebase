@@ -1,0 +1,57 @@
+{
+  "fs": 500,
+  "samples": 5000,
+  "leads": [
+    "II",
+    "III",
+    "aVR",
+    "aVF",
+    "V3",
+    "V4"
+  ],
+  "labels": [
+    "CLBBB",
+    "ILBBB"
+  ],
+  "train_dataset": "dataset1",
+  "best_epoch": 3,
+  "threshold": 0.5,
+  "confusion_matrix_order": "true rows / predicted columns: negative, positive",
+  "dataset2_status": "pending: approved team Dataset 2 unavailable",
+  "tests": {
+    "dataset1": {
+      "CLBBB": {
+        "accuracy": 0.9753593429158111,
+        "precision": 0.7027027027027027,
+        "recall": 0.9629629629629629,
+        "f1": 0.8125,
+        "confusion_matrix": [
+          [
+            898,
+            22
+          ],
+          [
+            2,
+            52
+          ]
+        ]
+      },
+      "ILBBB": {
+        "accuracy": 0.8655030800821355,
+        "precision": 0.051094890510948905,
+        "recall": 0.875,
+        "f1": 0.09655172413793103,
+        "confusion_matrix": [
+          [
+            836,
+            130
+          ],
+          [
+            1,
+            7
+          ]
+        ]
+      }
+    }
+  }
+}

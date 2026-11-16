@@ -1,0 +1,43 @@
+{
+  "train_dataset": "dataset1",
+  "best_epoch": 5,
+  "threshold": 0.5,
+  "confusion_matrix_order": "true rows / predicted columns: negative, positive",
+  "dataset2_status": "pending: approved team Dataset 2 unavailable",
+  "tests": {
+    "dataset1": {
+      "CLBBB": {
+        "accuracy": 0.9876796714579056,
+        "precision": 0.8387096774193549,
+        "recall": 0.9629629629629629,
+        "f1": 0.896551724137931,
+        "confusion_matrix": [
+          [
+            910,
+            10
+          ],
+          [
+            2,
+            52
+          ]
+        ]
+      },
+      "ILBBB": {
+        "accuracy": 0.8809034907597536,
+        "precision": 0.05737704918032787,
+        "recall": 0.875,
+        "f1": 0.1076923076923077,
+        "confusion_matrix": [
+          [
+            851,
+            115
+          ],
+          [
+            1,
+            7
+          ]
+        ]
+      }
+    }
+  }
+}

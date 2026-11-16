@@ -1,5 +1,27 @@
 # Research-001-Codebase
 
+## Lida's Experiment 5: six leads at 500 Hz
+
+Experiment 5 uses original PTB-XL `records500` recordings via `filename_hr`:
+**II, III, aVR, aVF, V3, V4**, with **5,000 samples per lead at 500 Hz**.
+It adapts Prisha's Dataset 1 selection and ResNet, preserving separate CLBBB/ILBBB
+outputs and patient-separated official folds 1–8/9/10.
+
+The fresh 500 Hz run selected epoch 3 and stopped after 10 epochs. At threshold
+0.5, Dataset 1 test F1 is 81.25% for CLBBB and 9.66% for ILBBB. ILBBB has only
+eight test positives and produced 130 false positives. These are internal
+held-out results; the source test fold has historical development exposure.
+Experiment 6 and Dataset 2 evaluations remain pending until the team provides
+Dataset 2. Historical 100 Hz results are stored separately and are superseded.
+
+See the [experiment documentation](docs/lida_non_diagnostic_leads.md) for
+preparation/training commands, architecture diagram, counts and limitations,
+and the [500 Hz result bundle](reports/lida_non_diagnostic_leads/README.md)
+for aggregate metrics and provenance. Tests are in
+`tests/test_non_diagnostic_leads.py`. Raw data, waveform arrays, predictions and
+model weights are excluded from Git; the locally saved checkpoint is
+`outputs/lida/experiment5_500hz_mps/best_model.pt`.
+
 ## V6 ResNet baseline at 500 Hz
 
 **Evaluating the Stability of Neural Network-Identified ECG Features** uses
