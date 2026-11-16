@@ -20,7 +20,7 @@
       "source_column": "filename_hr",
       "waveform_directory": "records500",
       "units": "mV",
-      "policy": "Prisha 02_build_dataset1.py at 4d82a77; code presence; diagnostic-only Normal filter",
+      "policy": "dataset1-v1: code presence; diagnostic-only Normal filter; comorbid LBBB permitted",
       "metadata_sha256": "7600de9c1b27d181d850b3c6038a35d7c3ddb6bb33b702e3a20252a6859d216b",
       "statements_sha256": "ad05b0b1fcae83bb1230755ad9cfc7c96f303feddc08a4a9ad5bdc9ca63bac8f"
     },
@@ -72,7 +72,7 @@
       "X_test.npy": "990a9d50f4ece6f2981a18b00f54ea04a91237e735159dcb9d613f13eafb645d",
       "y_test.npy": "e5d83dc007b3367c33450f9309b1cab183da92019bc83b76517a0badde3541a4",
       "test.csv": "e7716b514bf5ccf212e150b1a112c8e744ad215b8f49c28640219f53e1d30a3d",
-      "contract.json": "4b2221057ae04d4fcc52c1b8d3f82a0b39ab8d3d69f71e8a4b35198d16502003"
+      "contract.json": "f50fb798e9132ca3e98a1a28d037de631b34c0828f14dababc794ca1113110c0"
     },
     "patient_overlap": 0
   }

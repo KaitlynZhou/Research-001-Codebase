@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "tests_passed": 11,
+  "optimizer_steps_allowed": false,
+  "retraining_performed": false,
+  "device": "mps",
+  "full_test_recordings": 974,
+  "original_metrics_reproduced": true,
+  "model_tensors_unchanged": true,
+  "input_arrays_and_labels_unchanged": true,
+  "original_prediction_file_unchanged": true,
+  "max_probability_difference": 0.0,
+  "trainable_parameters": 243234,
+  "model_tensor_sha256": "2458329930788bdba3c21e2808a40271b991792d047d798b5e6605607d66f555"
+}

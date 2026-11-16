@@ -1,17 +1,7 @@
+"""Six-lead 1D ResNet for native 500 Hz, 5,000-sample ECGs."""
+from torch import nn
 
-import torch
-import torch.nn as nn
 
-import numpy as np
-import torch
-from sklearn.metrics import (
-    precision_score,
-    recall_score,
-    f1_score,
-    roc_auc_score,
-    confusion_matrix,
-    
-)
 class ResidualBlock(nn.Module):
     def __init__(self, in_channels, out_channels, stride=1):
         super().__init__()
@@ -50,8 +40,10 @@ class ResidualBlock(nn.Module):
 
 
 class ECGResNet(nn.Module):
-    def __init__(self, in_channels=12):
+    def __init__(self, in_channels=6):
         super().__init__()
+        if in_channels != 6:
+            raise ValueError("Exactly six ECG leads are required")
 
         self.stem = nn.Sequential(
             nn.Conv1d(in_channels, 32, kernel_size=7, padding=3),
@@ -69,22 +61,10 @@ class ECGResNet(nn.Module):
         self.classifier = nn.Linear(128, 2)
 
     def forward(self, x):
+        if x.ndim != 3 or x.shape[1:] != (6, 5000):
+            raise ValueError("Expected input shape (N, 6, 5000) at 500 Hz")
         x = self.stem(x)
         x = self.features(x)
         x = self.pool(x)
         x = x.squeeze(-1)
         return self.classifier(x)
-
-
-if __name__ == "__main__":
-    model = ECGResNet()
-
-    sample = torch.randn(4, 12, 1000)
-    output = model(sample)
-
-    print("Input shape:", sample.shape)
-    print("Output shape:", output.shape)
-    print(
-        "Trainable parameters:",
-        sum(p.numel() for p in model.parameters() if p.requires_grad)
-    )

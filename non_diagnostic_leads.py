@@ -1,11 +1,10 @@
-"""Experiments 5/6: Prisha's Dataset 1 and ResNet, six specified leads.
+"""Experiments 5 and 6: six-lead, 500 Hz CLBBB/ILBBB classification.
 
-Dataset 2 deliberately requires an approved team export; no inferred cohort.
+Dataset 2 requires an approved export; no cohort is inferred or substituted.
 """
 from pathlib import Path
 import argparse
 import ast
-import importlib.util
 import json
 
 import numpy as np
@@ -15,20 +14,17 @@ from torch import nn
 from torch.utils.data import DataLoader, TensorDataset
 import wfdb
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
-from ptbxl_data import sha256
-from resnet_model import set_seed
+from experiment_utils import sha256, set_seed
+from ecg_resnet import ECGResNet
 
 LEADS = ['II', 'III', 'aVR', 'aVF', 'V3', 'V4']
 LABELS = ['CLBBB', 'ILBBB']
 SPLITS = ['train', 'val', 'test']
-SOURCE = Path(__file__).parent / 'learning_pipeline/07_resnet_model.py'
-spec = importlib.util.spec_from_file_location('team_resnet', SOURCE)
-module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(module)
+SOURCE = Path(__file__).parent / 'ecg_resnet.py'
 
 
 def dataset1_metadata(root):
-    """Same code-presence labels and diagnostic-only Normal filter as team 02."""
+    """Select code-presence LBBB positives and diagnostic-only Normal negatives."""
     frame = pd.read_csv(root / 'ptbxl_database.csv')
     statements = pd.read_csv(root / 'scp_statements.csv', index_col=0)
     diagnostic = set(statements.index[statements.diagnostic == 1]) - {'NORM'}
@@ -81,7 +77,7 @@ def prepare(root, out):
     (out / 'contract.json').write_text(json.dumps(dict(dataset='dataset1', leads=LEADS,
         labels=LABELS, fs=500, samples=5000, normalization='none',
         source_column='filename_hr', waveform_directory='records500', units='mV',
-        policy='Prisha 02_build_dataset1.py at 4d82a77; code presence; diagnostic-only Normal filter',
+        policy='dataset1-v1: code presence; diagnostic-only Normal filter; comorbid LBBB permitted',
         metadata_sha256=sha256(root / 'ptbxl_database.csv'),
         statements_sha256=sha256(root / 'scp_statements.csv')), indent=2))
 
@@ -93,7 +89,7 @@ def load(directory, expected):
         if contract.get(k) != v:
             raise ValueError(f'Wrong export contract: {k}')
     if not contract.get('policy'):
-        raise ValueError('Team labeling policy provenance required')
+        raise ValueError('Labeling policy provenance required')
     frames = [pd.read_csv(directory / f'{s}.csv') for s in SPLITS]
     validate_metadata(pd.concat(frames))
     data, counts, fingerprints = {}, {}, {}
@@ -132,7 +128,7 @@ def run(args):
     if args.dataset2:
         loaded['dataset2'] = load(args.dataset2, 'dataset2')
     if args.train not in loaded:
-        raise ValueError('Dataset 2 team implementation/export unavailable; no substitution')
+        raise ValueError('Dataset 2 export unavailable; no substitution')
     # Cross-dataset evaluation must not introduce patients seen in training/validation.
     training_frames = loaded[args.train][2]
     seen = set(pd.concat(training_frames[:2]).patient_id)
@@ -143,7 +139,7 @@ def run(args):
     set_seed(42)
     torch.set_num_threads(1)
     device = torch.device(args.device)
-    model = module.ECGResNet(in_channels=6).to(device)
+    model = ECGResNet().to(device)
     data = loaded[args.train][0]
     loaders = {s: DataLoader(d, batch_size=32, shuffle=s == 'train') for s, d in data.items()}
     y = data['train'].tensors[1]

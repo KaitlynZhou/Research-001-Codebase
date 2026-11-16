@@ -53,7 +53,7 @@ files and matched every selected float32 sample exactly.
 
 ### ResNet architecture
 
-`ECGResNet` in `learning_pipeline/07_resnet_model.py` has:
+`ECGResNet` in `ecg_resnet.py` has:
 
 - A kernel-7, stride-1 stem convolution from **6 to 32** channels, BatchNorm and ReLU.
 - Three residual blocks with widths **32→32, 32→64, 64→128** and strides **1,2,2**.
@@ -135,7 +135,7 @@ an external builder correctly implements the approved selection policy.
 ### Environment and input files
 
 The completed Experiment 5 run used Python **3.11.9** and PyTorch **2.15.0** on macOS arm64.
-Full package pins are in `requirements-reproducible.txt`.
+Direct dependency pins are in `requirements-reproducible.txt`.
 
 ```bash
 python3.11 -m venv .venv
@@ -153,10 +153,10 @@ your own. Choose new output directories to preserve existing artifacts.
 
 ```bash
 python non_diagnostic_leads.py prepare \
-  --raw-root "$HOME/Desktop/PTB-XL" --output data/experiment5_500hz
+  --raw-root "$HOME/Desktop/PTB-XL" --output data/dataset1_500hz_reproduction
 OMP_NUM_THREADS=1 MPLCONFIGDIR=/tmp/ecg-mpl python non_diagnostic_leads.py train \
-  --dataset1 data/experiment5_500hz --epochs 30 --device mps \
-  --output outputs/experiment5_500hz
+  --dataset1 data/dataset1_500hz_reproduction --epochs 30 --device mps \
+  --output outputs/experiment5_500hz_reproduction
 ```
 
 Use `--device cpu` when MPS is unavailable; CPU is the six-lead CLI default.
@@ -168,7 +168,7 @@ To evaluate a checkpoint without retraining, use its matching exports:
 
 ```bash
 OMP_NUM_THREADS=1 python non_diagnostic_leads.py train \
-  --dataset1 data/experiment5_500hz --device mps \
+  --dataset1 data/dataset1_500hz --device mps \
   --checkpoint outputs/experiment5_500hz/best_model.pt \
   --output outputs/experiment5_500hz_evaluation
 ```
@@ -186,12 +186,12 @@ no Dataset 2 preparation command implemented here.
 ```bash
 # Train Experiment 6 and evaluate its best checkpoint on both test cohorts.
 OMP_NUM_THREADS=1 python non_diagnostic_leads.py train \
-  --dataset1 data/experiment5_500hz --dataset2 data/dataset2_500hz \
+  --dataset1 data/dataset1_500hz --dataset2 data/dataset2_500hz \
   --train dataset2 --device mps --output outputs/experiment6_500hz
 
 # Evaluate an Experiment 5 checkpoint on both test cohorts without retraining.
 OMP_NUM_THREADS=1 python non_diagnostic_leads.py train \
-  --dataset1 data/experiment5_500hz --dataset2 data/dataset2_500hz \
+  --dataset1 data/dataset1_500hz --dataset2 data/dataset2_500hz \
   --checkpoint outputs/experiment5_500hz/best_model.pt --device mps \
   --output outputs/experiment5_both_tests
 ```
@@ -202,7 +202,7 @@ cohort, including across datasets, without silently resplitting the data.
 ## Artifacts and verification
 
 The implementation is `non_diagnostic_leads.py`; the model is
-`learning_pipeline/07_resnet_model.py`. A training run saves `best_model.pt`,
+`ecg_resnet.py`. Hashing and deterministic seeding are in `experiment_utils.py`. A training run saves `best_model.pt`,
 `history.json`, `training_config.json`, `provenance.json`, `metrics.json`, and
 per-dataset test predictions in NPZ format with truths and probability scores.
 The checkpoint records model state, selected epoch/loss, seed, positive weights,
@@ -215,16 +215,22 @@ Small aggregate results and raw-input verification evidence are under `reports/`
 The completed Experiment 5 epoch-3 checkpoint is identified by SHA-256:
 
 ```text
-92ae4d18f654a5ab9a6a8933735c6e5d6dae7d984c442890131bf74aa6144a35
+1b34cdb13233090218e78976156c653c2c4f8f7206c21c4fd4f51433befde3e5
 ```
+
+The local data and checkpoint are `data/dataset1_500hz/` and
+`outputs/experiment5_500hz/best_model.pt`; aggregate results are in
+[the Experiment 5 report](reports/experiment5_500hz/README.md). The checkpoint
+metadata was refreshed for neutral paths and source/export fingerprints; every
+model tensor and all recorded predictions and metrics are unchanged.
 
 Its history contains 10 epochs, and epoch 3 has the minimum validation loss.
 Saved predictions reproduce the reported test metrics. Export contracts and
 fingerprints establish the 500 Hz, 5,000-sample input configuration.
-The latest full-suite check passed **61 tests**, with existing WFDB/pandas
+The six-lead suite passes **11 tests** without optimizer steps, with existing WFDB/pandas
 deprecation warnings. Six-lead checks cover forward/backward execution, labels,
 patient separation, sampling frequency, lead order, checkpoint restoration and
-evaluation-only execution. Synthetic fixtures are software checks, not results.
+evaluation-only execution. Synthetic fixtures are software checks, not experimental results; no models are retrained during verification.
 Raw data, waveform exports, per-record predictions, model weights and caches
 are Git-ignored and absent from a fresh checkout.
 

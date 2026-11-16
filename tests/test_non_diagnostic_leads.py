@@ -2,13 +2,13 @@ import numpy as np
 import pandas as pd
 import pytest
 import torch
-from non_diagnostic_leads import LEADS, LABELS, module, validate_metadata, metrics, dataset1_metadata
+from non_diagnostic_leads import LEADS, LABELS, ECGResNet, validate_metadata, metrics, dataset1_metadata
 
 
 def test_six_lead_two_independent_outputs():
     assert LEADS == ['II', 'III', 'aVR', 'aVF', 'V3', 'V4']
     assert LABELS == ['CLBBB', 'ILBBB']
-    model = module.ECGResNet(in_channels=6)
+    model = ECGResNet()
     logits = model(torch.randn(2, 6, 5000))
     assert logits.shape == (2, 2)
     torch.nn.BCEWithLogitsLoss()(logits, torch.tensor([[1., 1.], [0., 0.]])).backward()
@@ -21,7 +21,7 @@ def test_patient_leakage_rejected():
         validate_metadata(rows)
 
 
-def test_team_policy_keeps_comorbid_lbbb_and_excludes_abnormal_normal(tmp_path):
+def test_policy_keeps_comorbid_lbbb_and_excludes_abnormal_normal(tmp_path):
     pd.DataFrame(dict(ecg_id=[1, 2, 3, 4], scp_codes=["{'NORM':100}",
         "{'NORM':100,'MI':100}", "{'CLBBB':50,'MI':100}", "{'ILBBB':0}"])).to_csv(tmp_path/'ptbxl_database.csv', index=False)
     pd.DataFrame(dict(diagnostic=[1, 1]), index=['NORM', 'MI']).to_csv(tmp_path/'scp_statements.csv')
@@ -36,7 +36,7 @@ def test_per_label_metrics_fixed_threshold_and_confusion_order():
     assert result['ILBBB']['confusion_matrix'] == [[0, 1], [1, 0]]
 
 
-def test_training_checkpoint_and_evaluation_only(tmp_path):
+def test_checkpoint_evaluation_only(tmp_path, monkeypatch):
     import argparse
     import json
     from non_diagnostic_leads import load, run
@@ -55,10 +55,21 @@ def test_training_checkpoint_and_evaluation_only(tmp_path):
         np.save(directory/f'y_{split}.npy', frame[LABELS].to_numpy(dtype=np.float32))
     args = argparse.Namespace(dataset1=directory, dataset2=None, train='dataset1',
         output=tmp_path/'run', epochs=1, device='cpu', checkpoint=None)
+    # Build an untrained fixture checkpoint; this test never optimizes a model.
+    from non_diagnostic_leads import SOURCE
+    from experiment_utils import sha256
+    _, provenance, _ = load(directory, 'dataset1')
+    args.checkpoint = tmp_path/'fixture.pt'
+    torch.save(dict(model_state_dict=ECGResNet().state_dict(), epoch=0,
+        training_config=dict(train_dataset='dataset1'),
+        provenance=dict(dataset1=provenance), architecture_sha256=sha256(SOURCE),
+        leads=LEADS, labels=LABELS), args.checkpoint)
+    def forbid_step(*unused_args, **unused_kwargs):
+        raise AssertionError('Evaluation must not train')
+    monkeypatch.setattr(torch.optim.Adam, 'step', forbid_step)
     run(args)
     original = json.loads((args.output/'metrics.json').read_text())
-    args.checkpoint = args.output/'best_model.pt'
-    args.output = tmp_path/'evaluate'
+    args.output = tmp_path/'evaluate_again'
     run(args)
     assert json.loads((args.output/'metrics.json').read_text()) == original
     # Corruption must fail before any training or evaluation.
@@ -115,3 +126,12 @@ def test_low_resolution_manifest_rejected():
         filename_hr=['records100/a'], CLBBB=[1], ILBBB=[0]))
     with pytest.raises(ValueError, match='records500'):
         validate_metadata(frame)
+
+
+def test_model_rejects_other_leads_and_lengths():
+    with pytest.raises(ValueError, match='six'):
+        ECGResNet(in_channels=1)
+    model = ECGResNet()
+    for shape in [(2, 1, 5000), (2, 6, 1000)]:
+        with pytest.raises(ValueError, match='input shape'):
+            model(torch.zeros(shape))

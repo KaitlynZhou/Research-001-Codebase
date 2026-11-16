@@ -1,0 +1,61 @@
+{
+  "status": "500 Hz Experiment 5 trained and evaluated on Dataset 1; Dataset 2 tasks pending",
+  "fs": 500,
+  "samples": 5000,
+  "leads": [
+    "II",
+    "III",
+    "aVR",
+    "aVF",
+    "V3",
+    "V4"
+  ],
+  "labels": [
+    "CLBBB",
+    "ILBBB"
+  ],
+  "source_column": "filename_hr",
+  "waveform_directory": "records500",
+  "epochs_completed": 10,
+  "best_epoch": 3,
+  "best_val_loss": 0.44968122471601535,
+  "checkpoint_sha256": "1b34cdb13233090218e78976156c653c2c4f8f7206c21c4fd4f51433befde3e5",
+  "architecture_sha256": "4ee23dff7817665bc268c43447be99910d4b7bbc9d7aebcdf1a50aec411e255c",
+  "runner_sha256": "99c261018ff38f1aa04d5a0330dcac2ec6c39e1d2a7e99cfc38335229232b154",
+  "python": "3.11.9",
+  "torch": "2.15.0",
+  "platform": "macOS-26.3.1-arm64-arm-64bit",
+  "device": "mps",
+  "raw_source": "local PTB-XL records500 recordings",
+  "checkpoint_path": "outputs/experiment5_500hz/best_model.pt",
+  "checks": {
+    "patient_overlap": 0,
+    "original_records500_all_samples_verified": {
+      "train": 7733,
+      "val": 975,
+      "test": 974
+    },
+    "checkpoint_is_minimum_validation_loss": true,
+    "saved_predictions_reproduce_metrics": true,
+    "exports_match_checkpoint_fingerprints": true,
+    "pip_check": "passed",
+    "data_and_weights_git_ignored": true,
+    "tests_passed": 11,
+    "cleanup_inference_reproduces_metrics": true,
+    "model_tensors_unchanged": true,
+    "retraining_performed": false
+  },
+  "pending": [
+    "Experiment 5 on Dataset 2 test",
+    "Experiment 6 training",
+    "Experiment 6 on Dataset 1 and Dataset 2 tests"
+  ],
+  "caveat": "Internal official-fold held-out evaluation; historical source fold 10 was development-exposed",
+  "model_tensor_sha256": "2458329930788bdba3c21e2808a40271b991792d047d798b5e6605607d66f555",
+  "metadata_cleanup": {
+    "model_tensors_unchanged": true,
+    "predictions_unchanged": true,
+    "previous_checkpoint_sha256": "92ae4d18f654a5ab9a6a8933735c6e5d6dae7d984c442890131bf74aa6144a35",
+    "reason": "Neutral paths and policy description; relocated architecture; refreshed export and source fingerprints; no training"
+  }
+}
