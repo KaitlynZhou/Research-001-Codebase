@@ -1,105 +1,48 @@
+# Dataset 1 baseline: six diagnostic leads
 
-# Experiment 1: 12-Lead ResNet
+This summary describes the **six-diagnostic-lead experiment** on `feature/dataset1-diagnostic-leads`.
 
-## Objective
-Classify CLBBB and ILBBB separately using 12-lead ECG recordings from PTB-XL.
+The branch was created from Prisha's 12-lead baseline. The previous contents of this file described that inherited experiment. The original report remains available on [Prisha's 12-lead branch](https://github.com/KaitlynZhou/Research-001-Codebase/blob/4d82a777d7b811ea35e57d1abfc9cfb5c8128f6e/results/experiment1/experiment_summary.md).
 
-## Dataset
-- Dataset 1: LBBB vs. Normal
-- Training recordings: 7,733
-- Validation recordings: 975
-- Test recordings: 974 (not yet evaluated)
-- Input shape: (12, 1000)
-- Patient-disjoint train/validation/test splits
+See the [full diagnostic-lead report](../../diagnostic_leads/REPORT.md), [training/evaluation instructions](../../diagnostic_leads/README.md), and [six-lead metrics CSV](../../diagnostic_leads/results/metrics.csv).
 
-## Model
-- Architecture: 1D ResNet
-- Trainable parameters: 244,578
-- Output: 2 independent logits (CLBBB, ILBBB)
+## Method
 
-## Training
-- Optimizer: Adam
-- Learning rate: 0.001
-- Batch size: 32
-- Loss: BCEWithLogitsLoss with positive-class weighting
-- Maximum epochs: 30
-- Early stopping patience: 7
-- Best checkpoint: Epoch 7
-- Best validation loss: 0.2651
-## Key decisions:
+- Inputs: **I, aVL, V1, V2, V5, V6**, 100 Hz, 10 seconds; shape `(6, 1000)`.
+- Model: three-block 1D ResNet, **243,234 parameters**, with independent CLBBB and ILBBB outputs.
+- Labels: target-code presence defines each outcome independently; recordings with other diagnoses remain positive for the corresponding outcome.
+- Train on Dataset 1 (LBBB plus normal controls): folds 1–8, 7,733 recordings.
+- Validate on Dataset 1 fold 9: 975 recordings.
+- Follow Prisha's training settings: seed 42, Adam learning rate 0.001, batch size 32, training-derived positive weights, weighted binary cross-entropy, maximum 30 epochs, early-stopping patience 7.
+- Training stopped after **10 epochs**; the best checkpoint was **epoch 3**, validation loss **0.325712**.
+- Evaluate the same checkpoint on fold 10 of both test populations, using threshold **0.50** for each outcome.
 
--Used weighted binary cross-entropy to address severe class imbalance.
+## Dataset 1 test: LBBB versus normal
 
--Used early stopping based on validation loss to limit overfitting.
+974 recordings; 54 CLBBB positives and 8 ILBBB positives.
 
--Saved the checkpoint with the lowest validation loss rather than the final epoch.
+| Outcome | ROC-AUC | Average precision | Precision | Sensitivity | Specificity | F1 | TN | FP | FN | TP |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| CLBBB | 0.9974 | 0.9506 | 0.8667 | 0.9630 | 0.9913 | 0.9123 | 912 | 8 | 2 | 52 |
+| ILBBB | 0.9200 | 0.2136 | 0.0814 | 0.8750 | 0.9182 | 0.1489 | 887 | 79 | 1 | 7 |
 
--Used the same saved checkpoint for validation and test evaluation.
-___________________________________________________
-## Validation Results (Threshold = 0.50)
+## Dataset 2 test: LBBB versus all others
 
-| Metric | CLBBB | ILBBB |
-|---|---:|---:|
-| Precision | 0.909 | 0.061 |
-| Recall | 0.926 | 0.857 |
-| F1 | 0.917 | 0.113 |
-| ROC-AUC | 0.997 | 0.977 |
-## Confusion matrices: 
-|Condition | TN | FP | FN | TP|
-|----------|----|----|----|---|
-|CLBBB     | 916 | 5 | 4| | 50|
-|ILBBB     | 875 | 93| 1  | 6 | 
+2,198 recordings; 54 CLBBB positives and 8 ILBBB positives. This is evaluation of the **Dataset 1-trained six-lead model**, not a separately Dataset 2-trained model.
 
--CLBBB demonstrated strong validation performance. ILBBB achieved high recall and ROC-AUC but very low precision due to numerous false positives. 
-Thus, an experiment was done with different classificationt thresholds on the validation set only, without retraining the model. 
- 
-| Threshold | Precision | Recall | F1 Score | False Positives |
-|-----------|-----------|--------|----------|-----------------|
-| 0.50 | 0.061 | 0.857 | 0.113 | 93 |
-| 0.60 | 0.071 | 0.857 | 0.130 | 79 |
-| 0.70 | 0.083 | 0.857 | 0.152 | 66 |
-| 0.80 | 0.118 | 0.857 | 0.207 | 45 |
-| 0.90 | 0.188 | 0.857 | 0.308 | 26 |
-## Observations:
--Increasing the threshold reduced false positives from 93 to 26.
--Recall remained constant at 0.857 across the tested thresholds.
--Precision and F1 improved as the threshold increased.
--The 0.90 threshold performed best among those tested, but precision remained relatively low.
-*Decision for final threshold choice is still inconclusive and will be discussed with team members later
+| Outcome | ROC-AUC | Average precision | Precision | Sensitivity | Specificity | F1 | TN | FP | FN | TP |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| CLBBB | 0.9867 | 0.6569 | 0.1948 | 0.9630 | 0.8997 | 0.3240 | 1929 | 215 | 2 | 52 |
+| ILBBB | 0.8919 | 0.1300 | 0.0150 | 0.8750 | 0.7900 | 0.0295 | 1730 | 460 | 1 | 7 |
 
---------------------------------
+## Interpretation
 
-## 7. Held-Out Test Results — Dataset 1
+Six diagnostic leads achieved strong CLBBB discrimination against normal controls. Compared with Prisha's 12-lead run, Dataset 1 CLBBB false positives decreased from 12 to 8, with the same 52/54 detected positives. The 12-lead model had slightly higher ROC-AUC and average precision; this single run does not establish overall superiority.
 
-Classification threshold: **0.50 for both conditions**
+Precision decreased substantially against the broader Dataset 2 population. ILBBB remained exploratory because there were only 62 training, 7 validation, and 8 test positives, with many false positives.
 
-| Metric | CLBBB | ILBBB |
-|--------|-------|-------|
-| Precision | 0.813 | 0.076 |
-| Recall | 0.963 | 0.875 |
-| F1 | 0.881 | 0.140 |
-| ROC-AUC | 0.998 | 0.875 |
-| Average Precision | 0.963 | 0.280 |
+Dataset 1 test is a subset of Dataset 2 test; these overlapping PTB-XL cohorts are not external validation. Their positive cases are identical, so sensitivity is identical. Both test cohorts are patient-disjoint from this model's training and validation cohorts. No test-based threshold tuning was used.
 
-**Confusion Matrices:**
+## File locations
 
-| Condition | TN | FP | FN | TP |
-|-----------|----|----|----|----|
-| CLBBB | 908 | 12 | 2 | 52 |
-| ILBBB | 881 | 85 | 1 | 7 |
-
-## Observations:
-
--CLBBB maintained strong performance on unseen recordings, correctly identifying 52 of 54 positive cases.
-
--ILBBB continued to demonstrate high recall but low precision. The model detected 7 of 8 positive cases but generated 85 false positives.
-
--ILBBB ROC-AUC decreased from 0.977 on validation to 0.875 on the test set, indicating less consistent ranking performance across splits. However, the small number of positive ILBBB cases limits confidence in this comparison.
-
-----------------------------------------------------
-
-Limitations: 
-
--Since we are testing CLBBB and ILBBB seperating, this created a major limitation as ILBBB has only 77 total recordings, and only 62 of those are being used for positive training recordings. Only 7 ILBBB positve recordings are used for validation, and 8 for testing. This limited the amount of positive data available for learning. 
--ILBBB recieved a positive class weight of approximately 123.73, which may have encouraged the model to prioritize recall over precision. 
--Though increasing threshold improved validation performance, optimal threshold has yet to be established because validation improvement may not generalize to unseen recordings. 
+All six-lead source code and result artifacts are under [diagnostic_leads/](../../diagnostic_leads/). Other files still present under `learning_pipeline/` and `results/experiment1/`, including the neighboring metrics CSVs, are inherited **12-lead reference artifacts**. Use `diagnostic_leads/results/metrics.csv` for this experiment's numerical results.
