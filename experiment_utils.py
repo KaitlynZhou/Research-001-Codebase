@@ -25,4 +25,3 @@ def set_seed(seed=42):
     torch.backends.cudnn.deterministic = True
     # Unsupported nondeterministic operations should fail instead of silently varying.
     torch.use_deterministic_algorithms(True)
-
