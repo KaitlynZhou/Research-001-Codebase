@@ -1,0 +1,41 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.DS_Store
+.env
+data/**
+!data/**/
+!data/**/.gitkeep
+models/**
+!models/.gitkeep
+# Ignore generated results by default
+results/**
+
+# Allow directories and lightweight experiment results
+!results/**/
+!results/**/*.csv
+!results/**/*.md
+!results/.gitkeep
+*.pt
+*.pth
+*.ckpt
+*.dat
+*.hea
+# Generated arrays anywhere in the repository
+*.npy
+*.npz
+# Credentials and generated download/archive files
+.env.*
+*.pem
+*.key
+.aws/
+*.part
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.h5
+*.hdf5
