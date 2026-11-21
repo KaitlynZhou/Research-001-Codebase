@@ -1,0 +1,35 @@
+{
+  "fs": 500,
+  "leads": [
+    "I",
+    "II",
+    "III",
+    "AVR",
+    "AVL",
+    "AVF",
+    "V1",
+    "V2",
+    "V3",
+    "V4",
+    "V5",
+    "V6"
+  ],
+  "units": "mV",
+  "shape": [
+    12,
+    400
+  ],
+  "anchor": 150,
+  "counts": {
+    "train": {
+      "accepted": 17417,
+      "too_few_valid_beats": 1
+    },
+    "val": {
+      "accepted": 2183
+    },
+    "test": {
+      "accepted": 2198
+    }
+  }
+}

@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+.pytest_cache/
+data/
+outputs/
+artifacts/
+records100/
+records500/
+*.hea
+*.dat
+*.npy
+*.npz
+*.tmp
+.DS_Store

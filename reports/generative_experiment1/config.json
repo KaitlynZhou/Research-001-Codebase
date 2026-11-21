@@ -1,0 +1,12 @@
+{
+  "upstream_sha256": "960757d21f00f5460212906a7588182f0556967e6f37b9ecd7a34a8c0381a082",
+  "epochs": 20,
+  "batch_size": 128,
+  "seed": 42,
+  "latent": 512,
+  "shape": [
+    12,
+    400
+  ],
+  "kl_weight": 0.01
+}
