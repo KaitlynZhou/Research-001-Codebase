@@ -1,8 +1,41 @@
 # Generative Experiment 1
 
+## Final Results: Synthetic vs Real ECGs
+
+The final **waveform mixture** generates 12-lead median beats at 500 Hz. It fits a joint distribution in waveform space and enforces the four limb-lead identities when decoding. The ECG-SCD VAE documented below is the original baseline.
+
+The final evaluation compares **1,000 synthetic beats** with **2,198 real held-out PTB-XL fold 10 median beats**. Brackets show the 5th–95th percentiles around the median. Displayed values are rounded from the saved final evaluation.
+
+| Metric | Final synthetic (n = 1,000) | Real held-out (n = 2,198) |
+|---|---:|---:|
+| Pairwise waveform RMSE (mV) | 0.1789 [0.1057–0.3582] | 0.1822 [0.1004–0.3946] |
+| Pairs below 0.01 mV RMSE | 0.00% | 0.00% |
+| Median nearest-training RMSE (mV) | 0.0716 | 0.0648 |
+| PR interval (ms) | 164.0 [124.0–200.0] | 162.0 [130.0–200.0] |
+| PR measurable | 654/1,000 (65.4%) | 1,487/2,198 (67.7%) |
+| QRS duration (ms) | 110.0 [86.0–168.0] | 102.0 [78.0–158.0] |
+| QRS measurable | 964/1,000 (96.4%) | 2,164/2,198 (98.5%) |
+| QT interval (ms) | 392.0 [336.0–444.7] | 382.0 [330.0–440.0] |
+| QT measurable | 854/1,000 (85.4%) | 1,858/2,198 (84.5%) |
+| Lead II P-region peak deflection (mV) | 0.0869 [0.0314–0.1622] | 0.0909 [0.0180–0.1798] |
+| Lead II QRS-region peak deflection (mV) | 0.6149 [0.2263–1.2519] | 0.5856 [0.2051–1.2143] |
+| Lead II T-region peak deflection (mV) | 0.1796 [0.0557–0.3672] | 0.1782 [0.0474–0.3817] |
+| Limb-lead identity RMSE, median (mV) | 5.325e-09 | 0.004974 |
+| Limb-lead identity RMSE, 95th percentile (mV) | 9.513e-09 | 0.010261 |
+| Median fast waveform residual RMSE (mV) | 0.0257 | 0.0263 |
+
+- **Diversity and similarity.** Pairwise RMSE uses 124,750 pairs from 500 sampled beats per group. The nearest-training comparison uses those same 500 beats per group and all 17,417 accepted training beats. Neither full set contained an exact duplicate.
+- **Intervals.** The same annotation-trained detector estimated PR, QRS duration, and QT in both groups. Interval summaries use only beats with an estimate. Coverage is the fraction of beats with an estimate. The synthetic median QRS and QT were 8 ms and 10 ms longer than the corresponding real medians.
+- **Morphology.** Lead II peak deflection measures the largest absolute amplitude relative to the line joining the endpoints of each fixed P, QRS, or T region. The mean across-lead distances between synthetic and real deflection distributions were **0.0077, 0.0309, and 0.0153 mV** for P, QRS, and T, respectively. The fast waveform residual is the RMSE from a smoothed copy of the same beat.
+- **Lead consistency.** The synthetic limb identity errors are at numerical precision because the model enforces the four identities. This check covers the six limb leads. The experiment evaluates single median beats, so it provides no measurement of rhythm or beat-to-beat variation.
+
+[Full final evaluation and reproduction commands](reports/generative_experiment1_waveform/README.md) · [Exact evaluation values](reports/generative_experiment1_waveform/test_metrics.json) · [12-lead waveform comparison](reports/generative_experiment1_waveform/example_1.png) · [Lead II P-wave examples](reports/generative_experiment1_waveform/p_wave_examples.png) · [Waveform diversity figure](reports/generative_experiment1_waveform/waveform_spread.png) · [Reconstruction overlay](reports/generative_experiment1_waveform/reconstruction.png)
+
+## Original VAE baseline
+
 This experiment extracts one representative 12-lead median beat from each eligible PTB-XL recording and trains a variational autoencoder to reconstruct and generate these beats.
 
-## Setup and execution
+### Setup and execution
 
 Use Python 3.11 and a local PTB-XL directory with `ptbxl_database.csv` and the complete `records500/` tree. Follow the Code availability section of the linked paper to obtain the ECG-SCD source, then check out revision `f7b58768e2bb760a9a665aeb82191269fdf1d39b` in a separate directory. This project imports the original VAE modules at runtime. The upstream `LICENSE` file contains the source license. [Research paper](https://www.nature.com/articles/s41586-026-10674-6)
 
