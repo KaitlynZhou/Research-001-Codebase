@@ -7,3 +7,4 @@ flax==0.10.4
 optax==0.2.4
 tqdm==4.70.1
 pytest==9.2.0
+scikit-learn==1.9.1

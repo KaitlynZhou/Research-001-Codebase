@@ -1,0 +1,104 @@
+{
+  "compact": {
+    "config": {
+      "fitting_folds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "training_beats": 15244,
+      "reconstruction_split": "train_fold_8",
+      "rank": 32,
+      "components": 12,
+      "p_weight": 6,
+      "t_weight": 3,
+      "seed": 42,
+      "count": 1000,
+      "variance_explained": 0.9093552827835083
+    },
+    "reconstruction_rmse_mv": 0.0480375699698925,
+    "regional_rmse_mv": {
+      "P": 0.021313916891813278,
+      "QRS": 0.07688994705677032,
+      "T": 0.03146674111485481
+    },
+    "original_detector_counts": [
+      84,
+      956,
+      518
+    ],
+    "pairwise_rmse_mv": 0.18646156509416487
+  },
+  "unweighted": {
+    "config": {
+      "fitting_folds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "training_beats": 15244,
+      "reconstruction_split": "train_fold_8",
+      "rank": 64,
+      "components": 12,
+      "p_weight": 1.0,
+      "t_weight": 1.0,
+      "seed": 42,
+      "count": 1000,
+      "variance_explained": 0.9702216386795044
+    },
+    "reconstruction_rmse_mv": 0.029245318844914436,
+    "regional_rmse_mv": {
+      "P": 0.02093202993273735,
+      "QRS": 0.03912782296538353,
+      "T": 0.024687128141522408
+    },
+    "original_detector_counts": [
+      83,
+      956,
+      544
+    ],
+    "pairwise_rmse_mv": 0.18620832601508974
+  },
+  "weighted": {
+    "config": {
+      "fitting_folds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "training_beats": 15244,
+      "reconstruction_split": "train_fold_8",
+      "rank": 64,
+      "components": 12,
+      "p_weight": 6,
+      "t_weight": 3,
+      "seed": 42,
+      "count": 1000,
+      "variance_explained": 0.961926281452179
+    },
+    "reconstruction_rmse_mv": 0.0311712808907032,
+    "regional_rmse_mv": {
+      "P": 0.015898151323199272,
+      "QRS": 0.04797718673944473,
+      "T": 0.020626287907361984
+    },
+    "original_detector_counts": [
+      93,
+      964,
+      554
+    ],
+    "pairwise_rmse_mv": 0.1843015792322973
+  }
+}

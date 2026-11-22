@@ -1,0 +1,21 @@
+{
+  "fitting_folds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "training_beats": 17417,
+  "reconstruction_split": "val",
+  "rank": 64,
+  "components": 12,
+  "p_weight": 6,
+  "t_weight": 3,
+  "seed": 42,
+  "count": 1000,
+  "variance_explained": 0.9619269371032715
+}

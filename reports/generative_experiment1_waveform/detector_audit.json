@@ -1,0 +1,327 @@
+{
+  "odd": {
+    "beats": 344,
+    "original": {
+      "PR": {
+        "reference": 266,
+        "matched": 79,
+        "detection_without_in_window_reference": 14,
+        "mae_ms": 12.658227848101266,
+        "bias_ms": -7.341772151898734,
+        "within_30ms": 73
+      },
+      "QRS": {
+        "reference": 344,
+        "matched": 333,
+        "detection_without_in_window_reference": 0,
+        "mae_ms": 21.14114114114114,
+        "bias_ms": -15.747747747747749,
+        "within_30ms": 250
+      },
+      "QT": {
+        "reference": 304,
+        "matched": 139,
+        "detection_without_in_window_reference": 21,
+        "mae_ms": 49.10791366906475,
+        "bias_ms": -26.431654676258994,
+        "within_30ms": 36
+      }
+    },
+    "lead_aware": {
+      "PR": {
+        "reference": 266,
+        "matched": 120,
+        "detection_without_in_window_reference": 32,
+        "mae_ms": 28.976953272122767,
+        "bias_ms": -15.378893592196606,
+        "within_30ms": 86
+      },
+      "QRS": {
+        "reference": 344,
+        "matched": 153,
+        "detection_without_in_window_reference": 0,
+        "mae_ms": 38.31372549019608,
+        "bias_ms": 13.686274509803921,
+        "within_30ms": 82
+      },
+      "QT": {
+        "reference": 304,
+        "matched": 136,
+        "detection_without_in_window_reference": 17,
+        "mae_ms": 54.75896380933145,
+        "bias_ms": 0.9330818237695486,
+        "within_30ms": 59
+      }
+    },
+    "annotated": {
+      "PR": {
+        "reference": 266,
+        "matched": 232,
+        "detection_without_in_window_reference": 23,
+        "mae_ms": 4.7844827586206895,
+        "bias_ms": -1.4396551724137931,
+        "within_30ms": 231
+      },
+      "QRS": {
+        "reference": 344,
+        "matched": 342,
+        "detection_without_in_window_reference": 0,
+        "mae_ms": 5.286549707602339,
+        "bias_ms": -2.5497076023391814,
+        "within_30ms": 338
+      },
+      "QT": {
+        "reference": 304,
+        "matched": 264,
+        "detection_without_in_window_reference": 25,
+        "mae_ms": 7.371212121212121,
+        "bias_ms": -4.946969696969697,
+        "within_30ms": 257
+      }
+    },
+    "annotated_ungated": {
+      "PR": {
+        "reference": 266,
+        "matched": 266,
+        "detection_without_in_window_reference": 33,
+        "mae_ms": 5.2330827067669174,
+        "bias_ms": -1.8195488721804511,
+        "within_30ms": 265
+      },
+      "QRS": {
+        "reference": 344,
+        "matched": 342,
+        "detection_without_in_window_reference": 0,
+        "mae_ms": 5.286549707602339,
+        "bias_ms": -2.5497076023391814,
+        "within_30ms": 338
+      },
+      "QT": {
+        "reference": 304,
+        "matched": 302,
+        "detection_without_in_window_reference": 37,
+        "mae_ms": 9.701986754966887,
+        "bias_ms": -7.423841059602649,
+        "within_30ms": 289
+      }
+    }
+  },
+  "even": {
+    "beats": 358,
+    "original": {
+      "PR": {
+        "reference": 266,
+        "matched": 38,
+        "detection_without_in_window_reference": 14,
+        "mae_ms": 18.05263157894737,
+        "bias_ms": -2.8947368421052633,
+        "within_30ms": 32
+      },
+      "QRS": {
+        "reference": 358,
+        "matched": 347,
+        "detection_without_in_window_reference": 0,
+        "mae_ms": 26.43227665706052,
+        "bias_ms": -19.746397694524497,
+        "within_30ms": 229
+      },
+      "QT": {
+        "reference": 320,
+        "matched": 197,
+        "detection_without_in_window_reference": 23,
+        "mae_ms": 49.95939086294416,
+        "bias_ms": -39.21827411167513,
+        "within_30ms": 31
+      }
+    },
+    "lead_aware": {
+      "PR": {
+        "reference": 266,
+        "matched": 140,
+        "detection_without_in_window_reference": 54,
+        "mae_ms": 33.0394807064222,
+        "bias_ms": -21.38511083603682,
+        "within_30ms": 83
+      },
+      "QRS": {
+        "reference": 358,
+        "matched": 202,
+        "detection_without_in_window_reference": 0,
+        "mae_ms": 32.86138613861386,
+        "bias_ms": 12.188118811881187,
+        "within_30ms": 129
+      },
+      "QT": {
+        "reference": 320,
+        "matched": 181,
+        "detection_without_in_window_reference": 21,
+        "mae_ms": 44.03603891285672,
+        "bias_ms": 9.443757215758275,
+        "within_30ms": 90
+      }
+    },
+    "annotated": {
+      "PR": {
+        "reference": 266,
+        "matched": 201,
+        "detection_without_in_window_reference": 28,
+        "mae_ms": 7.044776119402985,
+        "bias_ms": -0.8756218905472637,
+        "within_30ms": 199
+      },
+      "QRS": {
+        "reference": 358,
+        "matched": 358,
+        "detection_without_in_window_reference": 0,
+        "mae_ms": 11.899441340782124,
+        "bias_ms": -5.709497206703911,
+        "within_30ms": 333
+      },
+      "QT": {
+        "reference": 320,
+        "matched": 259,
+        "detection_without_in_window_reference": 32,
+        "mae_ms": 15.637065637065637,
+        "bias_ms": -10.463320463320464,
+        "within_30ms": 231
+      }
+    },
+    "annotated_ungated": {
+      "PR": {
+        "reference": 266,
+        "matched": 254,
+        "detection_without_in_window_reference": 57,
+        "mae_ms": 10.141732283464567,
+        "bias_ms": -4.818897637795276,
+        "within_30ms": 236
+      },
+      "QRS": {
+        "reference": 358,
+        "matched": 358,
+        "detection_without_in_window_reference": 0,
+        "mae_ms": 11.899441340782124,
+        "bias_ms": -5.709497206703911,
+        "within_30ms": 333
+      },
+      "QT": {
+        "reference": 320,
+        "matched": 319,
+        "detection_without_in_window_reference": 37,
+        "mae_ms": 18.344827586206897,
+        "bias_ms": -10.858934169278998,
+        "within_30ms": 270
+      }
+    }
+  },
+  "independent": {
+    "beats": 197,
+    "original": {
+      "PR": {
+        "reference": 128,
+        "matched": 38,
+        "detection_without_in_window_reference": 11,
+        "mae_ms": 16.736842105263158,
+        "bias_ms": -12.210526315789474,
+        "within_30ms": 37
+      },
+      "QRS": {
+        "reference": 197,
+        "matched": 189,
+        "detection_without_in_window_reference": 0,
+        "mae_ms": 19.862433862433864,
+        "bias_ms": -11.312169312169312,
+        "within_30ms": 159
+      },
+      "QT": {
+        "reference": 176,
+        "matched": 114,
+        "detection_without_in_window_reference": 11,
+        "mae_ms": 46.31578947368421,
+        "bias_ms": -36.87719298245614,
+        "within_30ms": 27
+      }
+    },
+    "lead_aware": {
+      "PR": {
+        "reference": 128,
+        "matched": 74,
+        "detection_without_in_window_reference": 33,
+        "mae_ms": 44.507005390799904,
+        "bias_ms": -37.00227614038815,
+        "within_30ms": 36
+      },
+      "QRS": {
+        "reference": 197,
+        "matched": 112,
+        "detection_without_in_window_reference": 0,
+        "mae_ms": 54.982142857142854,
+        "bias_ms": 47.44642857142857,
+        "within_30ms": 45
+      },
+      "QT": {
+        "reference": 176,
+        "matched": 102,
+        "detection_without_in_window_reference": 10,
+        "mae_ms": 51.074796295880425,
+        "bias_ms": 31.976280654286207,
+        "within_30ms": 33
+      }
+    },
+    "annotated": {
+      "PR": {
+        "reference": 128,
+        "matched": 105,
+        "detection_without_in_window_reference": 20,
+        "mae_ms": 6.761904761904762,
+        "bias_ms": -1.276190476190476,
+        "within_30ms": 102
+      },
+      "QRS": {
+        "reference": 197,
+        "matched": 196,
+        "detection_without_in_window_reference": 0,
+        "mae_ms": 11.408163265306122,
+        "bias_ms": -1.3673469387755102,
+        "within_30ms": 181
+      },
+      "QT": {
+        "reference": 176,
+        "matched": 135,
+        "detection_without_in_window_reference": 14,
+        "mae_ms": 14.962962962962964,
+        "bias_ms": -8.977777777777778,
+        "within_30ms": 121
+      }
+    },
+    "annotated_ungated": {
+      "PR": {
+        "reference": 128,
+        "matched": 128,
+        "detection_without_in_window_reference": 38,
+        "mae_ms": 7.65625,
+        "bias_ms": -3.15625,
+        "within_30ms": 122
+      },
+      "QRS": {
+        "reference": 197,
+        "matched": 196,
+        "detection_without_in_window_reference": 0,
+        "mae_ms": 11.408163265306122,
+        "bias_ms": -1.3673469387755102,
+        "within_30ms": 181
+      },
+      "QT": {
+        "reference": 176,
+        "matched": 173,
+        "detection_without_in_window_reference": 20,
+        "mae_ms": 19.98843930635838,
+        "bias_ms": -13.976878612716764,
+        "within_30ms": 143
+      }
+    }
+  },
+  "evidence_floor_mv": {
+    "P": 0.04647726487975644,
+    "T": 0.04590758955573287
+  }
+}
