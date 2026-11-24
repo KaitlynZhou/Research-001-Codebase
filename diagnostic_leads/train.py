@@ -1,6 +1,9 @@
 """Train on Dataset 1 only. No test arrays are opened by this script."""
-import argparse, json, random, hashlib, time
+import argparse, json, os, random, hashlib, time
 from pathlib import Path
+# Deterministic cuBLAS kernels require this before CUDA initialises; without it,
+# use_deterministic_algorithms(True) raises on the first CUDA matmul. No effect on CPU/MPS.
+os.environ.setdefault('CUBLAS_WORKSPACE_CONFIG', ':4096:8')
 import numpy as np
 import torch
 from torch import nn

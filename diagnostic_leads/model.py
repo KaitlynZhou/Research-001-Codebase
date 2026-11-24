@@ -1,17 +1,8 @@
-
+"""Prisha's three-block 1D ResNet with a six-lead (I, aVL, V1, V2, V5, V6) input stem."""
 import torch
 import torch.nn as nn
 
-import numpy as np
-import torch
-from sklearn.metrics import (
-    precision_score,
-    recall_score,
-    f1_score,
-    roc_auc_score,
-    confusion_matrix,
-    
-)
+
 class ResidualBlock(nn.Module):
     def __init__(self, in_channels, out_channels, stride=1):
         super().__init__()
