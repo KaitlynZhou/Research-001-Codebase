@@ -7,7 +7,7 @@ results and limitations are in [the README](../README.md).
 ## Export contract
 
 The verified exports are `data/dataset1_500hz/` and `data/dataset2_500hz/`.
-Both match the designated source builders; see `reports/dataset_sources_verification.json`.
+Both match the designated source builders; see `results/dataset_sources_verification.json`.
 Each dataset must supply:
 
 - `contract.json` with its dataset identifier (`dataset1` or `dataset2`),
@@ -57,7 +57,7 @@ hashes and the model tensor digest are recorded in the aggregate summary.
 Only metadata changes account for the new serialized checkpoint checksum.
 
 Experiment 6 and both models' evaluations on both test datasets are complete.
-Exact results and configurations are in `reports/assignment_results.json`.
+Exact results and configurations are in `results/assignment_results.json`.
 Dataset 2 includes all source ECGs; its builder preserves the source assertion
 that no recording has both LBBB labels. This holds in the current corpus.
 Dataset 1 keeps the diagnostic-only Normal rule, including form/rhythm annotations.

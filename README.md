@@ -5,6 +5,13 @@ native PTB-XL **500 Hz** recordings. Inputs have exactly **5,000 samples per lea
 (10 seconds), ordered **II, III, aVR, aVF, V3, V4**, shape **`(6,5000)`**.
 CLBBB and ILBBB are independent binary outputs of the same ResNet architecture.
 
+## Repository structure
+
+- `learning_pipeline/`: preprocessing, model, training/evaluation and source verification scripts.
+- `results/`: experiment reports, metrics and verification records.
+- `outputs/`: saved model checkpoints (original paths retained).
+- `tests/`: automated tests; `docs/`: supplementary documentation.
+
 ## Experiment summary
 
 | Experiment | Training cohort | Model | Dataset 1 test | Dataset 2 test |
@@ -23,11 +30,11 @@ only waveform extraction was changed to the six native 500 Hz channels.
 | Dataset 1 | `feature/dataset1-12lead-clean` | `learning_pipeline/02_build_dataset1.py` | `4d82a777d7b811ea35e57d1abfc9cfb5c8128f6e` |
 | Dataset 2 | `kevin/experiment2-dataset2-all12` | `experiment2/01_build_dataset2.py` | `3e01b5ebedc1ec2db3f6ac71714d1d86b0f28127` |
 
-`verify_dataset_sources.py` executes only the pinned builders' in-memory selection
+`learning_pipeline/verify_dataset_sources.py` executes only the pinned builders' in-memory selection
 statements, excluding their output-writing code. It compares actual exports with
 those references: record IDs, patient IDs, CLBBB/ILBBB labels, folds, row order and
 native high-resolution paths all match. Raw metadata SHA-256 hashes are checked.
-See [source verification](reports/dataset_sources_verification.json).
+See [source verification](results/dataset_sources_verification.json).
 
 ### Dataset 1 selection
 
@@ -70,7 +77,7 @@ same-fold subset of Dataset 2, with matching patient IDs, labels and filenames.
 
 ## Native 500 Hz preprocessing and validation
 
-`non_diagnostic_leads.py` reads `ptbxl_database.csv`, `scp_statements.csv` and WFDB
+`learning_pipeline/non_diagnostic_leads.py` reads `ptbxl_database.csv`, `scp_statements.csv` and WFDB
 recordings from `records500/`, using **`filename_hr`**. It verifies native 500 Hz,
 raw shape `(5000,12)`, finite amplitudes, unique header lead names and mV units.
 It selects the six channels by case-insensitive header names and saves float32
@@ -80,7 +87,7 @@ There is no resampling, upsampling, filtering, padding, truncation, augmentation
 or fitted amplitude normalization. All 9,682 Dataset 1 and 21,799 Dataset 2 exports
 were independently compared with their native WFDB samples; every selected
 float32 sample matched exactly. Dataset 2 evidence is in
-[raw verification](reports/dataset2_raw_verification.json).
+[raw verification](results/dataset2_raw_verification.json).
 
 Waveform writing and loading are disk-backed to bound memory usage. Each batch
 copies waveform rows into tensors. `contract.json` declares dataset, ordered
@@ -112,7 +119,7 @@ training and freeze for validation/test. Adaptive pooling supports 5,000 samples
 Both models use this exact architecture and ordered outputs. Verification against
 the Dataset 2 source model confirms matching parameter keys/shapes and identical
 forward output with six input channels; see
-[architecture verification](reports/model_architecture_verification.json).
+[architecture verification](results/model_architecture_verification.json).
 
 ## Training configuration
 
@@ -163,7 +170,7 @@ precision are not computed by this runner. All metrics are recording-level.
 
 TN/FP/FN/TP define each confusion matrix as `[[TN,FP],[FN,TP]]`, true rows and
 predicted columns, negative then positive. Exact values and saved-score checks
-are in [the completed assignment report](reports/assignment_results.json).
+are in [the completed assignment report](results/assignment_results.json).
 
 Experiment 5 retains CLBBB recall 96.30% on Dataset 2, but its CLBBB precision is 16.88% and ILBBB precision is 1.00%. Its Dataset 2 false positives are 256 CLBBB and 690 ILBBB.
 
@@ -198,9 +205,9 @@ models and reports are not overwritten. Replace the example raw-data path below.
 ### Prepare both datasets
 
 ```bash
-python non_diagnostic_leads.py prepare --dataset dataset1 \
+python learning_pipeline/non_diagnostic_leads.py prepare --dataset dataset1 \
   --raw-root "$HOME/Desktop/PTB-XL" --output data/dataset1_500hz_reproduction
-python non_diagnostic_leads.py prepare --dataset dataset2 \
+python learning_pipeline/non_diagnostic_leads.py prepare --dataset dataset2 \
   --raw-root "$HOME/Desktop/PTB-XL" --output data/dataset2_500hz_reproduction
 ```
 
@@ -209,18 +216,18 @@ local Git objects. If needed, fetch their designated branches without merging:
 
 ```bash
 git fetch --no-tags origin feature/dataset1-12lead-clean kevin/experiment2-dataset2-all12
-python verify_dataset_sources.py --raw-root "$HOME/Desktop/PTB-XL" \
+python learning_pipeline/verify_dataset_sources.py --raw-root "$HOME/Desktop/PTB-XL" \
   --dataset1 data/dataset1_500hz_reproduction --dataset2 data/dataset2_500hz_reproduction \
-  --output reports/dataset_sources_reproduction.json
+  --output results/dataset_sources_reproduction.json
 ```
 
 ### Train each model and evaluate both test datasets
 
 ```bash
-OMP_NUM_THREADS=1 python non_diagnostic_leads.py train \
+OMP_NUM_THREADS=1 python learning_pipeline/non_diagnostic_leads.py train \
   --dataset1 data/dataset1_500hz_reproduction --dataset2 data/dataset2_500hz_reproduction \
   --train dataset1 --epochs 30 --device mps --output outputs/experiment5_reproduction
-OMP_NUM_THREADS=1 python non_diagnostic_leads.py train \
+OMP_NUM_THREADS=1 python learning_pipeline/non_diagnostic_leads.py train \
   --dataset1 data/dataset1_500hz_reproduction --dataset2 data/dataset2_500hz_reproduction \
   --train dataset2 --epochs 30 --device mps --output outputs/experiment6_reproduction
 ```
@@ -231,11 +238,11 @@ checkpoints/results across hardware or package versions.
 ### Evaluate the saved completed models without retraining
 
 ```bash
-OMP_NUM_THREADS=1 python non_diagnostic_leads.py train \
+OMP_NUM_THREADS=1 python learning_pipeline/non_diagnostic_leads.py train \
   --dataset1 data/dataset1_500hz --dataset2 data/dataset2_500hz --train dataset1 \
   --checkpoint outputs/experiment5_500hz/best_model.pt --device mps \
   --output outputs/experiment5_evaluation_repeat
-OMP_NUM_THREADS=1 python non_diagnostic_leads.py train \
+OMP_NUM_THREADS=1 python learning_pipeline/non_diagnostic_leads.py train \
   --dataset1 data/dataset1_500hz --dataset2 data/dataset2_500hz --train dataset2 \
   --checkpoint outputs/experiment6_500hz/best_model.pt --device mps \
   --output outputs/experiment6_evaluation_repeat
@@ -253,9 +260,9 @@ dataset identity and lead/label order must match.
 | `outputs/experiment5_500hz/best_model.pt` | Preserved Experiment 5 weights |
 | `outputs/experiment5_both_tests/` | Both Experiment 5 evaluations, scores, export provenance and leakage checks |
 | `outputs/experiment6_500hz/` | Experiment 6 weights, epoch history, configuration, both evaluations and scores |
-| `reports/experiment5_both_tests/`, `reports/experiment6_500hz/` | Small aggregate review bundles without weights or per-record predictions |
-| `reports/assignment_results.json` | All eight per-label result rows and completion/preservation checks |
-| `reports/dataset_sources_verification.json` | Exact matches to both pinned cohort builders |
+| `results/experiment5_both_tests/`, `results/experiment6_500hz/` | Small aggregate review bundles without weights or per-record predictions |
+| `results/assignment_results.json` | All eight per-label result rows and completion/preservation checks |
+| `results/dataset_sources_verification.json` | Exact matches to both pinned cohort builders |
 
 The suite passes **15 tests**. Model shape, BCE outputs, source labeling policies,
 Dataset 2 overlap assertion, lead selection, source frequency, patient checks,
