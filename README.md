@@ -1,3 +1,15 @@
+# Research 001 — Single-lead LBBB prediction
+
+## Predictive Experiment 2: non-diagnostic leads
+
+This branch extends the 12-lead Dataset 2 experiment to independent classifiers for II, III, aVR and aVF, with two binary outputs (CLBBB, ILBBB). See [experiment documentation](single_lead/README.md) for methods, results, limitations and reproduction commands.
+
+**Status:** eight full-ECG models trained and evaluated locally; median-beat extraction tested on three examples. Eight median training summaries were collected locally, but a representation metadata assertion failed. Median training provenance and final evaluation remain unverified.
+
+The original generative experiment documentation is preserved below.
+
+---
+
 # Generative Experiment 1
 
 ## Final Results: Synthetic vs Real ECGs
