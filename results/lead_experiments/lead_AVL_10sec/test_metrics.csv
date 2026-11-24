@@ -1,0 +1,3 @@
+lead,prediction_target,auroc,average_precision,positive_test_count
+AVL,CLBBB,0.9854468599033817,0.9269916164520678,54
+AVL,ILBBB,0.9047619047619047,0.3826765426154874,8

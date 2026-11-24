@@ -36,6 +36,12 @@ for _, row in df.iterrows():
         })
 
 dataset1 = pd.DataFrame(selected_records)
+both = dataset1[
+    (dataset1["CLBBB"] == 1) &
+    (dataset1["ILBBB"] == 1)
+]
+
+print("Recordings with both CLBBB and ILBBB:", len(both))
 
 print("Total recordings:", len(dataset1))
 print("CLBBB:", dataset1["CLBBB"].sum())
