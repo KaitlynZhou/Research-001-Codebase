@@ -1,6 +1,15 @@
-# Dataset 1 baseline with six diagnostic ECG leads
+# Single-lead V1–V4 models (this branch)
 
-This branch contains the experiment using **I, aVL, V1, V2, V5, and V6**, trained on Dataset 1 with separate **CLBBB** and **ILBBB** outputs.
+This branch adds [`single_leads/`](single_leads/): eight models, one per lead (V1, V2, V3, V4) for the full 10-second ECG and for the PTB-XL+ median beat, trained on Dataset 1 and evaluated on the Dataset 1 and Dataset 2 tests with AUROC and AUPRC.
+
+- [Results and limitations](single_leads/REPORT.md)
+- [Setup and reproduction](single_leads/README.md)
+
+It builds on `feature/dataset1-diagnostic-leads`, whose six-lead experiment is described below and reused for cohort definitions and model architecture.
+
+# Inherited: Dataset 1 baseline with six diagnostic ECG leads
+
+`feature/dataset1-diagnostic-leads` contains the experiment using **I, aVL, V1, V2, V5, and V6**, trained on Dataset 1 with separate **CLBBB** and **ILBBB** outputs.
 
 - [Experiment summary](results/experiment1/experiment_summary.md)
 - [Full report and limitations](diagnostic_leads/REPORT.md)

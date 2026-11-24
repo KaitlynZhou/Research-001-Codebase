@@ -1,0 +1,7 @@
+{
+  "epochs_run": 13,
+  "best_epoch": 6,
+  "seconds": 1034.8921988010406,
+  "best_validation_loss": 0.5088927458029756,
+  "checkpoint_sha256": "bbea94798973c75099d0d1640859c6607f2e2993bc835a62d3176b98457cce21"
+}

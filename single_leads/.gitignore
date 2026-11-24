@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pt
+*.npy
+*.npz
+*.zip
+*_predictions.csv
+*.png
+data/
+processed/

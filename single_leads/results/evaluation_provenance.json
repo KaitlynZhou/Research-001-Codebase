@@ -1,0 +1,49 @@
+{
+  "checkpoints": {
+    "full_V1": {
+      "best_epoch": 6,
+      "val_loss": 0.5088927458029756,
+      "checkpoint_sha256": "bbea94798973c75099d0d1640859c6607f2e2993bc835a62d3176b98457cce21"
+    },
+    "full_V2": {
+      "best_epoch": 8,
+      "val_loss": 0.47773659005993735,
+      "checkpoint_sha256": "94134011a0592cd65757a223be9ecbc26348bafe42dac59fd404796f1a678960"
+    },
+    "full_V3": {
+      "best_epoch": 29,
+      "val_loss": 0.4675123155675247,
+      "checkpoint_sha256": "a3d79e857ef0334ed7004ee2763d5954a41eb3bb8c0b726605834638b359b3dc"
+    },
+    "full_V4": {
+      "best_epoch": 10,
+      "val_loss": 0.27172821481071574,
+      "checkpoint_sha256": "2cd16605bee07da52363eb4b0379b3f95119baccaaeb558a59c8b9bbe44451c6"
+    },
+    "median_V1": {
+      "best_epoch": 6,
+      "val_loss": 0.5169910252032245,
+      "checkpoint_sha256": "55a9d6db3a5afeb639ec8dac4feb45f1462a2501d94728c94f9779c2fed752a9"
+    },
+    "median_V2": {
+      "best_epoch": 14,
+      "val_loss": 0.39750576354214356,
+      "checkpoint_sha256": "fa46483b6345657919bd05625ebf77cd033c01c95a4603e35e24c9b0bcc0c341"
+    },
+    "median_V3": {
+      "best_epoch": 19,
+      "val_loss": 0.4006921322735242,
+      "checkpoint_sha256": "3e0e6bcd2a544dc36376ba1e9f8710ebaf390db6edb2c92029ca3b48f2ef4b07"
+    },
+    "median_V4": {
+      "best_epoch": 15,
+      "val_loss": 0.36109613305448124,
+      "checkpoint_sha256": "efb7a3a87e20f91ca548736385ce5e5fd53b255a643dfbfa8c1c02e10bf66c7b"
+    }
+  },
+  "bootstrap_resamples": 2000,
+  "bootstrap_seed": 2026,
+  "threshold": 0.5,
+  "test_fold": 10,
+  "dataset1_test_is_subset_of_dataset2_test": true
+}

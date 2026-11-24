@@ -1,0 +1,76 @@
+{
+  "source": "PTB-XL 1.0.3 records500 + PTB-XL+ 1.0.1 median_beats/12sl",
+  "leads": [
+    "V1",
+    "V2",
+    "V3",
+    "V4"
+  ],
+  "outcomes": [
+    "CLBBB",
+    "ILBBB"
+  ],
+  "inputs": {
+    "full": {
+      "fs": 500,
+      "samples": 5000,
+      "description": "full 10-second ECG, native 500 Hz"
+    },
+    "median": {
+      "fs": 500,
+      "samples": 600,
+      "description": "PTB-XL+ GE 12SL median beat, 1.2 s at 500 Hz"
+    }
+  },
+  "units": "mV, no filtering or normalization",
+  "metadata_sha256": "7600de9c1b27d181d850b3c6038a35d7c3ddb6bb33b702e3a20252a6859d216b",
+  "excluded_without_median": {
+    "train": {
+      "n": 266,
+      "CLBBB": 22,
+      "ILBBB": 3
+    },
+    "val": {
+      "n": 14,
+      "CLBBB": 0,
+      "ILBBB": 0
+    },
+    "dataset2_test": {
+      "n": 40,
+      "CLBBB": 6,
+      "ILBBB": 0
+    }
+  },
+  "splits": {
+    "train": {
+      "n": 7467,
+      "patients": 6939,
+      "CLBBB": 406,
+      "ILBBB": 59
+    },
+    "val": {
+      "n": 961,
+      "patients": 902,
+      "CLBBB": 54,
+      "ILBBB": 7
+    },
+    "dataset2_test": {
+      "n": 2158,
+      "patients": 1874,
+      "CLBBB": 48,
+      "ILBBB": 8
+    },
+    "dataset1_test": {
+      "n": 960,
+      "CLBBB": 48,
+      "ILBBB": 8
+    }
+  },
+  "median_to_full_amplitude_ratio": {
+    "median": 1.0157835483551025,
+    "p5": 0.7660031914710999,
+    "p95": 1.084911584854126,
+    "records_sampled": 425
+  },
+  "patient_disjoint": true
+}

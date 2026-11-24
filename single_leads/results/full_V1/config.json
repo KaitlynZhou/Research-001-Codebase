@@ -1,0 +1,31 @@
+{
+  "input": "full",
+  "lead": "V1",
+  "fs": 500,
+  "samples": 5000,
+  "description": "full 10-second ECG, native 500 Hz",
+  "outcomes": [
+    "CLBBB",
+    "ILBBB"
+  ],
+  "seed": 42,
+  "batch_size": 32,
+  "max_epochs": 30,
+  "learning_rate": 0.001,
+  "patience": 7,
+  "optimizer": "Adam",
+  "weight_decay": 0,
+  "pos_weight": [
+    17.391626358032227,
+    125.55931854248047
+  ],
+  "selection": "minimum validation weighted BCE",
+  "normalization": "none; physical mV",
+  "train": "Dataset 1 folds 1-8",
+  "validation": "Dataset 1 fold 9",
+  "n_train": 7467,
+  "n_val": 961,
+  "device": "mps",
+  "torch": "2.15.0",
+  "parameters": 242114
+}
