@@ -1,0 +1,17 @@
+architecture,lead,split,CLBBB_AUROC,CLBBB_AUPRC,ILBBB_AUROC,ILBBB_AUPRC
+baseline,II,val,0.9708,0.6055,0.8754,0.0280
+baseline,III,val,0.9613,0.5843,0.8907,0.0267
+baseline,aVR,val,0.9878,0.8358,0.9489,0.1716
+baseline,aVF,val,0.9606,0.4955,0.8636,0.0151
+improved,II,val,0.9681,0.5523,0.8543,0.0218
+improved,III,val,0.9526,0.4332,0.8721,0.0866
+improved,aVR,val,0.9902,0.8154,0.9394,0.0574
+improved,aVF,val,0.9551,0.5446,0.8931,0.0193
+baseline,II,test,0.9817,0.6043,0.8725,0.0575
+baseline,III,test,0.9855,0.6778,0.9584,0.0947
+baseline,aVR,test,0.9961,0.8730,0.9322,0.1222
+baseline,aVF,test,0.9763,0.5216,0.9335,0.0416
+improved,II,test,0.9784,0.6743,0.8513,0.0507
+improved,III,test,0.9618,0.4539,0.8012,0.0179
+improved,aVR,test,0.9945,0.8541,0.8918,0.1030
+improved,aVF,test,0.9706,0.6273,0.8204,0.1027
