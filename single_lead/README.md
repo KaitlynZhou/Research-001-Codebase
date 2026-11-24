@@ -46,5 +46,29 @@ Values transcribed from local notebook screenshots, rounded to four decimals. Se
 
 Baseline won 11/16 validation and 13/16 test metric comparisons. aVR led CLBBB metrics in both architectures and splits. Baseline aVR was selected using validation CLBBB AP (.8358), with validation AUROC .9878 and ILBBB AUROC/AP .9489/.1716. Selection criterion was chosen after initial validation comparison, before test evaluation. Lead III baseline had highest test ILBBB AUROC. Baseline is preferred for controlled lead comparisons. aVR's larger absolute horizontal projection among the four leads is a physiological hypothesis, not proof of a learned mechanism.
 
+## Held-out test ROC and precision–recall curves
+
+Full 10-second ECG, PTB-XL fold 10 (2,198 recordings; 54 CLBBB and 8 ILBBB positives). Each curve compares II, III, aVR and aVF. The PR legends report average precision (AP).
+
+Figure files are cropped from the original notebook output, not reconstructed from aggregate metrics. They must be placed in the `single_lead/figures/` directory to render.
+
+### CLBBB
+
+| Baseline ResNet | Improved ResNet |
+|---|---|
+| ![Baseline CLBBB ROC](figures/test_baseline_CLBBB_ROC.png) | ![Improved CLBBB ROC](figures/test_improved_CLBBB_ROC.png) |
+| ![Baseline CLBBB precision-recall](figures/test_baseline_CLBBB_PR.png) | ![Improved CLBBB precision-recall](figures/test_improved_CLBBB_PR.png) |
+
+aVR provides the highest CLBBB AUROC and AP for both architectures.
+
+### ILBBB
+
+| Baseline ResNet | Improved ResNet |
+|---|---|
+| ![Baseline ILBBB ROC](figures/test_baseline_ILBBB_ROC.png) | ![Improved ILBBB ROC](figures/test_improved_ILBBB_ROC.png) |
+| ![Baseline ILBBB precision-recall](figures/test_baseline_ILBBB_PR.png) | ![Improved ILBBB precision-recall](figures/test_improved_ILBBB_PR.png) |
+
+ILBBB curves are particularly sensitive to individual cases because the test split contains only eight positive recordings. The prevalence references are 0.0246 for CLBBB and 0.0036 for ILBBB.
+
 ## Pending and limitations
 Median notebook aggregation failed because at least one saved summary representation was not median_beat. Do not relabel unverified checkpoints; verify original loader/config or retrain affected runs. New scripts explicitly record representation and input length. Compare full and median scores on the same accepted validation/test indices; report exclusions by label. Training cohorts may differ due to rejection. Filtering, alignment, and aggregation jointly differ between representations. Single seed, rare ILBBB (7 validation and 8 test positives), descriptive comparisons only, previously used PTB-XL test fold, no external cohort or clinical validation. Weighted sigmoid scores are not calibrated probabilities. No claim of physiological causation.
